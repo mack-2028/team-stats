@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evilleempire</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#4B9CD3;--panel:#fff;--ink:#0f2233;--mute:#4a5b68;--line:#c9dcea;--bar:#bfe3dc;--acc:#0f7b6c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c3b52;--panel:#16242e;--ink:#e6eef2;--mute:#8fa2af;--line:#2a3b47;--bar:#1f5b53;--acc:#5fd0bd}}
+:root[data-theme="dark"]{--bg:#1c3b52;--panel:#16242e;--ink:#e6eef2;--mute:#8fa2af;--line:#2a3b47;--bar:#1f5b53;--acc:#5fd0bd}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:2.1rem;line-height:1.1;margin:0 0 4px;font-weight:700;letter-spacing:-.01em;color:#fff}
+.sub{color:#eef6fb;margin:0 0 18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.navrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+select{font:600 15px Barlow,system-ui,sans-serif;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+#status{color:#eef6fb;font-size:.9rem;margin:0 0 14px}
+section{display:none}
+section.on{display:block}
+.bar-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+input[type=search]{flex:1 1 200px;max-width:320px;padding:9px 12px;border:1px solid #000;border-radius:8px;background:#f5f9fb;color:#000;font:inherit}
+.count{color:var(--mute)}
+.colToggle{display:flex;flex-wrap:wrap;gap:10px 16px;margin:0 0 14px;font-size:.9rem;color:var(--mute)}
+.colToggle label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:0;border-bottom:1px solid var(--line);text-align:left}
+tr:last-child td{border-bottom:0}
+thead th{background:#0b4f46}
+th button{all:unset;box-sizing:border-box;display:block;width:100%;padding:16px 22px;cursor:pointer;font-weight:700;color:#fff;font-size:.9rem;white-space:nowrap}
+th button:focus-visible{outline:3px solid var(--acc);outline-offset:-3px}
+th button[data-dir="1"]::after{content:" \25B2";font-size:.7em}
+th button[data-dir="-1"]::after{content:" \25BC";font-size:.7em}
+td.l{padding:16px 22px;font-weight:700;white-space:nowrap}
+td.n{position:relative;padding:16px 22px;font-variant-numeric:tabular-nums}
+td.n .b{position:absolute;left:0;top:4px;bottom:4px;background:var(--bar);border-radius:0 6px 6px 0}
+td.n .v{position:relative}
+td.e .v{color:var(--mute)}
+.empty{padding:32px 16px;text-align:center;color:var(--mute)}
+.rankrow{display:grid;grid-template-columns:70px 1fr 60px;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}
+.rankrow:last-child{border-bottom:0}
+.rankrow .team{font-weight:700}
+.rankbar-wrap{background:var(--line);border-radius:6px;overflow:hidden;height:22px}
+.rankbar{height:100%;background:var(--acc);border-radius:6px}
+.rankrow:hover .rankbar-wrap{outline:2px solid var(--acc)}
+.tip{position:fixed;background:#0f2233;color:#fff;padding:8px 10px;border-radius:8px;font-size:.85rem;pointer-events:none;z-index:20;display:none}
+.breakrow{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.breakrow:last-child{border-bottom:0}
+.breakrow .team{font-weight:700}
+.breakbar{display:flex;height:24px;border-radius:6px;overflow:hidden;background:var(--line)}
+.breakseg{height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:10px 0 16px;font-size:.85rem;color:var(--ink)}
+.legend span.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.pitgrid{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.pitbtn{padding:10px 18px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer;font:700 17px Barlow,sans-serif}
+.pitbtn.sel{background:var(--acc);color:#000;font-weight:800;border-color:#000}
+.qrow{margin-bottom:16px}
+.qrow label{display:block;font-weight:700;margin-bottom:6px;color:var(--ink);font-size:1.05rem}
+.qrow input[type=text],.qrow select{width:100%;max-width:420px;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000;font-size:1rem;font-weight:600}
+.qrow select option{color:#000;background:#fff}
+#pitform h3{font-size:1.4rem;color:var(--ink)}
+button.save{margin-top:6px;font:700 16px Barlow,sans-serif;padding:10px 18px;border-radius:8px;border:2px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+.photos{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.photos img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.hint{color:var(--mute);font-size:.9rem}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:0 0 6px}
+.stat{background:#f5f9fb;border:1px solid #000;border-radius:8px;padding:8px 10px}
+.stat-l{font-size:.78rem;color:#000;margin-bottom:2px;font-weight:600}
+.stat-v{font-weight:700;color:#000}
+#profilecontent h4{margin:18px 0 8px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Evilleempire</h1>
+  <p class="sub">Live scouting data. Choose a view below.</p>
+  <p id="status" role="status">Loading the sheet&hellip;</p>
+
+  <div class="navrow">
+    <label for="view" style="color:#fff;font-weight:700">View</label>
+    <select id="view">
+      <option value="analysis">Analysis</option>
+      <option value="rankings">Rankings</option>
+      <option value="pit">Pit scouting</option>
+      <option value="profile">Team profile</option>
+      <option value="raw">Raw data (Sheet1)</option>
+    </select>
+  </div>
+
+  <section id="sec-analysis" class="panel on">
+    <div class="bar-top">
+      <input id="q" type="search" placeholder="Search teams" aria-label="Search teams">
+      <span id="count" class="count"></span>
+    </div>
+    <div class="wrap"><table id="tbl"></table></div>
+  </section>
+
+  <section id="sec-rankings" class="panel">
+    <div class="navrow" style="margin-bottom:12px">
+      <label for="metric">Metric</label>
+      <select id="metric"></select>
+    </div>
+    <div id="rankchart"></div>
+    <p class="hint">Hover a bar to see that team's average auto and teleop score.</p>
+    <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
+    <div class="navrow" style="margin-bottom:12px">
+      <label for="metric2">Additional data</label>
+      <select id="metric2"></select>
+    </div>
+    <div id="rankchart2"></div>
+    <p class="hint">Hover a bar to see that team's average auto and teleop score.</p>
+    <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
+    <h3 style="margin:0 0 4px">Team breakdown</h3>
+    <p class="hint" style="margin:0 0 10px">Every team, ranked, with each stat as its own color. Hover a color to see that stat's number.</p>
+    <div id="breakdownLegend" class="legend"></div>
+    <div id="breakdown"></div>
+  </section>
+
+  <section id="sec-pit" class="panel">
+    <div id="pitgrid" class="pitgrid"></div>
+    <div id="pitform"></div>
+    <p class="hint">Answers save in this browser only, not on the sheet. Photos are for preview here and aren't saved after you close the page.</p>
+  </section>
+
+  <section id="sec-raw" class="panel">
+    <div class="wrap"><table id="rawtbl"></table></div>
+  </section>
+
+  <section id="sec-profile" class="panel">
+    <div id="profilegrid" class="pitgrid"></div>
+    <div id="profilecontent"></div>
+  </section>
+</main>
+<div id="tip" class="tip"></div>
+
+<script>
+const MAIN_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSq2G9BR2XNlYabdZ5StSY7FRPtC8a4_ixuuZanMox3m94PqmleySXFtyFZacznbkFJ-dVknDoZSwqC/pub?gid=1888204589&single=true&output=csv";
+const RAW_CSV_URL = ""; // fill in once Sheet1 is published as CSV too
+const EVERY = 30000;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let head=[], rows=[], numeric=[], sortCol=-1, sortDir=-1, extraCols=new Set();
+let rawHead=[], rawRows=[];
+
+function splitLine(line,d){
+  if(d==="\t") return line.split("\t");
+  const out=[]; let cur="",q=false;
+  for(let i=0;i<line.length;i++){const c=line[i];
+    if(c==='"'){ if(q&&line[i+1]==='"'){cur+='"';i++;} else q=!q; }
+    else if(c===","&&!q){ out.push(cur); cur=""; }
+    else cur+=c; }
+  out.push(cur); return out;
+}
+function parseCSV(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  if(lines.length<2) return null;
+  const d=text.includes("\t")?"\t":",";
+  const t=lines.map(l=>splitLine(l,d).map(s=>s.trim()));
+  const h=t[0].map((v,i)=>v||(i===0?"Team":"Column "+(i+1)));
+  const r=t.slice(1).map(row=>h.map((_,i)=>{
+    const v=row[i]===undefined?"":row[i];
+    if(i===0) return v;
+    const n=parseFloat(v.replace(/,/g,""));
+    return isNaN(n)||/^#/.test(v) ? null : n;
+  })).filter(row=>row.some((v,i)=>(i===0?v!=="":v!==null)))
+    .map((row,k)=>{ if(row[0]==="") row[0]="Row "+(k+1); return row; });
+  return {h,r};
+}
+
+function loadMain(text){
+  const p=parseCSV(text); if(!p) return "No data in this tab yet.";
+  head=p.h; rows=p.r;
+  let gapIdx = head.findIndex(h=>h.trim().toLowerCase()==="gap");
+  extraCols = new Set();
+  if(gapIdx>=0){
+    for(let i=gapIdx+1;i<head.length;i++) extraCols.add(i-1);
+    head = head.filter((_,i)=>i!==gapIdx);
+    rows = rows.map(r=>r.filter((_,i)=>i!==gapIdx));
+  }
+  numeric = head.map((_,i)=> i>0 && rows.some(r=>r[i]!==null));
+  if(sortCol>=head.length) sortCol=-1;
+  buildMetricSelect();
+  buildMetricSelect2();
+  return "";
+}
+
+function isRankOrTeam(i){
+  const n=head[i].trim().toLowerCase();
+  return n==="rank" || n.startsWith("team");
+}
+
+function renderTable(){
+  const term=$("q").value.trim().toLowerCase();
+  const visibleCols = head.map((_,i)=>i).filter(i=> !extraCols.has(i));
+  let list = rows.filter(r=>!term || String(r[0]).toLowerCase().includes(term));
+  if(sortCol>=0) list=list.slice().sort((a,b)=>{
+    const x=a[sortCol], y=b[sortCol];
+    if(x===null) return 1; if(y===null) return -1;
+    if(typeof x==="string") return sortDir*x.localeCompare(y,undefined,{numeric:true});
+    return sortDir*(x-y);
+  });
+  const max = head.map((_,i)=> numeric[i] ? Math.max(...rows.map(r=>r[i]||0)) : 0);
+  let h="<thead><tr>"+visibleCols.map(i=>
+    `<th scope="col"><button data-c="${i}"${i===sortCol?` data-dir="${sortDir}"`:""}>${esc(head[i])}</button></th>`).join("")+"</tr></thead><tbody>";
+  h += list.map(r=>"<tr>"+visibleCols.map(i=>{
+    const v=r[i];
+    if(i===0) return `<td class="l">${esc(v)}</td>`;
+    if(v===null) return `<td class="n e"><span class="v">&ndash;</span></td>`;
+    if(isRankOrTeam(i)) return `<td class="n"><span class="v">${v}</span></td>`;
+    const w = max[i]>0 ? Math.max(2, v/max[i]*100) : 0;
+    return `<td class="n"><span class="b" style="width:${w}%"></span><span class="v">${Math.round(v*100)/100}</span></td>`;
+  }).join("")+"</tr>").join("")+"</tbody>";
+  $("tbl").innerHTML = list.length ? h : `<tr><td class="empty">${rows.length?"No teams match your search.":"No data yet."}</td></tr>`;
+  $("count").textContent = list.length+" of "+rows.length+" teams";
+}
+$("tbl").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-c]"); if(!b) return;
+  const c=+b.dataset.c;
+  if(sortCol===c) sortDir=-sortDir; else { sortCol=c; sortDir = c===0?1:-1; }
+  renderTable();
+});
+$("q").addEventListener("input",renderTable);
+
+function buildMetricSelect(){
+  const sel=$("metric");
+  const prev=sel.value;
+  const opts = head.map((h,i)=>({h,i})).filter(o=>numeric[o.i] && !isRankOrTeam(o.i) && !extraCols.has(o.i));
+  sel.innerHTML = opts.map(o=>`<option value="${o.i}">${esc(o.h)}</option>`).join("");
+  if(opts.some(o=>String(o.i)===prev)) sel.value=prev;
+  renderRankings("metric","rankchart");
+}
+$("metric").addEventListener("change",()=>renderRankings("metric","rankchart"));
+
+function buildMetricSelect2(){
+  const sel=$("metric2");
+  const prev=sel.value;
+  const opts = head.map((h,i)=>({h,i})).filter(o=>numeric[o.i] && o.h.trim().toLowerCase()==="avg match");
+  sel.innerHTML = opts.length
+    ? opts.map(o=>`<option value="${o.i}">${esc(o.h)}</option>`).join("")
+    : "";
+  if(opts.some(o=>String(o.i)===prev)) sel.value=prev;
+  renderRankings("metric2","rankchart2");
+}
+$("metric2").addEventListener("change",()=>renderRankings("metric2","rankchart2"));
+
+function avgCols(row, match){
+  const idxs = head.map((h,i)=>i).filter(i=>numeric[i] && head[i].toLowerCase().includes(match) && !head[i].toLowerCase().includes("sum"));
+  const vals = idxs.map(i=>row[i]).filter(v=>v!==null);
+  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+}
+
+function renderRankings(selId,boxId){
+  const box=$(boxId);
+  const raw=$(selId).value;
+  const c = raw===""?NaN:+raw;
+  if(isNaN(c) || !rows.length){ box.innerHTML='<p class="hint">No numeric columns to chart yet.</p>'; return; }
+  const teamCol = head.findIndex(h=>h.trim().toLowerCase()==="team");
+  const tIdx = teamCol>=0?teamCol:0;
+  const list = rows.filter(r=>r[c]!==null).slice().sort((a,b)=>b[c]-a[c]);
+  const max = Math.max(...list.map(r=>r[c]),1);
+  box.innerHTML = list.map(r=>{
+    const w = Math.max(2, r[c]/max*100);
+    const avgA = avgCols(r,"auto"), avgT = avgCols(r,"teleop");
+    const tip = "Avg auto: "+(avgA===null?"–":Math.round(avgA*100)/100)+" • Avg teleop: "+(avgT===null?"–":Math.round(avgT*100)/100);
+    return `<div class="rankrow" data-tip="${esc(tip)}"><div class="team">${esc(r[tIdx])}</div><div class="rankbar-wrap"><div class="rankbar" style="width:${w}%"></div></div><div>${Math.round(r[c]*100)/100}</div></div>`;
+  }).join("");
+  const tipEl=$("tip");
+  box.querySelectorAll(".rankrow").forEach(el=>{
+    el.addEventListener("mousemove",e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave",()=>{ tipEl.style.display="none"; });
+  });
+}
+
+const PALETTE = ["#2f6fed","#e0393e","#f2b705","#2e9e4f","#8e44ad","#16a2b8","#e67e22","#795548","#d81b60","#607d8b"];
+const BREAKDOWN_COLS = ["leave auto","park","hive tip auto","teleop hive tip","teleop pollen/nectar remaining in cell","teleop flower bottom nectar reaming in cell","teleop agrden"];
+function renderBreakdown(){
+  const box=$("breakdown"), legend=$("breakdownLegend");
+  if(!rows.length){ box.innerHTML='<p class="hint">No data yet.</p>'; legend.innerHTML=""; return; }
+  const teamCol = head.findIndex(h=>h.trim().toLowerCase()==="team");
+  const rankCol = head.findIndex(h=>h.trim().toLowerCase()==="rank");
+  const lookupCol = head.findIndex((h,i)=> i!==teamCol && h.trim().toLowerCase().startsWith("team"));
+  const tIdx = teamCol>=0?teamCol:0;
+  const cols = BREAKDOWN_COLS.map(name=>head.findIndex(h=>h.trim().toLowerCase()===name)).filter(i=>i>=0 && numeric[i]);
+  if(!cols.length){ box.innerHTML='<p class="hint">No numeric columns to chart yet.</p>'; legend.innerHTML=""; return; }
+  legend.innerHTML = cols.map((c,k)=>`<span><span class="sw" style="background:${PALETTE[k%PALETTE.length]}"></span>${esc(head[c])}</span>`).join("");
+  let list = rows.slice();
+  let rankByTeam = {};
+  if(rankCol>=0 && lookupCol>=0){
+    rows.forEach(r=>{ if(r[lookupCol]!==null) rankByTeam[String(r[lookupCol])] = r[rankCol]; });
+    list = list.filter(r=>rankByTeam[String(r[tIdx])]!==undefined)
+      .sort((a,b)=>rankByTeam[String(a[tIdx])]-rankByTeam[String(b[tIdx])]);
+  } else if(rankCol>=0) list = list.filter(r=>r[rankCol]!==null).sort((a,b)=>a[rankCol]-b[rankCol]);
+  else list = list.sort((a,b)=>{
+    const ta = cols.reduce((s,c)=>s+(a[c]||0),0), tb = cols.reduce((s,c)=>s+(b[c]||0),0);
+    return tb-ta;
+  });
+  const totals = list.map(r=>cols.reduce((s,c)=>s+(r[c]||0),0));
+  const max = Math.max(...totals,1);
+  box.innerHTML = list.map((r,ri)=>{
+    const segs = cols.map((c,k)=>{
+      const v=r[c]; if(v===null||v===0) return "";
+      const w = v/max*100;
+      const tip = esc(head[c])+": "+(Math.round(v*100)/100);
+      return `<div class="breakseg" data-tip="${tip}" style="width:${w}%;background:${PALETTE[k%PALETTE.length]}"></div>`;
+    }).join("");
+    return `<div class="breakrow"><div class="team">${esc(r[tIdx])}</div><div class="breakbar">${segs}</div></div>`;
+  }).join("");
+  const tipEl=$("tip");
+  box.querySelectorAll(".breakseg").forEach(el=>{
+    el.addEventListener("mousemove",e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave",()=>{ tipEl.style.display="none"; });
+  });
+}
+
+const PIT_QS = [
+  {key:"drivetrain", label:"What drivetrain?", type:"text"},
+  {key:"intake", label:"Internal or external intake?", type:"select", opts:["Internal","External"]},
+  {key:"bothBalls", label:"Can both balls be intaked?", type:"select", opts:["Yes","No"]},
+  {key:"hasAuto", label:"Do they have auto?", type:"select", opts:["Yes","No"]}
+];
+function pitKey(t){ return "pit_"+t; }
+function loadPit(t){ try{ return JSON.parse(localStorage.getItem(pitKey(t))||"{}"); }catch(e){ return {}; } }
+function savePit(t,data){ try{ localStorage.setItem(pitKey(t), JSON.stringify(data)); }catch(e){} }
+
+let selectedTeam=null;
+function teamsList(){
+  const teamCol = head.findIndex(h=>h.trim().toLowerCase()==="team");
+  const tIdx = teamCol>=0?teamCol:0;
+  return Array.from(new Set(rows.map(r=>r[tIdx]))).filter(t=>t!==""&&t!==undefined);
+}
+function renderTeamGrid(gridId){
+  const teams = teamsList();
+  const el = $(gridId); if(!el) return;
+  el.innerHTML = teams.map(t=>`<button class="pitbtn${t===selectedTeam?" sel":""}" data-t="${esc(t)}">${esc(t)}</button>`).join("") || '<p class="hint">No teams yet.</p>';
+  el.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>selectTeam(b.dataset.t)));
+  return teams;
+}
+function selectTeam(t){
+  selectedTeam = t;
+  buildPitGrid(); buildProfileGrid();
+}
+function buildPitGrid(){
+  const teams = renderTeamGrid("pitgrid");
+  if(selectedTeam===null && teams && teams.length){ selectedTeam=teams[0]; renderTeamGrid("pitgrid"); }
+  renderPitForm();
+}
+function buildProfileGrid(){
+  const teams = renderTeamGrid("profilegrid");
+  if(selectedTeam===null && teams && teams.length){ selectedTeam=teams[0]; renderTeamGrid("profilegrid"); }
+  renderProfile();
+}
+function renderPitForm(){
+  const box=$("pitform");
+  if(selectedTeam===null){ box.innerHTML=""; return; }
+  const data = loadPit(selectedTeam);
+  if(!Array.isArray(data.photos)) data.photos = [];
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>` + PIT_QS.map(q=>{
+    if(q.type==="text") return `<div class="qrow"><label>${q.label}</label><input type="text" data-k="${q.key}" value="${esc(data[q.key]||"")}"></div>`;
+    return `<div class="qrow"><label>${q.label}</label><select data-k="${q.key}"><option value="">Select…</option>${q.opts.map(o=>`<option ${data[q.key]===o?"selected":""}>${o}</option>`).join("")}</select></div>`;
+  }).join("") +
+  `<div class="qrow"><label>Photos</label><input type="file" id="pitphotos" accept="image/*" multiple><div class="photos" id="pitphotopreview"></div></div>` +
+  `<button class="save" id="pitsave">Save answers</button>`;
+  const preview = $("pitphotopreview");
+  function drawPreview(){
+    preview.innerHTML="";
+    data.photos.forEach((src,idx)=>{
+      const img=document.createElement("img"); img.src=src;
+      img.title="Click to remove"; img.style.cursor="pointer";
+      img.addEventListener("click",()=>{ data.photos.splice(idx,1); savePit(selectedTeam,data); drawPreview(); if($("view").value==="profile") renderProfile(); });
+      preview.appendChild(img);
+    });
+  }
+  drawPreview();
+  box.querySelector("#pitphotos").addEventListener("change",e=>{
+    const files = Array.from(e.target.files);
+    let remaining = files.length;
+    files.forEach(f=>{
+      const reader = new FileReader();
+      reader.onload = ()=>{ data.photos.push(reader.result); remaining--; if(remaining===0){ savePit(selectedTeam,data); drawPreview(); } };
+      reader.readAsDataURL(f);
+    });
+  });
+  box.querySelector("#pitsave").addEventListener("click",()=>{
+    const out={photos:data.photos};
+    box.querySelectorAll("[data-k]").forEach(el=>out[el.dataset.k]=el.value);
+    savePit(selectedTeam,out);
+    const btn=box.querySelector("#pitsave");
+    btn.textContent="Saved"; setTimeout(()=>{btn.textContent="Save answers";},1200);
+  });
+}
+
+function renderProfile(){
+  const box=$("profilecontent");
+  if(selectedTeam===null){ box.innerHTML=""; return; }
+  const teamCol = head.findIndex(h=>h.trim().toLowerCase()==="team");
+  const tIdx = teamCol>=0?teamCol:0;
+  const rankIdx = head.findIndex(h=>h.trim().toLowerCase()==="rank");
+  const lookupIdx = head.findIndex((h,i)=> i!==tIdx && h.trim().toLowerCase().startsWith("team"));
+  let trueRank = null;
+  if(rankIdx>=0 && lookupIdx>=0){
+    const m = rows.find(r=>String(r[lookupIdx])===String(selectedTeam));
+    if(m) trueRank = m[rankIdx];
+  }
+  const row = rows.find(r=>String(r[tIdx])===String(selectedTeam));
+  let statsHtml = '<p class="hint">No match data for this team yet.</p>';
+  if(row){
+    statsHtml = '<div class="statgrid">' + head.map((h,i)=>{
+      if(i===tIdx || i===lookupIdx) return "";
+      const v = (i===rankIdx && trueRank!==null) ? trueRank : row[i];
+      return `<div class="stat"><div class="stat-l">${esc(h)}</div><div class="stat-v">${v===null?"–":v}</div></div>`;
+    }).join("") + '</div>';
+  }
+  const pit = loadPit(selectedTeam);
+  const photos = Array.isArray(pit.photos) ? pit.photos : [];
+  const pitHtml = PIT_QS.map(q=>`<div class="stat"><div class="stat-l">${q.label}</div><div class="stat-v">${esc(pit[q.key]||"–")}</div></div>`).join("");
+  const photosHtml = photos.length ? `<div class="photos">${photos.map(src=>`<img src="${src}">`).join("")}</div>` : '<p class="hint">No photos saved.</p>';
+  let rawHtml = "";
+  if(rawHead.length){
+    const rawTeamCol = rawHead.findIndex(h=>h.trim().toLowerCase().startsWith("team"));
+    if(rawTeamCol>=0){
+      const matches = rawRows.filter(r=>String(r[rawTeamCol])===String(selectedTeam));
+      rawHtml = matches.length
+        ? '<div class="wrap"><table>' +
+          '<thead><tr>'+rawHead.map(h=>`<th><button style="cursor:default">${esc(h)}</button></th>`).join("")+'</tr></thead><tbody>' +
+          matches.map(r=>'<tr>'+rawHead.map((_,i)=>`<td class="${i===0?'l':'n'}"><span class="v">${r[i]===null||r[i]===undefined?"":esc(r[i])}</span></td>`).join("")+'</tr>').join("") +
+          '</tbody></table></div>'
+        : '<p class="hint">No raw matches found for this team.</p>';
+    }
+  }
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>
+    <h4>Match stats</h4>${statsHtml}
+    <h4>Pit scouting</h4><div class="statgrid">${pitHtml}</div>
+    <h4>Photos</h4>${photosHtml}
+    ${rawHtml ? "<h4>Raw matches</h4>"+rawHtml : ""}`;
+}
+
+function renderRaw(){
+  if(!rawHead.length){ $("rawtbl").innerHTML='<tr><td class="empty">No raw data yet.</td></tr>'; return; }
+  let h="<thead><tr>"+rawHead.map(t=>`<th><button style="cursor:default">${esc(t)}</button></th>`).join("")+"</tr></thead><tbody>";
+  h += rawRows.map(r=>"<tr>"+rawHead.map((_,i)=>`<td class="${i===0?'l':'n'}"><span class="v">${r[i]===null||r[i]===undefined?"":esc(r[i])}</span></td>`).join("")+"</tr>").join("");
+  $("rawtbl").innerHTML = h+"</tbody>";
+}
+
+$("view").addEventListener("change",()=>{
+  const v=$("view").value;
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("on"));
+  $("sec-"+v).classList.add("on");
+  if(v==="pit") buildPitGrid();
+  if(v==="profile") buildProfileGrid();
+});
+
+async function fetchCsv(url){
+  const res = await fetch(url+(url.includes("?")?"&":"?")+"cb="+Date.now(),{cache:"no-store"});
+  if(!res.ok) throw new Error(res.status);
+  return res.text();
+}
+
+async function refresh(){
+  try{
+    const mainText = await fetchCsv(MAIN_CSV_URL);
+    const msg = loadMain(mainText);
+    if(msg){ rows=[]; head=[]; renderTable(); $("status").textContent=msg; }
+    else {
+      renderTable(); renderRankings("metric","rankchart"); renderRankings("metric2","rankchart2"); renderBreakdown();
+      if($("view").value==="pit") buildPitGrid();
+      if($("view").value==="profile") buildProfileGrid();
+      $("status").textContent = "Updated "+new Date().toLocaleTimeString()+". Refreshes every "+EVERY/1000+" seconds.";
+    }
+    if(RAW_CSV_URL){
+      try{
+        const rawText = await fetchCsv(RAW_CSV_URL);
+        const p = parseCSV(rawText);
+        if(p){ rawHead=p.h; rawRows=p.r; renderRaw(); }
+      }catch(e){}
+    }
+  }catch(e){
+    $("status").textContent = "Could not load the sheet (" + (e && e.message ? e.message : e) + "). Check that it's published to the web as CSV.";
+  }
+}
+refresh();
+setInterval(refresh, EVERY);
+</script>
+</body>
+</html>
