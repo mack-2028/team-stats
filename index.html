@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evilleempire</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#4B9CD3;--panel:#fff;--ink:#0f2233;--mute:#4a5b68;--line:#c9dcea;--bar:#bfe3dc;--acc:#0f7b6c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c3b52;--panel:#16242e;--ink:#e6eef2;--mute:#8fa2af;--line:#2a3b47;--bar:#1f5b53;--acc:#5fd0bd}}
+:root[data-theme="dark"]{--bg:#1c3b52;--panel:#16242e;--ink:#e6eef2;--mute:#8fa2af;--line:#2a3b47;--bar:#1f5b53;--acc:#5fd0bd}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:80px}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:2.1rem;line-height:1.1;margin:0 0 4px;font-weight:700;letter-spacing:-.01em;color:#fff}
+h3{margin:0 0 10px}
+.sub{color:#eef6fb;margin:0 0 18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.navrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+select{font:600 15px Barlow,system-ui,sans-serif;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+#status{color:#eef6fb;font-size:.9rem;margin:0 0 14px}
+section{display:none}
+section.on{display:block}
+.bar-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+input[type=search]{flex:1 1 200px;max-width:320px;padding:9px 12px;border:1px solid #000;border-radius:8px;background:#f5f9fb;color:#000;font:inherit}
+.count{color:var(--mute)}
+.wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:0;border-bottom:1px solid var(--line);text-align:left}
+tr:last-child td{border-bottom:0}
+thead th{background:#0b4f46}
+th button{all:unset;box-sizing:border-box;display:block;width:100%;padding:14px 18px;cursor:pointer;font-weight:700;color:#fff;font-size:.85rem;white-space:nowrap}
+th button[data-dir="1"]::after{content:" \25B2";font-size:.7em}
+th button[data-dir="-1"]::after{content:" \25BC";font-size:.7em}
+td.l{padding:14px 18px;font-weight:700;white-space:nowrap}
+td.n{padding:14px 18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{padding:32px 16px;text-align:center;color:var(--mute)}
+.rankrow{display:grid;grid-template-columns:70px 1fr 60px;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}
+.rankrow:last-child{border-bottom:0}
+.rankrow .team{font-weight:700}
+.rankbar-wrap{background:var(--line);border-radius:6px;overflow:hidden;height:22px}
+.rankbar{height:100%;background:var(--acc);border-radius:6px}
+.tip{position:fixed;background:#0f2233;color:#fff;padding:8px 10px;border-radius:8px;font-size:.85rem;pointer-events:none;z-index:50;display:none}
+.breakrow{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.breakrow:last-child{border-bottom:0}
+.breakrow .team{font-weight:700}
+.breakbar{display:flex;height:24px;border-radius:6px;overflow:hidden;background:var(--line)}
+.breakseg{height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:10px 0 16px;font-size:.85rem}
+.legend span.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.pitgrid{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.pitbtn{padding:10px 18px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer;font:700 16px Barlow,sans-serif}
+.pitbtn.sel{background:var(--acc);color:#000;font-weight:800;border-color:#000}
+.fieldrow{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.fieldrow-main{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.fieldrow-main input[type=text]{margin-bottom:0;flex:1;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.fieldrow-main select{margin-bottom:0;width:170px;flex:0 0 auto;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.fieldrow-main button.removeRow{background:#fff;color:#b3261e;border:2px solid #b3261e;flex:0 0 auto;padding:10px 12px;border-radius:8px;cursor:pointer}
+.fieldrow-extra input{margin-bottom:0;width:100%;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.qrow{margin-bottom:16px}
+.qrow label{display:block;font-weight:700;margin-bottom:6px;color:var(--ink);font-size:1.02rem}
+.qrow input[type=text],.qrow select{width:100%;max-width:420px;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000;font-size:1rem;font-weight:600}
+button.save{margin-top:6px;font:700 15px Barlow,sans-serif;padding:10px 18px;border-radius:8px;border:2px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+.photos{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.photos img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.hint{color:var(--mute);font-size:.9rem}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0 0 6px}
+.stat{background:#f5f9fb;border:1px solid #000;border-radius:8px;padding:8px 10px}
+.stat-l{font-size:.75rem;color:#000;margin-bottom:2px;font-weight:600}
+.stat-v{font-weight:700;color:#000}
+.modebar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:0;z-index:30;border-top:1px solid var(--line)}
+.modebar button{flex:1;padding:16px;font:700 16px Barlow,sans-serif;border:none;cursor:pointer;background:var(--panel);color:var(--ink)}
+.modebar button.active{background:var(--acc);color:#fff}
+.strategyBtn{position:fixed;right:0;top:45%;transform:translateY(-50%);z-index:25;background:var(--acc);color:#fff;border:none;padding:18px 10px;border-radius:10px 0 0 10px;font:700 15px Barlow,sans-serif;cursor:pointer;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.03em}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--panel);border-radius:12px;padding:22px;max-width:700px;width:100%;max-height:85vh;overflow-y:auto;position:relative;color:var(--ink)}
+.modal-box .closeBtn{position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Evilleempire</h1>
+  <p class="sub">Live scouting data from Firebase.</p>
+  <p id="status" role="status">Connecting…</p>
+
+  <div class="navrow">
+    <label for="eventSel" style="color:#fff;font-weight:700">Event</label>
+    <select id="eventSel"><option value="">All events</option></select>
+    <label for="view" style="color:#fff;font-weight:700">View</label>
+    <select id="view">
+      <option value="analysis">Analysis</option>
+      <option value="rankings">Rankings</option>
+      <option value="breakdown">Team breakdown</option>
+      <option value="pit">Pit scouting</option>
+      <option value="profile">Team profile</option>
+      <option value="all">All matches</option>
+      <option value="tba">Official (TBA)</option>
+    </select>
+  </div>
+
+  <section id="sec-analysis" class="panel on">
+    <div class="bar-top">
+      <input id="q" type="search" placeholder="Search teams" aria-label="Search teams">
+      <span id="count" class="count"></span>
+      <button id="pointValuesBtn" style="background:#fff;color:#0f7b6c">Point values</button>
+      <button id="exportAnalysisBtn" style="background:#fff;color:#0f7b6c">Export CSV</button>
+    </div>
+    <div id="pointValuesEditor" style="display:none;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)"></div>
+    <div class="wrap"><table id="tbl"></table></div>
+    <p class="hint" style="margin-top:8px">Each row averages that team's matches for this event. Non-numeric answers (like a dropdown pick) show the most common one.</p>
+  </section>
+
+  <section id="sec-rankings" class="panel">
+    <div class="navrow" style="margin-bottom:12px">
+      <label for="metric">Metric</label>
+      <select id="metric"></select>
+    </div>
+    <div id="rankchart"></div>
+  </section>
+
+  <section id="sec-breakdown" class="panel">
+    <p class="hint" style="margin:0 0 10px">Every team, ranked by total. Each color is one stat — hover a segment to see its value.</p>
+    <div id="breakdownLegend" class="legend"></div>
+    <div id="breakdown"></div>
+  </section>
+
+  <section id="sec-pit" class="panel">
+    <button class="save" id="editPitQBtn" style="background:#fff;color:#0f7b6c;margin-bottom:14px">Edit questions</button>
+    <div id="pitQEditor" style="display:none;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)"></div>
+    <div id="pitgrid" class="pitgrid"></div>
+    <div id="pitform"></div>
+    <p class="hint">Answers and photos save in this browser only, per event. Questions are saved separately for FRC and FTC.</p>
+  </section>
+
+  <section id="sec-profile" class="panel">
+    <div id="profilegrid" class="pitgrid"></div>
+    <div id="profilecontent"></div>
+  </section>
+
+  <section id="sec-all" class="panel">
+    <div class="bar-top"><span id="allCount" class="count"></span><button id="exportAllBtn" style="background:#fff;color:#0f7b6c">Export CSV</button></div>
+    <div id="allMatches"></div>
+  </section>
+
+  <section id="sec-tba" class="panel">
+    <div id="tbaBody"></div>
+  </section>
+</main>
+<div id="tip" class="tip"></div>
+
+<button id="strategyBtn" class="strategyBtn">Stressed</button>
+<div id="strategyModal" class="modal-overlay">
+  <div class="modal-box">
+    <button class="closeBtn" id="closeStrategyModal">✕</button>
+    <div id="strategyContent"></div>
+  </div>
+</div>
+
+<div class="modebar">
+  <button id="modeFrc" class="active">Switch to FRC</button>
+  <button id="modeFtc">Switch to FTC</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD89JSCdkO3TOYiTxilAzZdEltlVYsKjKY",
+  authDomain: "evilleempire-scouting.firebaseapp.com",
+  projectId: "evilleempire-scouting",
+  storageBucket: "evilleempire-scouting.firebasestorage.app",
+  messagingSenderId: "69285497577",
+  appId: "1:69285497577:web:d448ac8175fdf55626be78"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const META = ["match","slot","team","profileId","profileName","gameType"];
+
+let liveDocs = [];
+let lastAnalysisRows = [], lastAnalysisCols = [];
+let lastAllRows = [], lastAllCols = [];
+
+function csvEscape(v){
+  const s = v===null || v===undefined ? "" : String(v);
+  return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function downloadCsv(filename, cols, rows){
+  const header = cols.map(csvEscape).join(",");
+  const lines = rows.map(r=>cols.map(c=>csvEscape(r[c])).join(","));
+  const csv = [header, ...lines].join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function eventFilenamePart(){
+  const sel = $("eventSel");
+  const name = currentEvent && sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : "all-events";
+  return name.replace(/[^a-z0-9]+/gi,"-").toLowerCase();
+}
+$("exportAnalysisBtn").addEventListener("click", ()=>{
+  downloadCsv(`analysis-${mode}-${eventFilenamePart()}.csv`, lastAnalysisCols, lastAnalysisRows);
+});
+$("exportAllBtn").addEventListener("click", ()=>{
+  downloadCsv(`matches-${mode}-${eventFilenamePart()}.csv`, lastAllCols, lastAllRows);
+});
+
+let mode = localStorage.getItem("scoutMode") || "frc";
+let currentEvent = "";
+let sortCol = -1, sortDir = -1;
+let selectedTeam = null;
+
+function isNum(v){ return v!=="" && v!=null && !isNaN(parseFloat(v)); }
+
+function setMode(m){
+  mode = m;
+  try{ localStorage.setItem("scoutMode", m); }catch(e){}
+  $("modeFrc").classList.toggle("active", m==="frc");
+  $("modeFtc").classList.toggle("active", m==="ftc");
+  currentEvent = "";
+  tbaError = null;
+  refreshAll();
+}
+$("modeFrc").addEventListener("click", ()=>setMode("frc"));
+$("modeFtc").addEventListener("click", ()=>setMode("ftc"));
+
+function modeDocs(){ return liveDocs.filter(d=>d.gameType===mode); }
+function filteredDocs(){
+  const md = modeDocs();
+  return currentEvent ? md.filter(d=>d.profileId===currentEvent) : md;
+}
+function fieldKeys(docs){
+  const keys = [];
+  docs.forEach(d=>Object.keys(d).forEach(k=>{ if(!META.includes(k) && !keys.includes(k)) keys.push(k); }));
+  return keys;
+}
+function teamsIn(docs){
+  let teams = [...new Set(docs.map(d=>d.team))].filter(t=>t);
+  if(mode==="frc"){
+    teams = [...new Set([...teams, ...currentTbaTeams()])];
+  }
+  return teams.sort((a,b)=>{
+    const na = parseInt(a), nb = parseInt(b);
+    if(!isNaN(na) && !isNaN(nb)) return na-nb;
+    return String(a).localeCompare(String(b));
+  });
+}
+
+function aggregateTeam(docs, team, fields){
+  const matches = docs.filter(d=>d.team===team);
+  const row = {};
+  fields.forEach(f=>{
+    const vals = matches.map(m=>m[f]).filter(v=>v!==undefined && v!=="" && v!=null);
+    if(!vals.length){ row[f] = null; return; }
+    if(vals.every(isNum)){
+      const nums = vals.map(parseFloat);
+      row[f] = Math.round((nums.reduce((a,b)=>a+b,0)/nums.length)*100)/100;
+    } else {
+      const counts = {};
+      vals.forEach(v=>counts[v]=(counts[v]||0)+1);
+      row[f] = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+    }
+  });
+  row._matches = matches.length;
+  return row;
+}
+
+// ---------- Point values ----------
+function pointValuesKey(){ return "pointValues_"+mode; }
+function getPointValues(){ try{ return JSON.parse(localStorage.getItem(pointValuesKey())||"{}"); }catch(e){ return {}; } }
+function savePointValues(pv){ try{ localStorage.setItem(pointValuesKey(), JSON.stringify(pv)); }catch(e){} }
+function pointValuesConfigured(){ return Object.keys(getPointValues()).length > 0; }
+function computePoints(aggRow, fields){
+  const pv = getPointValues();
+  let total = 0, any = false;
+  fields.forEach(f=>{
+    if(pv[f]!==undefined && isNum(aggRow[f])){ total += parseFloat(aggRow[f]) * pv[f]; any = true; }
+  });
+  return any ? Math.round(total*100)/100 : null;
+}
+function renderPointValuesEditor(){
+  const box = $("pointValuesEditor");
+  const fields = fieldKeys(modeDocs());
+  const pv = getPointValues();
+  if(!fields.length){
+    box.innerHTML = '<p class="hint">No stats found yet for this game — submit a few matches first, then set point values here.</p>';
+    return;
+  }
+  box.innerHTML = '<p class="hint" style="margin:0 0 10px">How many real game points is each stat worth? Leave blank for stats that don\'t score points directly (like a Yes/No or a note).</p>' +
+    fields.map(f=>`<div class="qrow"><label>${esc(f)}</label><input type="number" step="any" class="pv-input" data-field="${esc(f)}" value="${pv[f]!==undefined?pv[f]:""}" placeholder="points per unit"></div>`).join("") +
+    '<button class="save" id="savePointValuesBtn">Save point values</button>';
+  box.querySelector("#savePointValuesBtn").addEventListener("click", ()=>{
+    const newPv = {};
+    box.querySelectorAll(".pv-input").forEach(inp=>{
+      const v = parseFloat(inp.value);
+      if(!isNaN(v)) newPv[inp.dataset.field] = v;
+    });
+    savePointValues(newPv);
+    box.style.display = "none";
+    refreshAll();
+  });
+}
+$("pointValuesBtn").addEventListener("click", ()=>{
+  const box = $("pointValuesEditor");
+  if(box.style.display==="none"){ renderPointValuesEditor(); box.style.display="block"; }
+  else box.style.display = "none";
+});
+
+function updateEventOptions(){
+  const md = modeDocs();
+  const events = [...new Map(md.map(d=>[d.profileId, d.profileName])).entries()];
+  const sel = $("eventSel");
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">All events</option>' + events.map(([id,name])=>`<option value="${id}">${esc(name||id)}</option>`).join("");
+  if(events.some(([id])=>id===prev)) sel.value = prev;
+  currentEvent = sel.value;
+}
+$("eventSel").addEventListener("change", ()=>{ currentEvent = $("eventSel").value; tbaError = null; refreshAll(); });
+
+// ---------- Analysis ----------
+function renderAnalysis(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const teams = teamsIn(docs);
+  const term = $("q").value.trim().toLowerCase();
+  const showPoints = pointValuesConfigured();
+  let rows = teams.filter(t=>!term || String(t).toLowerCase().includes(term))
+    .map(t=>{
+      const agg = aggregateTeam(docs, t, fields);
+      if(showPoints) agg.points = computePoints(agg, fields);
+      return {team:t, ...agg};
+    });
+  const cols = showPoints ? ["team", ...fields, "points"] : ["team", ...fields];
+  if(sortCol>=0 && sortCol<cols.length){
+    const key = cols[sortCol];
+    rows = rows.sort((a,b)=>{
+      const x=a[key], y=b[key];
+      if(x===null) return 1; if(y===null) return -1;
+      if(typeof x==="string" && isNaN(parseFloat(x))) return sortDir*String(x).localeCompare(String(y));
+      return sortDir*(parseFloat(x)-parseFloat(y));
+    });
+  }
+  let h = "<thead><tr>" + cols.map((c,i)=>
+    `<th><button data-c="${i}"${i===sortCol?` data-dir="${sortDir}"`:""}>${esc(c==="team"?"Team":c==="points"?"Points":c)}</button></th>`).join("") + "</tr></thead><tbody>";
+  h += rows.map(r=>"<tr>" + cols.map(c=>{
+    if(c==="team") return `<td class="l">${esc(r.team)}</td>`;
+    const v=r[c];
+    return `<td class="n">${v===null?"–":esc(v)}</td>`;
+  }).join("") + "</tr>").join("");
+  $("tbl").innerHTML = rows.length ? h+"</tbody>" : `<tr><td class="empty">${teams.length?"No teams match your search.":"No data yet for this event."}</td></tr>`;
+  $("count").textContent = rows.length+" of "+teams.length+" teams";
+  lastAnalysisRows = rows; lastAnalysisCols = cols;
+}
+$("tbl").addEventListener("click", e=>{
+  const b=e.target.closest("button[data-c]"); if(!b) return;
+  const c=+b.dataset.c;
+  if(sortCol===c) sortDir=-sortDir; else { sortCol=c; sortDir = c===0?1:-1; }
+  renderAnalysis();
+});
+$("q").addEventListener("input", renderAnalysis);
+
+// ---------- Rankings ----------
+function buildMetricSelect(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const sel = $("metric");
+  const prev = sel.value;
+  const showPoints = pointValuesConfigured();
+  let opts = fields.map(f=>`<option value="${f}">${esc(f)}</option>`).join("");
+  if(showPoints) opts = `<option value="__points__">Points (calculated)</option>` + opts;
+  sel.innerHTML = opts;
+  if(fields.includes(prev) || prev==="__points__" && showPoints) sel.value = prev;
+  else if(showPoints) sel.value = "__points__";
+  renderRankings();
+}
+$("metric").addEventListener("change", renderRankings);
+function renderRankings(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const metric = $("metric").value;
+  const box = $("rankchart");
+  if(!metric || !docs.length){ box.innerHTML = '<p class="hint">No numeric stats to chart yet.</p>'; return; }
+  const teams = teamsIn(docs);
+  const rows = teams.map(t=>{
+    const agg = aggregateTeam(docs,t,fields);
+    const v = metric==="__points__" ? computePoints(agg, fields) : agg[metric];
+    return {team:t, v};
+  }).filter(r=>r.v!==null && isNum(r.v));
+  rows.sort((a,b)=>b.v-a.v);
+  const max = Math.max(...rows.map(r=>parseFloat(r.v)), 1);
+  box.innerHTML = rows.map(r=>{
+    const w = Math.max(2, parseFloat(r.v)/max*100);
+    return `<div class="rankrow"><div class="team">${esc(r.team)}</div><div class="rankbar-wrap"><div class="rankbar" style="width:${w}%"></div></div><div>${r.v}</div></div>`;
+  }).join("") || '<p class="hint">No teams with this stat yet.</p>';
+}
+
+// ---------- Team breakdown ----------
+const PALETTE = ["#2f6fed","#e0393e","#f2b705","#2e9e4f","#8e44ad","#16a2b8","#e67e22","#795548","#d81b60","#607d8b"];
+function renderBreakdown(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const box = $("breakdown"), legend = $("breakdownLegend");
+  if(!docs.length || !fields.length){ box.innerHTML = '<p class="hint">No numeric stats to chart yet.</p>'; legend.innerHTML=""; return; }
+  legend.innerHTML = fields.map((f,k)=>`<span><span class="sw" style="background:${PALETTE[k%PALETTE.length]}"></span>${esc(f)}</span>`).join("");
+  const teams = teamsIn(docs);
+  const rows = teams.map(t=>{
+    const agg = aggregateTeam(docs, t, fields);
+    const total = fields.reduce((s,f)=>s+(isNum(agg[f])?parseFloat(agg[f]):0),0);
+    return {team:t, agg, total};
+  }).sort((a,b)=>b.total-a.total);
+  const max = Math.max(...rows.map(r=>r.total), 1);
+  box.innerHTML = rows.map(r=>{
+    const segs = fields.map((f,k)=>{
+      const v = r.agg[f];
+      if(!isNum(v) || parseFloat(v)===0) return "";
+      const w = parseFloat(v)/max*100;
+      return `<div class="breakseg" data-tip="${esc(f)}: ${v}" style="width:${w}%;background:${PALETTE[k%PALETTE.length]}"></div>`;
+    }).join("");
+    return `<div class="breakrow"><div class="team">${esc(r.team)}</div><div class="breakbar">${segs}</div></div>`;
+  }).join("");
+  const tipEl = $("tip");
+  box.querySelectorAll(".breakseg").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave", ()=>{ tipEl.style.display="none"; });
+  });
+}
+
+// ---------- Pit scouting ----------
+const DEFAULT_PIT_QS = [
+  {key:"drivetrain", label:"What drivetrain?", type:"text"},
+  {key:"intake", label:"Internal or external intake?", type:"choice", options:["Internal","External"]},
+  {key:"both_pieces", label:"Can both game pieces be intaked?", type:"choice", options:["Yes","No"]},
+  {key:"has_auto", label:"Do they have auto?", type:"choice", options:["Yes","No"]}
+];
+function pitQuestionsKey(){ return "pitQuestions_"+mode; }
+function slugify(label){ return label.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"") || "field"; }
+function getPitQuestions(){
+  try{
+    const raw = localStorage.getItem(pitQuestionsKey());
+    if(raw){ const parsed = JSON.parse(raw); if(Array.isArray(parsed) && parsed.length) return parsed; }
+  }catch(e){}
+  return DEFAULT_PIT_QS;
+}
+function savePitQuestions(qs){ try{ localStorage.setItem(pitQuestionsKey(), JSON.stringify(qs)); }catch(e){} }
+
+function renderPitQEditor(){
+  const box = $("pitQEditor");
+  const qs = getPitQuestions();
+  box.innerHTML = `<div id="pitQRows"></div>
+    <button type="button" id="addPitQRow" style="background:#fff;color:#0f7b6c;margin-bottom:14px">+ Add another question</button>
+    <div><button class="save" id="savePitQBtn">Save questions</button></div>`;
+  const rowsBox = box.querySelector("#pitQRows");
+  function addRow(q){
+    q = q || {};
+    const label = q.label||"", type = q.type||"text", optionsStr = (q.options||[]).join(", ");
+    const row = document.createElement("div");
+    row.className = "fieldrow";
+    row.dataset.qkey = q.key || "";
+    row.innerHTML = `<div class="fieldrow-main">
+        <input type="text" class="qlabel" placeholder="Question text" value="${esc(label)}">
+        <select class="qtype">
+          <option value="text"${type==="text"?" selected":""}>Text answer</option>
+          <option value="choice"${type==="choice"?" selected":""}>Multiple choice</option>
+        </select>
+        <button type="button" class="removeRow">✕</button>
+      </div>
+      <div class="fieldrow-extra">
+        <input type="text" class="qopts" placeholder="Options, comma separated (e.g. Yes, No)" value="${esc(optionsStr)}" style="display:${type==="choice"?"block":"none"}">
+      </div>`;
+    row.querySelector(".removeRow").addEventListener("click", ()=>row.remove());
+    row.querySelector(".qtype").addEventListener("change", e=>{
+      row.querySelector(".qopts").style.display = e.target.value==="choice" ? "block" : "none";
+    });
+    rowsBox.appendChild(row);
+  }
+  qs.forEach(addRow);
+  box.querySelector("#addPitQRow").addEventListener("click", ()=>addRow());
+  box.querySelector("#savePitQBtn").addEventListener("click", ()=>{
+    const seen = new Set();
+    const newQs = [...rowsBox.querySelectorAll(".fieldrow")].map(row=>{
+      const label = row.querySelector(".qlabel").value.trim();
+      const type = row.querySelector(".qtype").value;
+      const obj = {label, type};
+      if(type==="choice") obj.options = row.querySelector(".qopts").value.split(",").map(s=>s.trim()).filter(Boolean);
+      if(row.dataset.qkey) obj.key = row.dataset.qkey;
+      return obj;
+    }).filter(q=>q.label).map(q=>{
+      if(q.key && !seen.has(q.key)){ seen.add(q.key); return q; }
+      let base = slugify(q.label), key = base, n = 2;
+      while(seen.has(key)){ key = base+"_"+n; n++; }
+      seen.add(key);
+      return {...q, key};
+    });
+    savePitQuestions(newQs);
+    box.style.display = "none";
+    renderPitAndProfile();
+  });
+}
+$("editPitQBtn").addEventListener("click", ()=>{
+  const box = $("pitQEditor");
+  if(box.style.display==="none"){ renderPitQEditor(); box.style.display="block"; }
+  else box.style.display="none";
+});
+
+function pitKey(team){ return "pit_"+(currentEvent||mode)+"_"+team; }
+function loadPit(team){ try{ return JSON.parse(localStorage.getItem(pitKey(team))||"{}"); }catch(e){ return {}; } }
+function savePit(team,data){ try{ localStorage.setItem(pitKey(team), JSON.stringify(data)); }catch(e){} }
+
+function renderTeamGrid(gridId, docs){
+  const teams = teamsIn(docs);
+  const el = $(gridId);
+  el.innerHTML = teams.map(t=>`<button class="pitbtn${t===selectedTeam?" sel":""}" data-t="${esc(t)}">${esc(t)}</button>`).join("") || '<p class="hint">No teams yet for this event.</p>';
+  el.querySelectorAll("button").forEach(b=>b.addEventListener("click", ()=>{ selectedTeam=b.dataset.t; renderPitAndProfile(); }));
+  return teams;
+}
+function renderPitAndProfile(){
+  renderTeamGrid("pitgrid", filteredDocs());
+  renderTeamGrid("profilegrid", filteredDocs());
+  renderPitForm();
+  renderProfile();
+}
+function renderPitForm(){
+  const box = $("pitform");
+  if(!selectedTeam){ box.innerHTML=""; return; }
+  const PIT_QS = getPitQuestions();
+  const data = loadPit(selectedTeam);
+  if(!Array.isArray(data.photos)) data.photos=[];
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>` + PIT_QS.map(q=>{
+    if(q.type==="text") return `<div class="qrow"><label>${q.label}</label><input type="text" data-k="${q.key}" value="${esc(data[q.key]||"")}"></div>`;
+    return `<div class="qrow"><label>${q.label}</label><select data-k="${q.key}"><option value="">Select…</option>${(q.options||[]).map(o=>`<option ${data[q.key]===o?"selected":""}>${o}</option>`).join("")}</select></div>`;
+  }).join("") +
+  `<div class="qrow"><label>Photos</label><input type="file" id="pitphotos" accept="image/*" multiple><div class="photos" id="pitphotopreview"></div></div>
+  <button class="save" id="pitsave">Save answers</button>`;
+  const preview = $("pitphotopreview");
+  function draw(){
+    preview.innerHTML = "";
+    data.photos.forEach((src,idx)=>{
+      const img=document.createElement("img"); img.src=src; img.title="Click to remove"; img.style.cursor="pointer";
+      img.addEventListener("click", ()=>{ data.photos.splice(idx,1); savePit(selectedTeam,data); draw(); if($("view").value==="profile") renderProfile(); });
+      preview.appendChild(img);
+    });
+  }
+  draw();
+  box.querySelector("#pitphotos").addEventListener("change", e=>{
+    const files=Array.from(e.target.files); let remaining=files.length;
+    files.forEach(f=>{ const r=new FileReader(); r.onload=()=>{ data.photos.push(r.result); remaining--; if(remaining===0){ savePit(selectedTeam,data); draw(); } }; r.readAsDataURL(f); });
+  });
+  box.querySelector("#pitsave").addEventListener("click", ()=>{
+    const out={photos:data.photos};
+    box.querySelectorAll("[data-k]").forEach(el=>out[el.dataset.k]=el.value);
+    savePit(selectedTeam,out);
+    const btn=box.querySelector("#pitsave"); btn.textContent="Saved"; setTimeout(()=>btn.textContent="Save answers",1200);
+  });
+}
+
+// ---------- Team profile ----------
+function renderProfile(){
+  const box = $("profilecontent");
+  if(!selectedTeam){ box.innerHTML=""; return; }
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const agg = aggregateTeam(docs, selectedTeam, fields);
+  const showPoints = pointValuesConfigured();
+  const points = showPoints ? computePoints(agg, fields) : null;
+  const avgHtml = fields.length ? '<div class="statgrid">' +
+    (showPoints ? `<div class="stat" style="background:#dff5f0"><div class="stat-l">Points (calculated)</div><div class="stat-v">${points===null?"–":esc(points)}</div></div>` : "") +
+    fields.map(f=>
+    `<div class="stat"><div class="stat-l">${esc(f)}</div><div class="stat-v">${agg[f]===null?"–":esc(agg[f])}</div></div>`).join("") + '</div>'
+    : '<p class="hint">No stats yet.</p>';
+  const matches = docs.filter(d=>d.team===selectedTeam);
+  const matchesHtml = matches.length ? '<div class="wrap"><table><thead><tr>' +
+    ["match","slot",...fields].map(c=>`<th><button style="cursor:default">${esc(c)}</button></th>`).join("") + '</tr></thead><tbody>' +
+    matches.map(m=>'<tr>'+["match","slot",...fields].map(c=>`<td class="n">${m[c]!==undefined&&m[c]!==""?esc(m[c]):"–"}</td>`).join("")+'</tr>').join("") +
+    '</tbody></table></div>' : '<p class="hint">No individual matches recorded yet.</p>';
+  const pit = loadPit(selectedTeam);
+  const photos = Array.isArray(pit.photos) ? pit.photos : [];
+  const pitHtml = getPitQuestions().map(q=>`<div class="stat"><div class="stat-l">${q.label}</div><div class="stat-v">${esc(pit[q.key]||"–")}</div></div>`).join("");
+  const photosHtml = photos.length ? `<div class="photos">${photos.map(src=>`<img src="${src}">`).join("")}</div>` : '<p class="hint">No photos saved.</p>';
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>
+    <h4>Averages (${matches.length} match${matches.length===1?"":"es"})</h4>${avgHtml}
+    <h4>Individual matches</h4>${matchesHtml}
+    <h4>Pit scouting</h4><div class="statgrid">${pitHtml}</div>
+    <h4>Photos</h4>${photosHtml}`;
+}
+
+// ---------- All matches ----------
+function renderAll(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const cols = ["team","match","slot",...fields];
+  $("allCount").textContent = docs.length+" match(es)";
+  lastAllRows = docs; lastAllCols = cols;
+  if(!docs.length){ $("allMatches").innerHTML = '<p class="hint">No matches yet for this event.</p>'; return; }
+  let h = '<div class="wrap"><table><thead><tr>'+cols.map(c=>`<th><button style="cursor:default">${esc(c)}</button></th>`).join("")+'</tr></thead><tbody>';
+  h += docs.map(d=>'<tr>'+cols.map(c=>`<td class="${c==='team'?'l':'n'}">${d[c]!==undefined&&d[c]!==""?esc(d[c]):"–"}</td>`).join("")+'</tr>').join("");
+  $("allMatches").innerHTML = h+"</tbody></table></div>";
+}
+
+// ---------- Official (TBA) ----------
+function tbaKeyStorageKey(){ return "tbaApiKey"; }
+function getTbaApiKey(){ try{ return localStorage.getItem(tbaKeyStorageKey())||""; }catch(e){ return ""; } }
+function tbaStorageKey(){ return currentEvent || "__all_events__"; }
+function loadTbaEvents(){ try{ return JSON.parse(localStorage.getItem("tbaEvents")||"{}"); }catch(e){ return {}; } }
+function saveTbaEvent(storageKey, bundle){
+  const all = loadTbaEvents();
+  all[storageKey] = bundle;
+  try{ localStorage.setItem("tbaEvents", JSON.stringify(all)); }catch(e){}
+}
+function currentTbaBundle(){
+  const all = loadTbaEvents();
+  return all[tbaStorageKey()] || null;
+}
+function currentTbaTeams(){
+  const b = currentTbaBundle();
+  return b && b.teams ? b.teams : [];
+}
+
+let tbaError = null;
+
+function renderTbaSettings(extra){
+  const apiKey = getTbaApiKey();
+  const bundle = currentTbaBundle();
+  const lastEventKey = bundle && bundle.tbaEventKeyUsed ? bundle.tbaEventKeyUsed : "";
+  return `
+    <p class="hint" style="margin:0 0 14px">Loading data here applies to whichever event is selected up top (${currentEvent ? esc($("eventSel").selectedOptions[0].textContent) : "All events"}). Switch the Event dropdown to load or view a different one.</p>
+    <div class="qrow"><label>TBA API key (saved in this browser only)</label>
+      <input type="text" id="tbaApiKeyInput" value="${esc(apiKey)}" placeholder="Get one free at thebluealliance.com/account"></div>
+    <div class="qrow"><label>Event key for this event</label>
+      <input type="text" id="tbaEventKeyInput" value="${esc(lastEventKey)}" placeholder="e.g. 2026mimid"></div>
+    <button class="save" id="tbaLoadBtn">Load from The Blue Alliance</button>
+    ${extra||""}
+  `;
+}
+
+function wireTbaSettings(onLoad){
+  document.getElementById("tbaLoadBtn").addEventListener("click", async ()=>{
+    const apiKey = document.getElementById("tbaApiKeyInput").value.trim();
+    const eventKey = document.getElementById("tbaEventKeyInput").value.trim();
+    try{ localStorage.setItem(tbaKeyStorageKey(), apiKey); }catch(e){}
+    if(!apiKey || !eventKey){ alert("Enter both the API key and an event key first."); return; }
+    await onLoad(apiKey, eventKey);
+  });
+}
+
+async function fetchTba(apiKey, eventKey){
+  const headers = {"X-TBA-Auth-Key": apiKey};
+  const base = "https://www.thebluealliance.com/api/v3/event/"+encodeURIComponent(eventKey);
+  const [infoRes, rankRes, matchRes, teamRes] = await Promise.all([
+    fetch(base, {headers}),
+    fetch(base+"/rankings", {headers}),
+    fetch(base+"/matches", {headers}),
+    fetch(base+"/teams/simple", {headers})
+  ]);
+  if(!infoRes.ok || !rankRes.ok || !matchRes.ok || !teamRes.ok) throw new Error("TBA returned an error — check your API key and event key.");
+  const info = await infoRes.json();
+  const rankings = await rankRes.json();
+  const matches = await matchRes.json();
+  const teamsRaw = await teamRes.json();
+  const teams = teamsRaw.map(t=>String(t.team_number)).sort((a,b)=>parseInt(a)-parseInt(b));
+  return {info, rankings, matches, teams, savedAt: new Date().toISOString()};
+}
+
+function renderTbaResults(data){
+  const {info, rankings, matches, teams} = data;
+  let html = `<div class="panel" style="margin-bottom:16px">
+    <h3>${esc(info.name||"")}</h3>
+    <p class="hint">${esc(info.start_date||"")} – ${esc(info.end_date||"")} · ${esc(info.city||"")}${info.state_prov?", "+esc(info.state_prov):""}</p>
+  </div>`;
+
+  if(rankings && rankings.rankings && rankings.rankings.length){
+    const rpNames = (rankings.sort_order_info||[]).map(s=>s.name);
+    html += `<div class="wrap" style="margin-bottom:16px"><table><thead><tr>
+      <th><button style="cursor:default">Rank</button></th>
+      <th><button style="cursor:default">Team</button></th>
+      <th><button style="cursor:default">W-L-T</button></th>
+      ${rpNames.map(n=>`<th><button style="cursor:default">${esc(n)}</button></th>`).join("")}
+      </tr></thead><tbody>`;
+    html += rankings.rankings.map(r=>{
+      const rec = r.record ? `${r.record.wins}-${r.record.losses}-${r.record.ties}` : "–";
+      return `<tr><td class="n">${r.rank}</td><td class="l">${String(r.team_key).replace("frc","")}</td><td class="n">${rec}</td>
+        ${(r.sort_orders||[]).map(v=>`<td class="n">${v}</td>`).join("")}</tr>`;
+    }).join("");
+    html += "</tbody></table></div>";
+  } else {
+    html += '<p class="hint">No official rankings published yet for this event.</p>';
+  }
+
+  const qm = (matches||[]).filter(m=>m.comp_level==="qm").sort((a,b)=>a.match_number-b.match_number);
+  if(qm.length){
+    html += `<div class="wrap"><table><thead><tr>
+      <th><button style="cursor:default">Match</button></th>
+      <th><button style="cursor:default">Red</button></th>
+      <th><button style="cursor:default">Blue</button></th>
+      <th><button style="cursor:default">Red score</button></th>
+      <th><button style="cursor:default">Blue score</button></th>
+      </tr></thead><tbody>`;
+    html += qm.map(m=>{
+      const red = m.alliances.red.team_keys.map(t=>t.replace("frc","")).join(", ");
+      const blue = m.alliances.blue.team_keys.map(t=>t.replace("frc","")).join(", ");
+      const rs = m.alliances.red.score >= 0 ? m.alliances.red.score : "–";
+      const bs = m.alliances.blue.score >= 0 ? m.alliances.blue.score : "–";
+      return `<tr><td class="n">${m.match_number}</td><td class="n">${esc(red)}</td><td class="n">${esc(blue)}</td><td class="n">${rs}</td><td class="n">${bs}</td></tr>`;
+    }).join("");
+    html += "</tbody></table></div>";
+  } else {
+    html += '<p class="hint">No qualification matches published yet for this event.</p>';
+  }
+
+  if(teams && teams.length){
+    html += `<div class="panel" style="margin-top:16px"><h4 style="margin:0 0 8px">All ${teams.length} teams at this event</h4>
+      <p class="hint" style="margin:0">${teams.map(esc).join(", ")}</p></div>`;
+  }
+  return html;
+}
+
+function renderTba(){
+  const box = $("tbaBody");
+  if(mode==="ftc"){
+    box.innerHTML = '<p class="hint">The Blue Alliance only covers FRC — switch to FRC to use this.</p>' + renderTbaSettings();
+    wireTbaSettings(loadHandler);
+    return;
+  }
+  const bundle = currentTbaBundle();
+  const errorHtml = tbaError ? `<p class="hint" style="color:#b3261e;margin-top:10px">${esc(tbaError)}</p>` : "";
+  const emptyHtml = (!bundle && !tbaError) ? '<p class="hint" style="margin-top:10px">No event loaded yet. Enter a key above to load one.</p>' : "";
+  box.innerHTML = renderTbaSettings(errorHtml + emptyHtml) + (bundle ? renderTbaResults(bundle) : "");
+  wireTbaSettings(loadHandler);
+}
+
+async function loadHandler(apiKey, eventKey){
+  const loadBtn = document.getElementById("tbaLoadBtn");
+  loadBtn.textContent = "Loading…"; loadBtn.disabled = true;
+  try{
+    const bundle = await fetchTba(apiKey, eventKey);
+    bundle.tbaEventKeyUsed = eventKey;
+    saveTbaEvent(tbaStorageKey(), bundle);
+    tbaError = null;
+  }catch(e){
+    tbaError = e.message;
+  }
+  renderTba();
+}
+
+
+$("view").addEventListener("change", ()=>{
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("on"));
+  $("sec-"+$("view").value).classList.add("on");
+  refreshAll();
+});
+
+function refreshAll(){
+  updateEventOptions();
+  const v = $("view").value;
+  if(v==="analysis") renderAnalysis();
+  else if(v==="rankings") buildMetricSelect();
+  else if(v==="breakdown") renderBreakdown();
+  else if(v==="pit" || v==="profile") renderPitAndProfile();
+  else if(v==="all") renderAll();
+  else if(v==="tba") renderTba();
+}
+
+// ---------- Strategy ----------
+function getMyTeam(){ try{ return localStorage.getItem("myTeamNumber")||""; }catch(e){ return ""; } }
+function setMyTeam(v){ try{ localStorage.setItem("myTeamNumber", v); }catch(e){} }
+
+function findNextMatch(myTeam){
+  const bundle = currentTbaBundle();
+  if(!bundle || !bundle.matches) return null;
+  const qm = bundle.matches.filter(m=>m.comp_level==="qm").sort((a,b)=>a.match_number-b.match_number);
+  const myMatches = qm.filter(m=>{
+    const teams = [...m.alliances.red.team_keys, ...m.alliances.blue.team_keys].map(t=>t.replace("frc",""));
+    return teams.includes(String(myTeam));
+  });
+  if(!myMatches.length) return null;
+  return myMatches.find(m=>m.alliances.red.score<0 && m.alliances.blue.score<0) || myMatches[0];
+}
+
+function renderStrategy(){
+  const box = $("strategyContent");
+  const myTeam = getMyTeam();
+  const teamInputHtml = `<div class="qrow"><label>Your team number</label><input type="text" id="myTeamInput" value="${esc(myTeam)}" placeholder="e.g. 5216"></div>`;
+
+  if(mode!=="frc"){
+    box.innerHTML = '<h3>Stressed</h3><p class="hint">This uses the official schedule from The Blue Alliance, which only covers FRC. Switch to FRC to use this.</p>';
+    return;
+  }
+  if(!myTeam){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + '<p class="hint">Enter your team number above to find your next match.</p>';
+    wireMyTeamInput(); return;
+  }
+  const bundle = currentTbaBundle();
+  if(!bundle){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + '<p class="hint">No event schedule loaded yet — load one on the Official (TBA) tab first.</p>';
+    wireMyTeamInput(); return;
+  }
+  const match = findNextMatch(myTeam);
+  if(!match){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + `<p class="hint">No matches found for team ${esc(myTeam)} in the loaded event.</p>`;
+    wireMyTeamInput(); return;
+  }
+
+  const red = match.alliances.red.team_keys.map(t=>t.replace("frc",""));
+  const blue = match.alliances.blue.team_keys.map(t=>t.replace("frc",""));
+  const onRed = red.includes(String(myTeam));
+  const allTeams = [...red, ...blue];
+
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+
+  let html = `<h3>Stressed</h3>${teamInputHtml}
+    <h3 style="margin-top:0">Match ${match.match_number}</h3>
+    <p class="hint" style="margin:0 0 10px">You're on the <b>${onRed?"RED":"BLUE"}</b> alliance.</p>
+    <p style="margin:0 0 4px"><b style="color:#e0393e">Red:</b> ${red.map(esc).join(", ")}</p>
+    <p style="margin:0 0 16px"><b style="color:#2f6fed">Blue:</b> ${blue.map(esc).join(", ")}</p>`;
+
+  if(!fields.length){
+    html += '<p class="hint">No scouted stats yet to compare these teams on.</p>';
+  } else {
+    html += `<div class="legend">${fields.map((f,k)=>`<span><span class="sw" style="background:${PALETTE[k%PALETTE.length]}"></span>${esc(f)}</span>`).join("")}</div>`;
+    const rows = allTeams.map(t=>{
+      const agg = aggregateTeam(docs, t, fields);
+      const total = fields.reduce((s,f)=>s+(isNum(agg[f])?parseFloat(agg[f]):0),0);
+      return {team:t, agg, total, isMe: String(t)===String(myTeam)};
+    });
+    const max = Math.max(...rows.map(r=>r.total), 1);
+    html += rows.map(r=>{
+      const segs = fields.map((f,k)=>{
+        const v = r.agg[f];
+        if(!isNum(v) || parseFloat(v)===0) return "";
+        const w = parseFloat(v)/max*100;
+        return `<div class="breakseg" data-tip="${esc(f)}: ${v}" style="width:${w}%;background:${PALETTE[k%PALETTE.length]}"></div>`;
+      }).join("");
+      return `<div class="breakrow"><div class="team"${r.isMe?' style="color:var(--acc)"':""}>${esc(r.team)}${r.isMe?" (us)":""}</div><div class="breakbar">${segs}</div></div>`;
+    }).join("");
+  }
+  box.innerHTML = html;
+  wireMyTeamInput();
+  const tipEl = $("tip");
+  box.querySelectorAll(".breakseg").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave", ()=>{ tipEl.style.display="none"; });
+  });
+}
+function wireMyTeamInput(){
+  const input = document.getElementById("myTeamInput");
+  if(input) input.addEventListener("change", ()=>{ setMyTeam(input.value.trim()); renderStrategy(); });
+}
+$("strategyBtn").addEventListener("click", ()=>{ $("strategyModal").classList.add("open"); renderStrategy(); });
+$("closeStrategyModal").addEventListener("click", ()=>{ $("strategyModal").classList.remove("open"); });
+$("strategyModal").addEventListener("click", e=>{ if(e.target.id==="strategyModal") $("strategyModal").classList.remove("open"); });
+
+db.collection("submissions").onSnapshot(snapshot=>{
+  liveDocs = snapshot.docs.map(doc=>doc.data());
+  $("status").textContent = "Connected — "+liveDocs.length+" total match(es) received.";
+  refreshAll();
+}, err=>{
+  $("status").textContent = "Could not connect to Firebase: "+err.message;
+});
+</script>
+</body>
+</html>
