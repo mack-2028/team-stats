@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evilleempire</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#4B9CD3;--panel:#fff;--ink:#000;--mute:#000;--line:#c9dcea;--bar:#bfe3dc;--acc:#0f7b6c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:80px}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:2.1rem;line-height:1.1;margin:0 0 4px;font-weight:700;letter-spacing:-.01em;color:#fff}
+h3{margin:0 0 10px}
+.sub{color:#eef6fb;margin:0 0 18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.navrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+select{font:600 15px Barlow,system-ui,sans-serif;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+#status{color:#eef6fb;font-size:.9rem;margin:0 0 14px}
+section{display:none}
+section.on{display:block}
+.bar-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+input[type=search]{flex:1 1 200px;max-width:320px;padding:9px 12px;border:1px solid #000;border-radius:8px;background:#f5f9fb;color:#000;font:inherit}
+.count{color:var(--mute)}
+.wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:0;border-bottom:1px solid var(--line);text-align:left}
+tr:last-child td{border-bottom:0}
+thead th{background:#0b4f46}
+th button{all:unset;box-sizing:border-box;display:block;width:100%;padding:14px 18px;cursor:pointer;font-weight:700;color:#fff;font-size:.85rem;white-space:nowrap}
+th button[data-dir="1"]::after{content:" \25B2";font-size:.7em}
+th button[data-dir="-1"]::after{content:" \25BC";font-size:.7em}
+td.l{padding:14px 18px;font-weight:700;white-space:nowrap}
+td.n{padding:14px 18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{padding:32px 16px;text-align:center;color:var(--mute)}
+.rankrow{display:grid;grid-template-columns:70px 1fr 60px;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}
+.rankrow:last-child{border-bottom:0}
+.rankrow .team{font-weight:700}
+.rankbar-wrap{background:var(--line);border-radius:6px;overflow:hidden;height:22px}
+.rankbar{height:100%;background:var(--acc);border-radius:6px}
+.tip{position:fixed;background:#0f2233;color:#fff;padding:8px 10px;border-radius:8px;font-size:.85rem;pointer-events:none;z-index:50;display:none}
+.breakrow{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.breakrow:last-child{border-bottom:0}
+.breakrow .team{font-weight:700}
+.breakbar{display:flex;height:24px;border-radius:6px;overflow:hidden;background:var(--line)}
+.breakseg{height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:10px 0 16px;font-size:.85rem}
+.legend span.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.pitgrid{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.pitbtn{padding:10px 18px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer;font:700 16px Barlow,sans-serif}
+.pitbtn.sel{background:var(--acc);color:#000;font-weight:800;border-color:#000}
+.fieldrow{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.fieldrow-main{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.fieldrow-main input[type=text]{margin-bottom:0;flex:1;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.fieldrow-main select{margin-bottom:0;width:170px;flex:0 0 auto;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.fieldrow-main button.removeRow{background:#fff;color:#b3261e;border:2px solid #b3261e;flex:0 0 auto;padding:10px 12px;border-radius:8px;cursor:pointer}
+.fieldrow-extra input{margin-bottom:0;width:100%;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.qrow{margin-bottom:16px}
+.qrow label{display:block;font-weight:700;margin-bottom:6px;color:var(--ink);font-size:1.02rem}
+.qrow input[type=text],.qrow select{width:100%;max-width:420px;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000;font-size:1rem;font-weight:600}
+button.save{margin-top:6px;font:700 15px Barlow,sans-serif;padding:10px 18px;border-radius:8px;border:2px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+.photos{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.photos img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.hint{color:var(--mute);font-size:.9rem}
+.pickitem{display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid var(--line);background:#fff;flex-wrap:wrap}
+.pickrank{font-weight:700;min-width:40px;font-size:1.2rem}
+.pickteam{flex:1;font-weight:700;font-size:1.2rem;min-width:70px}
+.pickscore{color:var(--mute);font-size:.85rem;width:100%}
+.pickmove{padding:10px 14px;border-radius:8px;border:2px solid #000;background:#f5f9fb;font-weight:700;cursor:pointer;font-size:1rem}
+.pickmove:disabled{opacity:.3;cursor:not-allowed}
+.weightrow{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.weightname{flex:1;font-weight:700;min-width:110px}
+.weightbtn{width:44px;height:44px;border-radius:10px;border:2px solid #000;background:#f5f9fb;font-size:1.4rem;font-weight:700;cursor:pointer}
+.weightval{font-weight:700;font-size:1.3rem;min-width:28px;text-align:center}
+.weightlabel{font-weight:700;font-size:.9rem;min-width:90px}
+.turncard{background:#1d4ed8;color:#fff;border-radius:14px;padding:20px;margin-bottom:16px;text-align:center}
+.turnlabel{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.turnwhat{font-size:1.1rem}
+.alliancechips{display:flex;flex-wrap:wrap;gap:10px}
+.alliancechip{display:flex;border-radius:10px;overflow:hidden;border:2px solid #000}
+.chipteam{padding:16px 18px;font-size:1.15rem;font-weight:700;background:#f5f9fb;border:none;cursor:pointer}
+.chipdecline{padding:16px 14px;font-size:1.1rem;font-weight:700;background:#7f1d1d;color:#fff;border:none;border-left:2px solid #000;cursor:pointer}
+.pickpool button{margin:4px;padding:10px 14px;border-radius:8px;border:2px solid #000;background:#f5f9fb;font-weight:700;cursor:pointer}
+.pickpool button.declineBtn{background:#7f1d1d;color:#fff;border-color:#7f1d1d}
+#menuToggle{position:fixed;top:14px;left:14px;z-index:50;font:700 18px Barlow,sans-serif;padding:12px 20px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+main{padding-top:70px}
+.menuBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}
+.menuBackdrop.open{display:block}
+.menuDrawer{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:#fff;z-index:45;transform:translateX(-100%);transition:transform .2s ease;padding:70px 10px 20px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;box-shadow:4px 0 20px rgba(0,0,0,.3)}
+.menuDrawer.open{transform:translateX(0)}
+.menuDrawer a{display:block;color:#000;text-decoration:none;padding:18px 16px;border-radius:12px;font-weight:700;font-size:1.15rem}
+.menuDrawer a:active,.menuDrawer a.active{background:var(--line)}
+.menuClose{position:absolute;top:16px;right:16px;font:700 16px Barlow,sans-serif;padding:10px 16px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0 0 6px}
+.stat{background:#f5f9fb;border:1px solid #000;border-radius:8px;padding:8px 10px}
+.stat-l{font-size:.75rem;color:#000;margin-bottom:2px;font-weight:600}
+.stat-v{font-weight:700;color:#000}
+.modebar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:0;z-index:30;border-top:1px solid var(--line)}
+.modebar button{flex:1;padding:16px;font:700 16px Barlow,sans-serif;border:none;cursor:pointer;background:var(--panel);color:var(--ink)}
+.modebar button.active{background:var(--acc);color:#fff}
+.strategyBtn{position:fixed;right:0;top:45%;transform:translateY(-50%);z-index:25;background:var(--acc);color:#fff;border:none;padding:18px 10px;border-radius:10px 0 0 10px;font:700 15px Barlow,sans-serif;cursor:pointer;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.03em}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--panel);border-radius:12px;padding:22px;max-width:700px;width:100%;max-height:85vh;overflow-y:auto;position:relative;color:var(--ink)}
+.modal-box .closeBtn{position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Evilleempire</h1>
+  <p class="sub">Live scouting data from Firebase.</p>
+  <p id="status" role="status">Connecting…</p>
+  <div id="progressCard" class="panel" style="display:none;padding:14px 18px;margin-bottom:16px">
+    <div id="progressText" style="font-weight:700;margin-bottom:6px"></div>
+    <div style="background:var(--line);border-radius:8px;height:14px;overflow:hidden">
+      <div id="progressBar" style="background:var(--acc);height:100%;width:0%"></div>
+    </div>
+  </div>
+
+  <div class="navrow">
+    <label for="eventSel" style="color:#fff;font-weight:700">Event</label>
+    <select id="eventSel"><option value="">All events</option></select>
+    <button id="menuToggle" type="button">☰ Menu</button>
+  </div>
+  <select id="view" style="display:none">
+    <option value="analysis">Analysis</option>
+    <option value="rankings">Rankings</option>
+    <option value="breakdown">Team breakdown</option>
+    <option value="pit">Pit scouting</option>
+    <option value="profile">Team profile</option>
+    <option value="prescout">Prescout</option>
+    <option value="validate">Data Validation</option>
+    <option value="picklist">Pick List</option>
+    <option value="alliance">Alliance Selection</option>
+    <option value="all">All matches</option>
+    <option value="tba">Official (TBA)</option>
+  </select>
+  <div id="menuBackdrop" class="menuBackdrop"></div>
+  <nav id="menuDrawer" class="menuDrawer">
+    <button type="button" class="menuClose" id="menuClose">✕ Close</button>
+    <a href="#" data-view="analysis">📊 Analysis</a>
+    <a href="#" data-view="rankings">🏆 Rankings</a>
+    <a href="#" data-view="breakdown">📈 Team breakdown</a>
+    <a href="#" data-view="pit">🔧 Pit scouting</a>
+    <a href="#" data-view="profile">👤 Team profile</a>
+    <a href="#" data-view="prescout">🔍 Prescout</a>
+    <a href="#" data-view="validate">✅ Data Validation</a>
+    <a href="#" data-view="picklist">📋 Pick List</a>
+    <a href="#" data-view="alliance">🤝 Alliance Selection</a>
+    <a href="#" data-view="all">📄 All matches</a>
+    <a href="#" data-view="tba">🌐 Official (TBA)</a>
+  </nav>
+
+  <section id="sec-analysis" class="panel on">
+    <div class="bar-top">
+      <input id="q" type="search" placeholder="Search teams" aria-label="Search teams">
+      <span id="count" class="count"></span>
+      <button id="pointValuesBtn" style="background:#fff;color:#0f7b6c">Point values</button>
+      <button id="exportAnalysisBtn" style="background:#fff;color:#0f7b6c">Export CSV</button>
+    </div>
+    <div id="pointValuesEditor" style="display:none;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)"></div>
+    <div class="wrap"><table id="tbl"></table></div>
+    <p class="hint" style="margin-top:8px">Each row averages that team's matches for this event. Non-numeric answers (like a dropdown pick) show the most common one.</p>
+  </section>
+
+  <section id="sec-rankings" class="panel">
+    <div class="navrow" style="margin-bottom:12px">
+      <label for="metric">Metric</label>
+      <select id="metric"></select>
+    </div>
+    <div id="rankchart"></div>
+  </section>
+
+  <section id="sec-breakdown" class="panel">
+    <p class="hint" style="margin:0 0 10px">Every team, ranked by total. Each color is one stat — hover a segment to see its value.</p>
+    <div id="breakdownLegend" class="legend"></div>
+    <div id="breakdown"></div>
+  </section>
+
+  <section id="sec-pit" class="panel">
+    <button class="save" id="editPitQBtn" style="background:#fff;color:#0f7b6c;margin-bottom:14px">Edit questions</button>
+    <div id="pitQEditor" style="display:none;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)"></div>
+    <div id="pitgrid" class="pitgrid"></div>
+    <div id="pitform"></div>
+    <p class="hint">Answers and photos save in this browser only, per event. Questions are saved separately for FRC and FTC.</p>
+  </section>
+
+  <section id="sec-profile" class="panel">
+    <div id="profilegrid" class="pitgrid"></div>
+    <div id="profilecontent"></div>
+  </section>
+
+  <section id="sec-prescout" class="panel">
+    <p class="hint" style="margin:0 0 14px">See how the teams at the current event performed at an earlier event — useful for studying opponents before the competition starts.</p>
+    <div class="bar-top">
+      <label for="prescoutEventSel" style="color:#fff;font-weight:700">Compare against</label>
+      <select id="prescoutEventSel"><option value="">Pick an earlier event…</option></select>
+    </div>
+    <div id="prescoutBody"></div>
+  </section>
+
+  <section id="sec-validate" class="panel">
+    <p class="hint" style="margin:0 0 14px">Flags matches that look like scouting mistakes — numbers way outside the normal range, the same match/slot submitted more than once, or a missing team number. This is informational only; nothing here is changed automatically.</p>
+    <div id="validateBody"></div>
+  </section>
+
+  <section id="sec-picklist" class="panel">
+    <p class="hint" style="margin:0 0 14px">Give each stat a weight to rank teams automatically, then drag to reorder based on your own judgment — the algorithm is a starting point, not the final word.</p>
+    <div class="card" style="padding:14px 18px;margin-bottom:16px">
+      <h4 style="margin-top:0">Weights</h4>
+      <div id="weightInputs"></div>
+    </div>
+    <div id="pickListBody"></div>
+  </section>
+
+  <section id="sec-alliance" class="panel">
+    <p class="hint" style="margin:0 0 14px">A live draft board for alliance selection day. Uses your Pick List order as the starting pool.</p>
+    <div class="card" style="padding:14px 18px;margin-bottom:16px">
+      <div class="bar-top">
+        <label style="color:#fff;font-weight:700"># Alliances</label>
+        <input id="allianceCount" type="number" min="2" max="16" value="8" style="width:70px">
+        <label style="color:#fff;font-weight:700">Picks per alliance</label>
+        <input id="picksPerAlliance" type="number" min="1" max="4" value="2" style="width:70px">
+        <button id="startAllianceBtn">Start / Restart Selection</button>
+      </div>
+    </div>
+    <div id="allianceBody"></div>
+  </section>
+
+  <section id="sec-all" class="panel">
+    <div class="bar-top"><span id="allCount" class="count"></span><button id="exportAllBtn" style="background:#fff;color:#0f7b6c">Export CSV</button></div>
+    <div id="allMatches"></div>
+  </section>
+
+  <section id="sec-tba" class="panel">
+    <div id="tbaBody"></div>
+  </section>
+</main>
+<div id="tip" class="tip"></div>
+
+<button id="strategyBtn" class="strategyBtn">Stressed</button>
+<div id="strategyModal" class="modal-overlay">
+  <div class="modal-box">
+    <button class="closeBtn" id="closeStrategyModal">✕</button>
+    <div id="strategyContent"></div>
+  </div>
+</div>
+
+<div class="modebar">
+  <button id="modeFrc" class="active">Switch to FRC</button>
+  <button id="modeFtc">Switch to FTC</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD89JSCdkO3TOYiTxilAzZdEltlVYsKjKY",
+  authDomain: "evilleempire-scouting.firebaseapp.com",
+  projectId: "evilleempire-scouting",
+  storageBucket: "evilleempire-scouting.firebasestorage.app",
+  messagingSenderId: "69285497577",
+  appId: "1:69285497577:web:d448ac8175fdf55626be78"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const META = ["match","slot","team","profileId","profileName","gameType"];
+
+let liveDocs = [];
+let livePitDocs = [];
+let liveSuperDocs = [];
+let profileMeta = {};
+let lastAnalysisRows = [], lastAnalysisCols = [];
+let lastAllRows = [], lastAllCols = [];
+
+function csvEscape(v){
+  const s = v===null || v===undefined ? "" : String(v);
+  return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function downloadCsv(filename, cols, rows){
+  const header = cols.map(csvEscape).join(",");
+  const lines = rows.map(r=>cols.map(c=>csvEscape(r[c])).join(","));
+  const csv = [header, ...lines].join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function eventFilenamePart(){
+  const sel = $("eventSel");
+  const name = currentEvent && sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : "all-events";
+  return name.replace(/[^a-z0-9]+/gi,"-").toLowerCase();
+}
+$("exportAnalysisBtn").addEventListener("click", ()=>{
+  downloadCsv(`analysis-${mode}-${eventFilenamePart()}.csv`, lastAnalysisCols, lastAnalysisRows);
+});
+$("exportAllBtn").addEventListener("click", ()=>{
+  downloadCsv(`matches-${mode}-${eventFilenamePart()}.csv`, lastAllCols, lastAllRows);
+});
+
+let mode = localStorage.getItem("scoutMode") || "frc";
+let currentEvent = "";
+let sortCol = -1, sortDir = -1;
+let selectedTeam = null;
+
+function isNum(v){ return v!=="" && v!=null && !isNaN(parseFloat(v)); }
+
+function setMode(m){
+  mode = m;
+  try{ localStorage.setItem("scoutMode", m); }catch(e){}
+  $("modeFrc").classList.toggle("active", m==="frc");
+  $("modeFtc").classList.toggle("active", m==="ftc");
+  currentEvent = "";
+  tbaError = null;
+  refreshAll();
+}
+$("modeFrc").addEventListener("click", ()=>setMode("frc"));
+$("modeFtc").addEventListener("click", ()=>setMode("ftc"));
+
+function modeDocs(){ return liveDocs.filter(d=>d.gameType===mode); }
+function filteredDocs(){
+  const md = modeDocs();
+  return currentEvent ? md.filter(d=>d.profileId===currentEvent) : md;
+}
+function filteredPitDocsFromApp(){
+  const md = livePitDocs.filter(d=>d.gameType===mode);
+  return currentEvent ? md.filter(d=>d.profileId===currentEvent) : md;
+}
+function filteredSuperDocs(){
+  const md = liveSuperDocs.filter(d=>d.gameType===mode);
+  return currentEvent ? md.filter(d=>d.profileId===currentEvent) : md;
+}
+function fieldKeys(docs){
+  const keys = [];
+  docs.forEach(d=>Object.keys(d).forEach(k=>{ if(!META.includes(k) && !keys.includes(k)) keys.push(k); }));
+  return keys;
+}
+function teamsIn(docs){
+  let teams = [...new Set(docs.map(d=>d.team))].filter(t=>t);
+  if(mode==="frc"){
+    teams = [...new Set([...teams, ...currentTbaTeams()])];
+  }
+  return teams.sort((a,b)=>{
+    const na = parseInt(a), nb = parseInt(b);
+    if(!isNaN(na) && !isNaN(nb)) return na-nb;
+    return String(a).localeCompare(String(b));
+  });
+}
+
+function aggregateTeam(docs, team, fields){
+  const matches = docs.filter(d=>d.team===team);
+  const row = {};
+  fields.forEach(f=>{
+    const vals = matches.map(m=>m[f]).filter(v=>v!==undefined && v!=="" && v!=null);
+    if(!vals.length){ row[f] = null; return; }
+    if(vals.every(isNum)){
+      const nums = vals.map(parseFloat);
+      row[f] = Math.round((nums.reduce((a,b)=>a+b,0)/nums.length)*100)/100;
+    } else {
+      const counts = {};
+      vals.forEach(v=>counts[v]=(counts[v]||0)+1);
+      row[f] = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+    }
+  });
+  row._matches = matches.length;
+  return row;
+}
+
+// ---------- Point values ----------
+function pointValuesKey(){ return "pointValues_"+mode; }
+function getPointValues(){ try{ return JSON.parse(localStorage.getItem(pointValuesKey())||"{}"); }catch(e){ return {}; } }
+function savePointValues(pv){ try{ localStorage.setItem(pointValuesKey(), JSON.stringify(pv)); }catch(e){} }
+function pointValuesConfigured(){ return Object.keys(getPointValues()).length > 0; }
+
+function fieldIsChoiceStyle(field, docs){
+  return docs.some(d => d[field]!==undefined && d[field]!=="" && !isNum(d[field]));
+}
+function distinctValuesFor(field, docs){
+  const vals = new Set();
+  docs.forEach(d=>{ if(d[field]!==undefined && d[field]!=="") vals.add(String(d[field])); });
+  return [...vals].sort();
+}
+
+// Points are computed per match, then averaged — not from an already-averaged
+// row — so a team that climbed L1 twice and L3 once gets credit for all three
+// climbs, not just whichever level happened to come up most often.
+function pointsForMatch(matchDoc, fields, pv){
+  let total = 0, any = false;
+  fields.forEach(f=>{
+    const conf = pv[f];
+    if(conf===undefined) return;
+    const v = matchDoc[f];
+    if(v===undefined || v==="" || v===null) return;
+    if(typeof conf==="object"){
+      if(conf[v]!==undefined){ total += conf[v]; any = true; }
+    } else if(isNum(v)){
+      total += parseFloat(v) * conf; any = true;
+    }
+  });
+  return any ? total : null;
+}
+function computeTeamPoints(docs, team, fields){
+  const pv = getPointValues();
+  if(!Object.keys(pv).length) return null;
+  const matches = docs.filter(d=>d.team===team);
+  const perMatch = matches.map(m=>pointsForMatch(m, fields, pv)).filter(v=>v!==null);
+  if(!perMatch.length) return null;
+  return Math.round((perMatch.reduce((a,b)=>a+b,0)/perMatch.length)*100)/100;
+}
+
+function renderPointValuesEditor(){
+  const box = $("pointValuesEditor");
+  const docs = modeDocs();
+  const fields = fieldKeys(docs);
+  const pv = getPointValues();
+  if(!fields.length){
+    box.innerHTML = '<p class="hint">No stats found yet for this game — submit a few matches first, then set point values here.</p>';
+    return;
+  }
+  box.innerHTML = '<p class="hint" style="margin:0 0 10px">How many real game points is each stat worth? For a pick-one stat like Climb, set a value per option. Leave blank for stats that don\'t score points directly.</p>' +
+    fields.map(f=>{
+      if(fieldIsChoiceStyle(f, docs)){
+        const opts = distinctValuesFor(f, docs);
+        const current = (pv[f] && typeof pv[f]==="object") ? pv[f] : {};
+        return `<div class="qrow"><label>${esc(f)}</label>` +
+          opts.map(o=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="flex:1">${esc(o)}</span>
+            <input type="number" step="any" class="pv-choice-input" data-field="${esc(f)}" data-option="${esc(o)}" value="${current[o]!==undefined?current[o]:""}" placeholder="points" style="width:110px;margin-bottom:0">
+          </div>`).join("") + `</div>`;
+      }
+      const currentVal = (pv[f]!==undefined && typeof pv[f]!=="object") ? pv[f] : "";
+      return `<div class="qrow"><label>${esc(f)}</label><input type="number" step="any" class="pv-input" data-field="${esc(f)}" value="${currentVal}" placeholder="points per unit"></div>`;
+    }).join("") +
+    '<button class="save" id="savePointValuesBtn">Save point values</button>';
+  box.querySelector("#savePointValuesBtn").addEventListener("click", ()=>{
+    const newPv = {};
+    box.querySelectorAll(".pv-input").forEach(inp=>{
+      const v = parseFloat(inp.value);
+      if(!isNaN(v)) newPv[inp.dataset.field] = v;
+    });
+    box.querySelectorAll(".pv-choice-input").forEach(inp=>{
+      const v = parseFloat(inp.value);
+      if(!isNaN(v)){
+        if(!newPv[inp.dataset.field] || typeof newPv[inp.dataset.field]!=="object") newPv[inp.dataset.field] = {};
+        newPv[inp.dataset.field][inp.dataset.option] = v;
+      }
+    });
+    savePointValues(newPv);
+    box.style.display = "none";
+    refreshAll();
+  });
+}
+$("pointValuesBtn").addEventListener("click", ()=>{
+  const box = $("pointValuesEditor");
+  if(box.style.display==="none"){ renderPointValuesEditor(); box.style.display="block"; }
+  else box.style.display = "none";
+});
+
+function updateEventOptions(){
+  const md = modeDocs();
+  const events = [...new Map(md.map(d=>[d.profileId, d.profileName])).entries()];
+  const sel = $("eventSel");
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">All events</option>' + events.map(([id,name])=>`<option value="${id}">${esc(name||id)}</option>`).join("");
+  if(events.some(([id])=>id===prev)) sel.value = prev;
+  currentEvent = sel.value;
+}
+$("eventSel").addEventListener("change", ()=>{ currentEvent = $("eventSel").value; tbaError = null; refreshAll(); });
+
+function updatePrescoutEventOptions(){
+  const md = modeDocs();
+  const events = [...new Map(md.map(d=>[d.profileId, d.profileName])).entries()]
+    .filter(([id])=>id !== currentEvent); // never offer comparing an event against itself
+  const sel = $("prescoutEventSel");
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">Pick an earlier event…</option>' +
+    events.map(([id,name])=>`<option value="${id}">${esc(name||id)}</option>`).join("");
+  if(events.some(([id])=>id===prev)) sel.value = prev;
+}
+$("prescoutEventSel").addEventListener("change", renderPrescout);
+
+function renderPrescout(){
+  const body = $("prescoutBody");
+  const compareId = $("prescoutEventSel").value;
+  if(!compareId){
+    body.innerHTML = '<p class="hint">Pick an event above to see how these teams performed there.</p>';
+    return;
+  }
+  const compareDocs = liveDocs.filter(d=>d.gameType===mode && d.profileId===compareId);
+  if(!compareDocs.length){
+    body.innerHTML = '<p class="hint">No data found for that event.</p>';
+    return;
+  }
+  const currentTeams = new Set(teamsIn(filteredDocs()));
+  const compareFields = fieldKeys(compareDocs);
+  // Derive teams directly from compareDocs (not teamsIn), since teamsIn always
+  // injects the CURRENT event's TBA team list regardless of which docs are
+  // passed in -- using it here would list teams with no real data in compareDocs.
+  const compareTeams = [...new Set(compareDocs.map(d=>d.team))].filter(t=>t && currentTeams.has(t))
+    .sort((a,b)=>{
+      const na=parseInt(a), nb=parseInt(b);
+      if(!isNaN(na) && !isNaN(nb)) return na-nb;
+      return String(a).localeCompare(String(b));
+    });
+  if(!compareTeams.length){
+    body.innerHTML = '<p class="hint">None of the teams at the current event show up in that one.</p>';
+    return;
+  }
+  const rows = compareTeams.map(t=>aggregateTeam(compareDocs, t, compareFields));
+  let html = '<div class="wrap"><table><thead><tr><th><button style="cursor:default">Team</button></th>' +
+    compareFields.map(f=>`<th><button style="cursor:default">${esc(f)}</button></th>`).join("") + '</tr></thead><tbody>';
+  rows.forEach((r,i)=>{
+    html += `<tr><td class="n">${esc(compareTeams[i])}</td>` +
+      compareFields.map(f=>`<td class="n">${r[f]!==null && r[f]!==undefined ? esc(r[f]) : "–"}</td>`).join("") + '</tr>';
+  });
+  html += '</tbody></table></div>';
+  body.innerHTML = html;
+}
+
+function median(sorted){
+  const n = sorted.length;
+  return n%2 ? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2;
+}
+
+// Median + MAD (median absolute deviation) instead of mean/stddev: a single
+// extreme value skews a mean/stddev enough to mask its own z-score, but
+// barely moves the median -- so this stays sensitive even to the exact
+// typo it's meant to catch (e.g. "80" typed for "8").
+function computeFieldStats(docs, field){
+  const vals = docs.map(d=>d[field]).filter(v=>v!==undefined && v!=="" && v!=null && isNum(v)).map(parseFloat).sort((a,b)=>a-b);
+  if(vals.length < 5) return null; // too few points for this to mean anything
+  const med = median(vals);
+  const deviations = vals.map(v=>Math.abs(v-med)).sort((a,b)=>a-b);
+  const mad = median(deviations);
+  return { median: med, mad };
+}
+
+function findOutliers(docs, fields){
+  const outliers = [];
+  fields.forEach(f=>{
+    const stats = computeFieldStats(docs, f);
+    if(!stats || stats.mad===0) return;
+    docs.forEach(d=>{
+      const v = d[f];
+      if(v===undefined || v==="" || v===null || !isNum(v)) return;
+      // modified z-score (Iglewicz & Hoaglin); >3.5 is the standard threshold
+      const z = Math.abs(0.6745 * (parseFloat(v)-stats.median) / stats.mad);
+      if(z > 3.5){
+        outliers.push({match:d.match, slot:d.slot, team:d.team, field:f, value:v, mean:Math.round(stats.median*10)/10, z:Math.round(z*10)/10});
+      }
+    });
+  });
+  return outliers.sort((a,b)=>b.z-a.z);
+}
+
+function findDuplicateSlots(docs){
+  const groups = {};
+  docs.forEach(d=>{
+    if(!d.match || !d.slot) return;
+    const key = d.match+"::"+d.slot;
+    (groups[key] = groups[key] || []).push(d);
+  });
+  return Object.entries(groups).filter(([,g])=>g.length>1)
+    .map(([key,g])=>{
+      const [match,slot] = key.split("::");
+      return { match, slot, count: g.length, teams: [...new Set(g.map(d=>d.team))] };
+    });
+}
+
+function findMissingTeam(docs){
+  return docs.filter(d=>!d.team || String(d.team).trim()==="");
+}
+
+function pickWeightsKey(){ return "pickListWeights_"+(currentEvent||mode); }
+function pickOrderKey(){ return "pickListOrder_"+(currentEvent||mode); }
+function loadPickWeights(){ try{ return JSON.parse(localStorage.getItem(pickWeightsKey())||"{}"); }catch(e){ return {}; } }
+function savePickWeights(w){ try{ localStorage.setItem(pickWeightsKey(), JSON.stringify(w)); }catch(e){} }
+function loadPickOrder(){ try{ return JSON.parse(localStorage.getItem(pickOrderKey())||"null"); }catch(e){ return null; } }
+function savePickOrder(order){ try{ localStorage.setItem(pickOrderKey(), JSON.stringify(order)); }catch(e){} }
+
+function computeWeightedScore(aggRow, weights){
+  let score = 0;
+  Object.entries(weights).forEach(([field,w])=>{
+    const v = parseFloat(aggRow[field]);
+    if(!isNaN(v) && w) score += v*w;
+  });
+  return score;
+}
+
+// Decides the team order for the pick list: if weights are set and there's no
+// saved manual order (or the team set has changed since), rank by weighted
+// score; otherwise respect whatever manual drag-order was last saved.
+function computePickListOrder(teams, docs, weights){
+  const anyWeights = Object.values(weights).some(w=>w);
+  const savedOrder = loadPickOrder();
+  const savedMatchesCurrentTeams = savedOrder && savedOrder.length===teams.length && teams.every(t=>savedOrder.includes(t));
+  if(savedMatchesCurrentTeams) return savedOrder;
+  if(anyWeights){
+    const scored = teams.map(t=>({ team:t, score: computeWeightedScore(aggregateTeam(docs, t, Object.keys(weights)), weights) }));
+    return scored.sort((a,b)=>b.score-a.score).map(r=>r.team);
+  }
+  return teams;
+}
+
+function renderPickList(){
+  const docs = filteredDocs();
+  const teams = teamsIn(docs);
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const weights = loadPickWeights();
+
+  const wbox = $("weightInputs");
+  if(!fields.length){
+    wbox.innerHTML = '<p class="hint">No numeric stats found yet for this event.</p>';
+  } else {
+    wbox.innerHTML = fields.map(f=>{
+      const w = weights[f]||0;
+      const label = w>0 ? "Important" : (w<0 ? "Avoid" : "Not used");
+      const labelColor = w>0 ? "#0f7b6c" : (w<0 ? "#7f1d1d" : "var(--mute)");
+      return `
+      <div class="weightrow" data-field="${esc(f)}">
+        <span class="weightname">${esc(f)}</span>
+        <button type="button" class="weightbtn weightminus">−</button>
+        <span class="weightval">${w}</span>
+        <button type="button" class="weightbtn weightplus">+</button>
+        <span class="weightlabel" style="color:${labelColor}">${label}</span>
+      </div>`;
+    }).join("");
+    wbox.querySelectorAll(".weightrow").forEach(row=>{
+      const field = row.dataset.field;
+      function bump(delta){
+        const w = loadPickWeights();
+        w[field] = Math.max(-3, Math.min(3, (w[field]||0)+delta));
+        savePickWeights(w);
+        renderPickList(); // full re-render so the Important/Avoid label updates too
+      }
+      row.querySelector(".weightminus").addEventListener("click", ()=>bump(-1));
+      row.querySelector(".weightplus").addEventListener("click", ()=>bump(1));
+    });
+  }
+  renderPickListTable();
+}
+
+function renderPickListTable(){
+  const docs = filteredDocs();
+  const teams = teamsIn(docs);
+  const weights = loadPickWeights();
+  if(!teams.length){ $("pickListBody").innerHTML = '<p class="hint">No teams found for this event.</p>'; return; }
+
+  const ordered = computePickListOrder(teams, docs, weights);
+  const scoreMap = {};
+  teams.forEach(t=>{ scoreMap[t] = computeWeightedScore(aggregateTeam(docs, t, Object.keys(weights)), weights); });
+
+  $("pickListBody").innerHTML = '<div class="card" style="padding:10px"><div id="pickListItems"></div></div>';
+  const itemsBox = $("pickListItems");
+  ordered.forEach((t,i)=>{
+    const div = document.createElement("div");
+    div.className = "pickitem";
+    div.dataset.team = t;
+    div.innerHTML = `<span class="pickrank">#${i+1}</span><span class="pickteam">${esc(t)}</span><span class="pickscore">score: ${Math.round(scoreMap[t]*100)/100}</span>
+      <button type="button" class="pickmove pickup" ${i===0?"disabled":""}>⬆ Up</button>
+      <button type="button" class="pickmove pickdown" ${i===ordered.length-1?"disabled":""}>⬇ Down</button>`;
+    itemsBox.appendChild(div);
+  });
+  itemsBox.querySelectorAll(".pickitem").forEach((el,i)=>{
+    el.querySelector(".pickup").addEventListener("click", ()=>movePickListTeam(ordered, i, -1));
+    el.querySelector(".pickdown").addEventListener("click", ()=>movePickListTeam(ordered, i, 1));
+  });
+}
+
+function movePickListTeam(ordered, index, direction){
+  const newOrder = [...ordered];
+  const swapWith = index+direction;
+  if(swapWith<0 || swapWith>=newOrder.length) return;
+  [newOrder[index], newOrder[swapWith]] = [newOrder[swapWith], newOrder[index]];
+  savePickOrder(newOrder);
+  renderPickListTable();
+}
+
+function allianceKey(){ return "allianceState_"+(currentEvent||mode); }
+function loadAllianceState(){ try{ return JSON.parse(localStorage.getItem(allianceKey())||"null"); }catch(e){ return null; } }
+function saveAllianceState(s){ try{ localStorage.setItem(allianceKey(), JSON.stringify(s)); }catch(e){} }
+
+function draftOrder(count){ return Array.from({length:count}, (_,i)=>i); }
+
+function currentDraftSlot(state){
+  const totalSlots = state.picks+1;
+  for(let slotIdx=0; slotIdx<totalSlots; slotIdx++){
+    for(const allianceIdx of draftOrder(state.count)){
+      if(state.alliances[allianceIdx][slotIdx]===null) return {allianceIdx, slotIdx};
+    }
+  }
+  return null;
+}
+
+function startAllianceSelection(){
+  const count = parseInt($("allianceCount").value,10) || 8;
+  const picks = parseInt($("picksPerAlliance").value,10) || 2;
+  const docs = filteredDocs();
+  const savedOrder = loadPickOrder();
+  const order = savedOrder && savedOrder.length ? savedOrder : teamsIn(docs);
+  const state = {
+    count, picks,
+    pool: [...order],
+    alliances: Array.from({length:count}, ()=>new Array(picks+1).fill(null)),
+    declined: [],
+  };
+  saveAllianceState(state);
+  renderAllianceBoard();
+}
+$("startAllianceBtn").addEventListener("click", startAllianceSelection);
+
+function assignTeamToCurrentSlot(team){
+  const state = loadAllianceState();
+  if(!state) return;
+  const slot = currentDraftSlot(state);
+  if(!slot) return;
+  state.alliances[slot.allianceIdx][slot.slotIdx] = team;
+  state.pool = state.pool.filter(t=>t!==team);
+  saveAllianceState(state);
+  renderAllianceBoard();
+}
+
+function declineTeam(team){
+  const state = loadAllianceState();
+  if(!state) return;
+  state.pool = state.pool.filter(t=>t!==team);
+  state.declined.push(team);
+  saveAllianceState(state);
+  renderAllianceBoard();
+}
+
+function renderAllianceBoard(){
+  const state = loadAllianceState();
+  const body = $("allianceBody");
+  if(!state){ body.innerHTML = '<p class="hint">Click \u201cStart / Restart Selection\u201d to begin.</p>'; return; }
+
+  const slot = currentDraftSlot(state);
+  let html = '';
+  if(slot){
+    const roundName = slot.slotIdx===0 ? "a Captain" : ("Pick "+slot.slotIdx);
+    html += `<div class="turncard"><div class="turnlabel">It's Alliance ${slot.allianceIdx+1}'s turn</div><div class="turnwhat">Tap a team below to pick ${roundName}</div></div>`;
+  } else {
+    html += '<div class="turncard" style="background:#0f7b6c"><div class="turnlabel">🎉 Selection complete!</div></div>';
+  }
+
+  html += '<div class="wrap"><table><thead><tr><th><button style="cursor:default">Alliance</button></th><th><button style="cursor:default">Captain</button></th>';
+  for(let p=1;p<=state.picks;p++) html += `<th><button style="cursor:default">Pick ${p}</button></th>`;
+  html += '</tr></thead><tbody>';
+  state.alliances.forEach((a,i)=>{
+    html += `<tr${slot && slot.allianceIdx===i ? ' style="background:#fffbe6"' : ''}><td class="n">${i+1}</td>`;
+    a.forEach(t=>{ html += `<td class="n">${t?esc(t):"–"}</td>`; });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+
+  if(slot){
+    html += '<h4>Tap a team to pick it — tap the small ✕ if that team says no</h4><div id="alliancePool" class="alliancechips"></div>';
+  }
+  if(state.declined.length) html += `<h4>Said no / skipped</h4><p class="hint">${state.declined.map(esc).join(", ")}</p>`;
+
+  body.innerHTML = html;
+
+  if(slot){
+    const poolBox = $("alliancePool");
+    state.pool.forEach(t=>{
+      const chip = document.createElement("div");
+      chip.className = "alliancechip";
+      chip.innerHTML = `<button type="button" class="chipteam">${esc(t)}</button><button type="button" class="chipdecline" title="This team says no">✕</button>`;
+      chip.querySelector(".chipteam").addEventListener("click", ()=>assignTeamToCurrentSlot(t));
+      chip.querySelector(".chipdecline").addEventListener("click", ()=>declineTeam(t));
+      poolBox.appendChild(chip);
+    });
+  }
+}
+
+function renderValidation(){
+  const docs = filteredDocs();
+  const body = $("validateBody");
+  if(!docs.length){ body.innerHTML = '<p class="hint">No matches collected yet for this event.</p>'; return; }
+
+  const fields = fieldKeys(docs);
+  const outliers = findOutliers(docs, fields);
+  const dups = findDuplicateSlots(docs);
+  const missing = findMissingTeam(docs);
+
+  if(!outliers.length && !dups.length && !missing.length){
+    body.innerHTML = '<p class="hint" style="color:#0f7b6c;font-weight:700">Nothing flagged — this event\u2019s data looks clean so far.</p>';
+    return;
+  }
+
+  let html = '';
+  if(missing.length){
+    html += `<h4>Missing team number (${missing.length})</h4><div class="wrap"><table><thead><tr><th><button style="cursor:default">Match</button></th><th><button style="cursor:default">Slot</button></th></tr></thead><tbody>`;
+    missing.forEach(d=>{ html += `<tr><td class="n">${esc(d.match)}</td><td class="n">${esc(d.slot)}</td></tr>`; });
+    html += '</tbody></table></div>';
+  }
+  if(dups.length){
+    html += `<h4>Same match/slot submitted more than once (${dups.length})</h4><div class="wrap"><table><thead><tr><th><button style="cursor:default">Match</button></th><th><button style="cursor:default">Slot</button></th><th><button style="cursor:default">Times submitted</button></th><th><button style="cursor:default">Team(s)</button></th></tr></thead><tbody>`;
+    dups.forEach(d=>{ html += `<tr><td class="n">${esc(d.match)}</td><td class="n">${esc(d.slot)}</td><td class="n">${d.count}</td><td class="n">${esc(d.teams.join(", "))}</td></tr>`; });
+    html += '</tbody></table></div>';
+  }
+  if(outliers.length){
+    html += `<h4>Possible typos or misclicks (${outliers.length})</h4><div class="wrap"><table><thead><tr><th><button style="cursor:default">Match</button></th><th><button style="cursor:default">Slot</button></th><th><button style="cursor:default">Team</button></th><th><button style="cursor:default">Field</button></th><th><button style="cursor:default">Value</button></th><th><button style="cursor:default">Typical</button></th></tr></thead><tbody>`;
+    outliers.forEach(o=>{ html += `<tr><td class="n">${esc(o.match)}</td><td class="n">${esc(o.slot)}</td><td class="n">${esc(o.team)}</td><td class="n">${esc(o.field)}</td><td class="n">${esc(o.value)}</td><td class="n">~${o.mean}</td></tr>`; });
+    html += '</tbody></table></div>';
+  }
+  body.innerHTML = html;
+}
+
+// ---------- Analysis ----------
+function renderAnalysis(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const teams = teamsIn(docs);
+  const term = $("q").value.trim().toLowerCase();
+  const showPoints = pointValuesConfigured();
+  let rows = teams.filter(t=>!term || String(t).toLowerCase().includes(term))
+    .map(t=>{
+      const agg = aggregateTeam(docs, t, fields);
+      if(showPoints) agg.points = computeTeamPoints(docs, t, fields);
+      return {team:t, ...agg};
+    });
+  const cols = showPoints ? ["team", ...fields, "points"] : ["team", ...fields];
+  if(sortCol>=0 && sortCol<cols.length){
+    const key = cols[sortCol];
+    rows = rows.sort((a,b)=>{
+      const x=a[key], y=b[key];
+      if(x===null) return 1; if(y===null) return -1;
+      if(typeof x==="string" && isNaN(parseFloat(x))) return sortDir*String(x).localeCompare(String(y));
+      return sortDir*(parseFloat(x)-parseFloat(y));
+    });
+  }
+  let h = "<thead><tr>" + cols.map((c,i)=>
+    `<th><button data-c="${i}"${i===sortCol?` data-dir="${sortDir}"`:""}>${esc(c==="team"?"Team":c==="points"?"Points":c)}</button></th>`).join("") + "</tr></thead><tbody>";
+  h += rows.map(r=>"<tr>" + cols.map(c=>{
+    if(c==="team") return `<td class="l">${esc(r.team)}</td>`;
+    const v=r[c];
+    return `<td class="n">${v===null?"–":esc(v)}</td>`;
+  }).join("") + "</tr>").join("");
+  $("tbl").innerHTML = rows.length ? h+"</tbody>" : `<tr><td class="empty">${teams.length?"No teams match your search.":"No data yet for this event."}</td></tr>`;
+  $("count").textContent = rows.length+" of "+teams.length+" teams";
+  lastAnalysisRows = rows; lastAnalysisCols = cols;
+}
+$("tbl").addEventListener("click", e=>{
+  const b=e.target.closest("button[data-c]"); if(!b) return;
+  const c=+b.dataset.c;
+  if(sortCol===c) sortDir=-sortDir; else { sortCol=c; sortDir = c===0?1:-1; }
+  renderAnalysis();
+});
+$("q").addEventListener("input", renderAnalysis);
+
+// ---------- Rankings ----------
+function buildMetricSelect(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const sel = $("metric");
+  const prev = sel.value;
+  const showPoints = pointValuesConfigured();
+  let opts = fields.map(f=>`<option value="${f}">${esc(f)}</option>`).join("");
+  if(showPoints) opts = `<option value="__points__">Points (calculated)</option>` + opts;
+  sel.innerHTML = opts;
+  if(fields.includes(prev) || prev==="__points__" && showPoints) sel.value = prev;
+  else if(showPoints) sel.value = "__points__";
+  renderRankings();
+}
+$("metric").addEventListener("change", renderRankings);
+function renderRankings(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const metric = $("metric").value;
+  const box = $("rankchart");
+  if(!metric || !docs.length){ box.innerHTML = '<p class="hint">No numeric stats to chart yet.</p>'; return; }
+  const teams = teamsIn(docs);
+  const rows = teams.map(t=>{
+    const agg = aggregateTeam(docs,t,fields);
+    const v = metric==="__points__" ? computeTeamPoints(docs, t, fields) : agg[metric];
+    return {team:t, v};
+  }).filter(r=>r.v!==null && isNum(r.v));
+  rows.sort((a,b)=>b.v-a.v);
+  const max = Math.max(...rows.map(r=>parseFloat(r.v)), 1);
+  box.innerHTML = rows.map(r=>{
+    const w = Math.max(2, parseFloat(r.v)/max*100);
+    return `<div class="rankrow"><div class="team">${esc(r.team)}</div><div class="rankbar-wrap"><div class="rankbar" style="width:${w}%"></div></div><div>${r.v}</div></div>`;
+  }).join("") || '<p class="hint">No teams with this stat yet.</p>';
+}
+
+// ---------- Team breakdown ----------
+const PALETTE = ["#2f6fed","#e0393e","#f2b705","#2e9e4f","#8e44ad","#16a2b8","#e67e22","#795548","#d81b60","#607d8b"];
+function renderBreakdown(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const box = $("breakdown"), legend = $("breakdownLegend");
+  if(!docs.length || !fields.length){ box.innerHTML = '<p class="hint">No numeric stats to chart yet.</p>'; legend.innerHTML=""; return; }
+  legend.innerHTML = fields.map((f,k)=>`<span><span class="sw" style="background:${PALETTE[k%PALETTE.length]}"></span>${esc(f)}</span>`).join("");
+  const teams = teamsIn(docs);
+  const rows = teams.map(t=>{
+    const agg = aggregateTeam(docs, t, fields);
+    const total = fields.reduce((s,f)=>s+(isNum(agg[f])?parseFloat(agg[f]):0),0);
+    return {team:t, agg, total};
+  }).sort((a,b)=>b.total-a.total);
+  const max = Math.max(...rows.map(r=>r.total), 1);
+  box.innerHTML = rows.map(r=>{
+    const segs = fields.map((f,k)=>{
+      const v = r.agg[f];
+      if(!isNum(v) || parseFloat(v)===0) return "";
+      const w = parseFloat(v)/max*100;
+      return `<div class="breakseg" data-tip="${esc(f)}: ${v}" style="width:${w}%;background:${PALETTE[k%PALETTE.length]}"></div>`;
+    }).join("");
+    return `<div class="breakrow"><div class="team">${esc(r.team)}</div><div class="breakbar">${segs}</div></div>`;
+  }).join("");
+  const tipEl = $("tip");
+  box.querySelectorAll(".breakseg").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave", ()=>{ tipEl.style.display="none"; });
+  });
+}
+
+// ---------- Pit scouting ----------
+const DEFAULT_PIT_QS = [
+  {key:"drivetrain", label:"What drivetrain?", type:"text"},
+  {key:"intake", label:"Internal or external intake?", type:"choice", options:["Internal","External"]},
+  {key:"both_pieces", label:"Can both game pieces be intaked?", type:"choice", options:["Yes","No"]},
+  {key:"has_auto", label:"Do they have auto?", type:"choice", options:["Yes","No"]}
+];
+function pitQuestionsKey(){ return "pitQuestions_"+mode; }
+function slugify(label){ return label.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"") || "field"; }
+function getPitQuestions(){
+  try{
+    const raw = localStorage.getItem(pitQuestionsKey());
+    if(raw){ const parsed = JSON.parse(raw); if(Array.isArray(parsed) && parsed.length) return parsed; }
+  }catch(e){}
+  return DEFAULT_PIT_QS;
+}
+function savePitQuestions(qs){ try{ localStorage.setItem(pitQuestionsKey(), JSON.stringify(qs)); }catch(e){} }
+
+function renderPitQEditor(){
+  const box = $("pitQEditor");
+  const qs = getPitQuestions();
+  box.innerHTML = `<div id="pitQRows"></div>
+    <button type="button" id="addPitQRow" style="background:#fff;color:#0f7b6c;margin-bottom:14px">+ Add another question</button>
+    <div><button class="save" id="savePitQBtn">Save questions</button></div>`;
+  const rowsBox = box.querySelector("#pitQRows");
+  function addRow(q){
+    q = q || {};
+    const label = q.label||"", type = q.type||"text", optionsStr = (q.options||[]).join(", ");
+    const row = document.createElement("div");
+    row.className = "fieldrow";
+    row.dataset.qkey = q.key || "";
+    row.innerHTML = `<div class="fieldrow-main">
+        <input type="text" class="qlabel" placeholder="Question text" value="${esc(label)}">
+        <select class="qtype">
+          <option value="text"${type==="text"?" selected":""}>Text answer</option>
+          <option value="choice"${type==="choice"?" selected":""}>Multiple choice</option>
+        </select>
+        <button type="button" class="removeRow">✕</button>
+      </div>
+      <div class="fieldrow-extra">
+        <input type="text" class="qopts" placeholder="Options, comma separated (e.g. Yes, No)" value="${esc(optionsStr)}" style="display:${type==="choice"?"block":"none"}">
+      </div>`;
+    row.querySelector(".removeRow").addEventListener("click", ()=>row.remove());
+    row.querySelector(".qtype").addEventListener("change", e=>{
+      row.querySelector(".qopts").style.display = e.target.value==="choice" ? "block" : "none";
+    });
+    rowsBox.appendChild(row);
+  }
+  qs.forEach(addRow);
+  box.querySelector("#addPitQRow").addEventListener("click", ()=>addRow());
+  box.querySelector("#savePitQBtn").addEventListener("click", ()=>{
+    const seen = new Set();
+    const newQs = [...rowsBox.querySelectorAll(".fieldrow")].map(row=>{
+      const label = row.querySelector(".qlabel").value.trim();
+      const type = row.querySelector(".qtype").value;
+      const obj = {label, type};
+      if(type==="choice") obj.options = row.querySelector(".qopts").value.split(",").map(s=>s.trim()).filter(Boolean);
+      if(row.dataset.qkey) obj.key = row.dataset.qkey;
+      return obj;
+    }).filter(q=>q.label).map(q=>{
+      if(q.key && !seen.has(q.key)){ seen.add(q.key); return q; }
+      let base = slugify(q.label), key = base, n = 2;
+      while(seen.has(key)){ key = base+"_"+n; n++; }
+      seen.add(key);
+      return {...q, key};
+    });
+    savePitQuestions(newQs);
+    box.style.display = "none";
+    renderPitAndProfile();
+  });
+}
+$("editPitQBtn").addEventListener("click", ()=>{
+  const box = $("pitQEditor");
+  if(box.style.display==="none"){ renderPitQEditor(); box.style.display="block"; }
+  else box.style.display="none";
+});
+
+function pitKey(team){ return "pit_"+(currentEvent||mode)+"_"+team; }
+function loadPit(team){ try{ return JSON.parse(localStorage.getItem(pitKey(team))||"{}"); }catch(e){ return {}; } }
+function savePit(team,data){ try{ localStorage.setItem(pitKey(team), JSON.stringify(data)); }catch(e){} }
+
+function renderTeamGrid(gridId, docs){
+  const teams = teamsIn(docs);
+  const el = $(gridId);
+  el.innerHTML = teams.map(t=>`<button class="pitbtn${t===selectedTeam?" sel":""}" data-t="${esc(t)}">${esc(t)}</button>`).join("") || '<p class="hint">No teams yet for this event.</p>';
+  el.querySelectorAll("button").forEach(b=>b.addEventListener("click", ()=>{ selectedTeam=b.dataset.t; renderPitAndProfile(); }));
+  return teams;
+}
+function renderPitAndProfile(){
+  renderTeamGrid("pitgrid", filteredDocs());
+  renderTeamGrid("profilegrid", filteredDocs());
+  renderPitForm();
+  renderProfile();
+}
+function renderPitForm(){
+  const box = $("pitform");
+  if(!selectedTeam){ box.innerHTML=""; return; }
+  const PIT_QS = getPitQuestions();
+  const data = loadPit(selectedTeam);
+  if(!Array.isArray(data.photos)) data.photos=[];
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>` + PIT_QS.map(q=>{
+    if(q.type==="text") return `<div class="qrow"><label>${q.label}</label><input type="text" data-k="${q.key}" value="${esc(data[q.key]||"")}"></div>`;
+    return `<div class="qrow"><label>${q.label}</label><select data-k="${q.key}"><option value="">Select…</option>${(q.options||[]).map(o=>`<option ${data[q.key]===o?"selected":""}>${o}</option>`).join("")}</select></div>`;
+  }).join("") +
+  `<div class="qrow"><label>Photos</label><input type="file" id="pitphotos" accept="image/*" capture="environment" multiple><div class="photos" id="pitphotopreview"></div></div>
+  <button class="save" id="pitsave">Save answers</button>`;
+  const preview = $("pitphotopreview");
+  function draw(){
+    preview.innerHTML = "";
+    data.photos.forEach((src,idx)=>{
+      const img=document.createElement("img"); img.src=src; img.title="Click to remove"; img.style.cursor="pointer";
+      img.addEventListener("click", ()=>{ data.photos.splice(idx,1); savePit(selectedTeam,data); draw(); if($("view").value==="profile") renderProfile(); });
+      preview.appendChild(img);
+    });
+  }
+  draw();
+  box.querySelector("#pitphotos").addEventListener("change", e=>{
+    const files=Array.from(e.target.files); let remaining=files.length;
+    files.forEach(f=>{ const r=new FileReader(); r.onload=()=>{ data.photos.push(r.result); remaining--; if(remaining===0){ savePit(selectedTeam,data); draw(); } }; r.readAsDataURL(f); });
+  });
+  box.querySelector("#pitsave").addEventListener("click", ()=>{
+    const out={photos:data.photos};
+    box.querySelectorAll("[data-k]").forEach(el=>out[el.dataset.k]=el.value);
+    savePit(selectedTeam,out);
+    const btn=box.querySelector("#pitsave"); btn.textContent="Saved"; setTimeout(()=>btn.textContent="Save answers",1200);
+  });
+}
+
+// ---------- Team profile ----------
+function renderProfile(){
+  const box = $("profilecontent");
+  if(!selectedTeam){ box.innerHTML=""; return; }
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const agg = aggregateTeam(docs, selectedTeam, fields);
+  const showPoints = pointValuesConfigured();
+  const points = showPoints ? computeTeamPoints(docs, selectedTeam, fields) : null;
+  const avgHtml = fields.length ? '<div class="statgrid">' +
+    (showPoints ? `<div class="stat" style="background:#dff5f0"><div class="stat-l">Points (calculated)</div><div class="stat-v">${points===null?"–":esc(points)}</div></div>` : "") +
+    fields.map(f=>
+    `<div class="stat"><div class="stat-l">${esc(f)}</div><div class="stat-v">${agg[f]===null?"–":esc(agg[f])}</div></div>`).join("") + '</div>'
+    : '<p class="hint">No stats yet.</p>';
+  const matches = docs.filter(d=>d.team===selectedTeam);
+  const matchesHtml = matches.length ? '<div class="wrap"><table><thead><tr>' +
+    ["match","slot",...fields].map(c=>`<th><button style="cursor:default">${esc(c)}</button></th>`).join("") + '</tr></thead><tbody>' +
+    matches.map(m=>'<tr>'+["match","slot",...fields].map(c=>`<td class="n">${m[c]!==undefined&&m[c]!==""?esc(m[c]):"–"}</td>`).join("")+'</tr>').join("") +
+    '</tbody></table></div>' : '<p class="hint">No individual matches recorded yet.</p>';
+  const pit = loadPit(selectedTeam);
+  const photos = Array.isArray(pit.photos) ? pit.photos : [];
+  const pitHtml = getPitQuestions().map(q=>`<div class="stat"><div class="stat-l">${q.label}</div><div class="stat-v">${esc(pit[q.key]||"–")}</div></div>`).join("");
+  const photosHtml = photos.length ? `<div class="photos">${photos.map(src=>`<img src="${src}">`).join("")}</div>` : '<p class="hint">No photos saved.</p>';
+
+  const meta = currentEvent && profileMeta[currentEvent] ? profileMeta[currentEvent] : null;
+  let pitFieldDefs = [], superFieldDefs = [];
+  if(meta){
+    try{ pitFieldDefs = JSON.parse(meta.pitFields||"[]"); }catch(e){}
+    try{ superFieldDefs = JSON.parse(meta.superFields||"[]"); }catch(e){}
+  }
+  const pitFieldMap = {}; pitFieldDefs.forEach(f=>pitFieldMap[f.id]=f);
+  const superFieldMap = {}; superFieldDefs.forEach(f=>superFieldMap[f.id]=f);
+
+  function formatFieldValue(def, val){
+    if(val===undefined || val===null || val==="") return "–";
+    if(def && def.type==="rating"){
+      const n = parseInt(val,10)||0;
+      return "★".repeat(Math.max(0,n)) + "☆".repeat(Math.max(0,5-n));
+    }
+    if(def && def.type==="toggle") return val==="1" ? "Yes" : (val==="0" ? "No" : "–");
+    return esc(val);
+  }
+
+  const PIT_APP_META = ["team","profileId","profileName","gameType"];
+  const pitAppDoc = filteredPitDocsFromApp().find(d=>d.team===selectedTeam);
+  const pitAppHtml = pitAppDoc
+    ? '<div class="statgrid">' + Object.keys(pitAppDoc).filter(k=>!PIT_APP_META.includes(k))
+        .map(k=>{
+          const def = pitFieldMap[k];
+          const label = def ? def.label : k;
+          return `<div class="stat"><div class="stat-l">${esc(label)}</div><div class="stat-v">${formatFieldValue(def, pitAppDoc[k])}</div></div>`;
+        }).join("") + '</div>'
+    : '<p class="hint">No pit scouting from the app yet for this team.</p>';
+
+  const SUPER_META = ["match","team","profileId","profileName","gameType"];
+  const superDocs = filteredSuperDocs().filter(d=>d.team===selectedTeam);
+  const superFieldIds = [];
+  superDocs.forEach(d=>Object.keys(d).forEach(k=>{ if(!SUPER_META.includes(k) && !superFieldIds.includes(k)) superFieldIds.push(k); }));
+  const superHtml = superDocs.length ? '<div class="wrap"><table><thead><tr>' +
+    ["match",...superFieldIds].map(fid=>{
+      const label = fid==="match" ? "match" : (superFieldMap[fid] ? superFieldMap[fid].label : fid);
+      return `<th><button style="cursor:default">${esc(label)}</button></th>`;
+    }).join("") + '</tr></thead><tbody>' +
+    superDocs.map(d=>'<tr>'+["match",...superFieldIds].map(fid=>{
+      const cellVal = fid==="match" ? (d.match!==undefined&&d.match!==""?esc(d.match):"–") : formatFieldValue(superFieldMap[fid], d[fid]);
+      return `<td class="n">${cellVal}</td>`;
+    }).join("")+'</tr>').join("") +
+    '</tbody></table></div>' : '<p class="hint">No super scout entries yet for this team.</p>';
+
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>
+    <h4>Averages (${matches.length} match${matches.length===1?"":"es"})</h4>${avgHtml}
+    <h4>Individual matches</h4>${matchesHtml}
+    <h4>Pit scouting (website)</h4><div class="statgrid">${pitHtml}</div>
+    <h4>Photos</h4>${photosHtml}
+    <h4>Pit scouting (from app)</h4>${pitAppHtml}
+    <h4>Super Scout</h4>${superHtml}`;
+}
+
+// ---------- All matches ----------
+function renderAll(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const cols = ["team","match","slot",...fields];
+  $("allCount").textContent = docs.length+" match(es)";
+  lastAllRows = docs; lastAllCols = cols;
+  if(!docs.length){ $("allMatches").innerHTML = '<p class="hint">No matches yet for this event.</p>'; return; }
+  let h = '<div class="wrap"><table><thead><tr>'+cols.map(c=>`<th><button style="cursor:default">${esc(c)}</button></th>`).join("")+'</tr></thead><tbody>';
+  h += docs.map(d=>'<tr>'+cols.map(c=>`<td class="${c==='team'?'l':'n'}">${d[c]!==undefined&&d[c]!==""?esc(d[c]):"–"}</td>`).join("")+'</tr>').join("");
+  $("allMatches").innerHTML = h+"</tbody></table></div>";
+}
+
+// ---------- Official (TBA) ----------
+function tbaKeyStorageKey(){ return "tbaApiKey"; }
+function getTbaApiKey(){ try{ return localStorage.getItem(tbaKeyStorageKey())||""; }catch(e){ return ""; } }
+function tbaStorageKey(){ return currentEvent || "__all_events__"; }
+function loadTbaEvents(){ try{ return JSON.parse(localStorage.getItem("tbaEvents")||"{}"); }catch(e){ return {}; } }
+function saveTbaEvent(storageKey, bundle){
+  const all = loadTbaEvents();
+  all[storageKey] = bundle;
+  try{ localStorage.setItem("tbaEvents", JSON.stringify(all)); }catch(e){}
+}
+function currentTbaBundle(){
+  const all = loadTbaEvents();
+  return all[tbaStorageKey()] || null;
+}
+function currentTbaTeams(){
+  const b = currentTbaBundle();
+  return b && b.teams ? b.teams : [];
+}
+
+let tbaError = null;
+
+function renderTbaSettings(extra){
+  const apiKey = getTbaApiKey();
+  const bundle = currentTbaBundle();
+  const lastEventKey = bundle && bundle.tbaEventKeyUsed ? bundle.tbaEventKeyUsed : "";
+  return `
+    <p class="hint" style="margin:0 0 14px">Loading data here applies to whichever event is selected up top (${currentEvent ? esc($("eventSel").selectedOptions[0].textContent) : "All events"}). Switch the Event dropdown to load or view a different one.</p>
+    <div class="qrow"><label>TBA API key (saved in this browser only)</label>
+      <input type="text" id="tbaApiKeyInput" value="${esc(apiKey)}" placeholder="Get one free at thebluealliance.com/account"></div>
+    <div class="qrow"><label>Event key for this event</label>
+      <input type="text" id="tbaEventKeyInput" value="${esc(lastEventKey)}" placeholder="e.g. 2026mimid"></div>
+    <button class="save" id="tbaLoadBtn">Load from The Blue Alliance</button>
+    ${extra||""}
+  `;
+}
+
+function wireTbaSettings(onLoad){
+  document.getElementById("tbaLoadBtn").addEventListener("click", async ()=>{
+    const apiKey = document.getElementById("tbaApiKeyInput").value.trim();
+    const eventKey = document.getElementById("tbaEventKeyInput").value.trim();
+    try{ localStorage.setItem(tbaKeyStorageKey(), apiKey); }catch(e){}
+    if(!apiKey || !eventKey){ alert("Enter both the API key and an event key first."); return; }
+    await onLoad(apiKey, eventKey);
+  });
+}
+
+async function fetchTba(apiKey, eventKey){
+  const headers = {"X-TBA-Auth-Key": apiKey};
+  const base = "https://www.thebluealliance.com/api/v3/event/"+encodeURIComponent(eventKey);
+  const [infoRes, rankRes, matchRes, teamRes] = await Promise.all([
+    fetch(base, {headers}),
+    fetch(base+"/rankings", {headers}),
+    fetch(base+"/matches", {headers}),
+    fetch(base+"/teams/simple", {headers})
+  ]);
+  if(!infoRes.ok || !rankRes.ok || !matchRes.ok || !teamRes.ok) throw new Error("TBA returned an error — check your API key and event key.");
+  const info = await infoRes.json();
+  const rankings = await rankRes.json();
+  const matches = await matchRes.json();
+  const teamsRaw = await teamRes.json();
+  const teams = teamsRaw.map(t=>String(t.team_number)).sort((a,b)=>parseInt(a)-parseInt(b));
+  return {info, rankings, matches, teams, savedAt: new Date().toISOString()};
+}
+
+function renderTbaResults(data){
+  const {info, rankings, matches, teams} = data;
+  let html = `<div class="panel" style="margin-bottom:16px">
+    <h3>${esc(info.name||"")}</h3>
+    <p class="hint">${esc(info.start_date||"")} – ${esc(info.end_date||"")} · ${esc(info.city||"")}${info.state_prov?", "+esc(info.state_prov):""}</p>
+  </div>`;
+
+  if(rankings && rankings.rankings && rankings.rankings.length){
+    const rpNames = (rankings.sort_order_info||[]).map(s=>s.name);
+    html += `<div class="wrap" style="margin-bottom:16px"><table><thead><tr>
+      <th><button style="cursor:default">Rank</button></th>
+      <th><button style="cursor:default">Team</button></th>
+      <th><button style="cursor:default">W-L-T</button></th>
+      ${rpNames.map(n=>`<th><button style="cursor:default">${esc(n)}</button></th>`).join("")}
+      </tr></thead><tbody>`;
+    html += rankings.rankings.map(r=>{
+      const rec = r.record ? `${r.record.wins}-${r.record.losses}-${r.record.ties}` : "–";
+      return `<tr><td class="n">${r.rank}</td><td class="l">${String(r.team_key).replace("frc","")}</td><td class="n">${rec}</td>
+        ${(r.sort_orders||[]).map(v=>`<td class="n">${v}</td>`).join("")}</tr>`;
+    }).join("");
+    html += "</tbody></table></div>";
+  } else {
+    html += '<p class="hint">No official rankings published yet for this event.</p>';
+  }
+
+  const qm = (matches||[]).filter(m=>m.comp_level==="qm").sort((a,b)=>a.match_number-b.match_number);
+  if(qm.length){
+    html += `<div class="wrap"><table><thead><tr>
+      <th><button style="cursor:default">Match</button></th>
+      <th><button style="cursor:default">Red</button></th>
+      <th><button style="cursor:default">Blue</button></th>
+      <th><button style="cursor:default">Red score</button></th>
+      <th><button style="cursor:default">Blue score</button></th>
+      </tr></thead><tbody>`;
+    html += qm.map(m=>{
+      const red = m.alliances.red.team_keys.map(t=>t.replace("frc","")).join(", ");
+      const blue = m.alliances.blue.team_keys.map(t=>t.replace("frc","")).join(", ");
+      const rs = m.alliances.red.score >= 0 ? m.alliances.red.score : "–";
+      const bs = m.alliances.blue.score >= 0 ? m.alliances.blue.score : "–";
+      return `<tr><td class="n">${m.match_number}</td><td class="n">${esc(red)}</td><td class="n">${esc(blue)}</td><td class="n">${rs}</td><td class="n">${bs}</td></tr>`;
+    }).join("");
+    html += "</tbody></table></div>";
+  } else {
+    html += '<p class="hint">No qualification matches published yet for this event.</p>';
+  }
+
+  if(teams && teams.length){
+    html += `<div class="panel" style="margin-top:16px"><h4 style="margin:0 0 8px">All ${teams.length} teams at this event</h4>
+      <p class="hint" style="margin:0">${teams.map(esc).join(", ")}</p></div>`;
+  }
+  return html;
+}
+
+function renderTba(){
+  const box = $("tbaBody");
+  if(mode==="ftc"){
+    box.innerHTML = '<p class="hint">The Blue Alliance only covers FRC — switch to FRC to use this.</p>' + renderTbaSettings();
+    wireTbaSettings(loadHandler);
+    return;
+  }
+  const bundle = currentTbaBundle();
+  const errorHtml = tbaError ? `<p class="hint" style="color:#b3261e;margin-top:10px">${esc(tbaError)}</p>` : "";
+  const emptyHtml = (!bundle && !tbaError) ? '<p class="hint" style="margin-top:10px">No event loaded yet. Enter a key above to load one.</p>' : "";
+  box.innerHTML = renderTbaSettings(errorHtml + emptyHtml) + (bundle ? renderTbaResults(bundle) : "");
+  wireTbaSettings(loadHandler);
+}
+
+async function loadHandler(apiKey, eventKey){
+  const loadBtn = document.getElementById("tbaLoadBtn");
+  loadBtn.textContent = "Loading…"; loadBtn.disabled = true;
+  try{
+    const bundle = await fetchTba(apiKey, eventKey);
+    bundle.tbaEventKeyUsed = eventKey;
+    saveTbaEvent(tbaStorageKey(), bundle);
+    tbaError = null;
+  }catch(e){
+    tbaError = e.message;
+  }
+  renderTba();
+}
+
+
+function switchView(viewName){
+  $("view").value = viewName;
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("on"));
+  $("sec-"+viewName).classList.add("on");
+  document.querySelectorAll("#menuDrawer a").forEach(a=>a.classList.toggle("active", a.dataset.view===viewName));
+  refreshAll();
+}
+$("view").addEventListener("change", ()=>switchView($("view").value));
+
+function openMenu(){ $("menuDrawer").classList.add("open"); $("menuBackdrop").classList.add("open"); }
+function closeMenu(){ $("menuDrawer").classList.remove("open"); $("menuBackdrop").classList.remove("open"); }
+$("menuToggle").addEventListener("click", openMenu);
+$("menuClose").addEventListener("click", closeMenu);
+$("menuBackdrop").addEventListener("click", closeMenu);
+document.querySelectorAll("#menuDrawer a").forEach(a=>{
+  a.addEventListener("click", e=>{
+    e.preventDefault();
+    switchView(a.dataset.view);
+    closeMenu();
+  });
+});
+document.querySelector('#menuDrawer a[data-view="analysis"]').classList.add("active");
+
+function renderProgressCard(){
+  const docs = filteredDocs();
+  const card = $("progressCard");
+  const bundle = currentTbaBundle();
+  const filledSet = new Set(docs.filter(d=>d.team).map(d=>d.match+"::"+d.slot));
+  const filled = filledSet.size;
+  if(mode==="frc" && bundle && bundle.matches){
+    const qm = bundle.matches.filter(m=>m.comp_level==="qm");
+    let total = 0;
+    qm.forEach(m=>{ total += m.alliances.red.team_keys.length + m.alliances.blue.team_keys.length; });
+    if(total>0){
+      const pct = Math.round(filled/total*100);
+      card.style.display = "block";
+      $("progressText").textContent = `Scouting progress: ${filled} / ${total} slots (${pct}%)`;
+      $("progressBar").style.width = pct+"%";
+      return;
+    }
+  }
+  if(filled>0){
+    card.style.display = "block";
+    $("progressText").textContent = `${filled} match slot(s) scouted so far`;
+    $("progressBar").style.width = "0%";
+  } else {
+    card.style.display = "none";
+  }
+}
+
+function refreshAll(){
+  updateEventOptions();
+  renderProgressCard();
+  const v = $("view").value;
+  if(v==="analysis") renderAnalysis();
+  else if(v==="rankings") buildMetricSelect();
+  else if(v==="breakdown") renderBreakdown();
+  else if(v==="pit" || v==="profile") renderPitAndProfile();
+  else if(v==="prescout"){ updatePrescoutEventOptions(); renderPrescout(); }
+  else if(v==="validate") renderValidation();
+  else if(v==="picklist") renderPickList();
+  else if(v==="alliance") renderAllianceBoard();
+  else if(v==="all") renderAll();
+  else if(v==="tba") renderTba();
+}
+
+// ---------- Strategy ----------
+function getMyTeam(){ try{ return localStorage.getItem("myTeamNumber")||""; }catch(e){ return ""; } }
+function setMyTeam(v){ try{ localStorage.setItem("myTeamNumber", v); }catch(e){} }
+
+function findNextMatch(myTeam){
+  const bundle = currentTbaBundle();
+  if(!bundle || !bundle.matches) return null;
+  const qm = bundle.matches.filter(m=>m.comp_level==="qm").sort((a,b)=>a.match_number-b.match_number);
+  const myMatches = qm.filter(m=>{
+    const teams = [...m.alliances.red.team_keys, ...m.alliances.blue.team_keys].map(t=>t.replace("frc",""));
+    return teams.includes(String(myTeam));
+  });
+  if(!myMatches.length) return null;
+  return myMatches.find(m=>m.alliances.red.score<0 && m.alliances.blue.score<0) || myMatches[0];
+}
+
+function renderStrategy(){
+  const box = $("strategyContent");
+  const myTeam = getMyTeam();
+  const teamInputHtml = `<div class="qrow"><label>Your team number</label><input type="text" id="myTeamInput" value="${esc(myTeam)}" placeholder="e.g. 5216"></div>`;
+
+  if(mode!=="frc"){
+    box.innerHTML = '<h3>Stressed</h3><p class="hint">This uses the official schedule from The Blue Alliance, which only covers FRC. Switch to FRC to use this.</p>';
+    return;
+  }
+  if(!myTeam){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + '<p class="hint">Enter your team number above to find your next match.</p>';
+    wireMyTeamInput(); return;
+  }
+  const bundle = currentTbaBundle();
+  if(!bundle){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + '<p class="hint">No event schedule loaded yet — load one on the Official (TBA) tab first.</p>';
+    wireMyTeamInput(); return;
+  }
+  const match = findNextMatch(myTeam);
+  if(!match){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + `<p class="hint">No matches found for team ${esc(myTeam)} in the loaded event.</p>`;
+    wireMyTeamInput(); return;
+  }
+
+  const red = match.alliances.red.team_keys.map(t=>t.replace("frc",""));
+  const blue = match.alliances.blue.team_keys.map(t=>t.replace("frc",""));
+  const onRed = red.includes(String(myTeam));
+  const allTeams = [...red, ...blue];
+
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+
+  let html = `<h3>Stressed</h3>${teamInputHtml}
+    <h3 style="margin-top:0">Match ${match.match_number}</h3>
+    <p class="hint" style="margin:0 0 10px">You're on the <b>${onRed?"RED":"BLUE"}</b> alliance.</p>
+    <p style="margin:0 0 4px"><b style="color:#e0393e">Red:</b> ${red.map(esc).join(", ")}</p>
+    <p style="margin:0 0 16px"><b style="color:#2f6fed">Blue:</b> ${blue.map(esc).join(", ")}</p>`;
+
+  if(!fields.length){
+    html += '<p class="hint">No scouted stats yet to compare these teams on.</p>';
+  } else {
+    html += `<div class="legend">${fields.map((f,k)=>`<span><span class="sw" style="background:${PALETTE[k%PALETTE.length]}"></span>${esc(f)}</span>`).join("")}</div>`;
+    const rows = allTeams.map(t=>{
+      const agg = aggregateTeam(docs, t, fields);
+      const total = fields.reduce((s,f)=>s+(isNum(agg[f])?parseFloat(agg[f]):0),0);
+      return {team:t, agg, total, isMe: String(t)===String(myTeam)};
+    });
+    const max = Math.max(...rows.map(r=>r.total), 1);
+    html += rows.map(r=>{
+      const segs = fields.map((f,k)=>{
+        const v = r.agg[f];
+        if(!isNum(v) || parseFloat(v)===0) return "";
+        const w = parseFloat(v)/max*100;
+        return `<div class="breakseg" data-tip="${esc(f)}: ${v}" style="width:${w}%;background:${PALETTE[k%PALETTE.length]}"></div>`;
+      }).join("");
+      return `<div class="breakrow"><div class="team"${r.isMe?' style="color:var(--acc)"':""}>${esc(r.team)}${r.isMe?" (us)":""}</div><div class="breakbar">${segs}</div></div>`;
+    }).join("");
+  }
+  box.innerHTML = html;
+  wireMyTeamInput();
+  const tipEl = $("tip");
+  box.querySelectorAll(".breakseg").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave", ()=>{ tipEl.style.display="none"; });
+  });
+}
+function wireMyTeamInput(){
+  const input = document.getElementById("myTeamInput");
+  if(input) input.addEventListener("change", ()=>{ setMyTeam(input.value.trim()); renderStrategy(); });
+}
+$("strategyBtn").addEventListener("click", ()=>{ $("strategyModal").classList.add("open"); renderStrategy(); });
+$("closeStrategyModal").addEventListener("click", ()=>{ $("strategyModal").classList.remove("open"); });
+$("strategyModal").addEventListener("click", e=>{ if(e.target.id==="strategyModal") $("strategyModal").classList.remove("open"); });
+
+db.collection("submissions").onSnapshot(snapshot=>{
+  liveDocs = snapshot.docs.map(doc=>doc.data());
+  $("status").textContent = "Connected — "+liveDocs.length+" total match(es) received.";
+  refreshAll();
+}, err=>{
+  $("status").textContent = "Could not connect to Firebase: "+err.message;
+});
+
+db.collection("pit_scouting").onSnapshot(snapshot=>{
+  livePitDocs = snapshot.docs.map(doc=>doc.data());
+  if(selectedTeam) renderProfile();
+}, err=>{ console.error("pit_scouting listener error:", err.message); });
+
+db.collection("super_scout").onSnapshot(snapshot=>{
+  liveSuperDocs = snapshot.docs.map(doc=>doc.data());
+  if(selectedTeam) renderProfile();
+}, err=>{ console.error("super_scout listener error:", err.message); });
+
+db.collection("profile_meta").onSnapshot(snapshot=>{
+  profileMeta = {};
+  snapshot.docs.forEach(doc=>{ profileMeta[doc.id] = doc.data(); });
+  if(selectedTeam) renderProfile();
+}, err=>{ console.error("profile_meta listener error:", err.message); });
+</script>
+</body>
+</html>
