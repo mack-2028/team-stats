@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evilleempire</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#4B9CD3;--panel:#fff;--ink:#000;--mute:#000;--line:#c9dcea;--bar:#bfe3dc;--acc:#0f7b6c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:80px}
+main{max-width:1040px;margin:0 auto;padding:80px 16px 48px}
+h1{font-size:clamp(1.6rem,6vw,2.1rem);line-height:1.1;margin:0 0 4px;font-weight:700;letter-spacing:-.01em;color:#fff}
+h3{margin:0 0 10px}
+.sub{color:#eef6fb;margin:0 0 18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.navrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+select{font:600 15px Barlow,system-ui,sans-serif;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+#status{color:#eef6fb;font-size:.9rem;margin:0 0 14px}
+section{display:none}
+section.on{display:block}
+.bar-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+input[type=search]{flex:1 1 200px;max-width:320px;padding:9px 12px;border:1px solid #000;border-radius:8px;background:#f5f9fb;color:#000;font:inherit}
+.count{color:var(--mute)}
+.wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:0;border-bottom:1px solid var(--line);text-align:left}
+tr:last-child td{border-bottom:0}
+thead th{background:#0b4f46}
+th button{all:unset;box-sizing:border-box;display:block;width:100%;padding:14px 18px;cursor:pointer;font-weight:700;color:#fff;font-size:.85rem;white-space:nowrap}
+th button[data-dir="1"]::after{content:" \25B2";font-size:.7em}
+th button[data-dir="-1"]::after{content:" \25BC";font-size:.7em}
+td.l{padding:14px 18px;font-weight:700;white-space:nowrap}
+td.n{padding:14px 18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{padding:32px 16px;text-align:center;color:var(--mute)}
+.rankrow{display:grid;grid-template-columns:70px 1fr 60px;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}
+.rankrow:last-child{border-bottom:0}
+.rankrow .team{font-weight:700}
+.rankbar-wrap{background:var(--line);border-radius:6px;overflow:hidden;height:22px}
+.rankbar{height:100%;background:var(--acc);border-radius:6px}
+.tip{position:fixed;background:#0f2233;color:#fff;padding:8px 10px;border-radius:8px;font-size:.85rem;pointer-events:none;z-index:50;display:none}
+.breakrow{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.breakrow:last-child{border-bottom:0}
+.breakrow .team{font-weight:700}
+.breakbar{display:flex;height:24px;border-radius:6px;overflow:hidden;background:var(--line)}
+.breakseg{height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:10px 0 16px;font-size:.85rem}
+.legend span.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.pitgrid{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.pitbtn{padding:10px 18px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer;font:700 16px Barlow,sans-serif}
+.pitbtn.sel{background:var(--acc);color:#000;font-weight:800;border-color:#000}
+.fieldrow{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.fieldrow-main{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.fieldrow-main input[type=text]{margin-bottom:0;flex:1;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.fieldrow-main select{margin-bottom:0;width:170px;flex:0 0 auto;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.fieldrow-main button.removeRow{background:#fff;color:#b3261e;border:2px solid #b3261e;flex:0 0 auto;padding:10px 12px;border-radius:8px;cursor:pointer}
+.fieldrow-extra input{margin-bottom:0;width:100%;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000}
+.qrow{margin-bottom:16px}
+.qrow label{display:block;font-weight:700;margin-bottom:6px;color:var(--ink);font-size:1.02rem}
+.qrow input[type=text],.qrow select{width:100%;max-width:420px;padding:10px 12px;border-radius:8px;border:2px solid #000;background:#fff;color:#000;font-size:1rem;font-weight:600}
+button.save{margin-top:6px;font:700 15px Barlow,sans-serif;padding:10px 18px;border-radius:8px;border:2px solid var(--acc);background:var(--acc);color:#fff;cursor:pointer}
+.photos{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.photos img{width:100px;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.hint{color:var(--mute);font-size:.9rem}
+.pickitem{display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid var(--line);background:#fff;flex-wrap:wrap}
+.pickrank{font-weight:700;min-width:40px;font-size:1.2rem}
+.pickteam{flex:1;font-weight:700;font-size:1.2rem;min-width:70px}
+.pickscore{color:var(--mute);font-size:.85rem;width:100%}
+.pickmove{padding:10px 14px;border-radius:8px;border:2px solid #000;background:#f5f9fb;font-weight:700;cursor:pointer;font-size:1rem}
+.pickmove:disabled{opacity:.3;cursor:not-allowed}
+.plbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pltab{padding:12px 16px;border-radius:10px;border:2px solid #000;background:#f5f9fb;font-weight:700;font-size:1rem;cursor:pointer}
+.pltab.on{background:#0f7b6c;color:#fff}
+.plnew{background:#fff;border-style:dashed}
+.plchk{font-weight:700;display:flex;align-items:center;gap:6px;margin-left:auto}
+.pickitem.picked{opacity:.5;background:#eef3f6}
+.pickitem.picked .pickteam{text-decoration:line-through}
+.pltag{font-size:.75rem;background:#1d4ed8;color:#fff;border-radius:6px;padding:2px 8px;margin-left:6px;text-decoration:none;display:inline-block}
+.pltag.no{background:#7f1d1d}
+.weightrow{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.weightname{flex:1;font-weight:700;min-width:110px}
+.weightbtn{width:44px;height:44px;border-radius:10px;border:2px solid #000;background:#f5f9fb;font-size:1.4rem;font-weight:700;cursor:pointer}
+.weightval{font-weight:700;font-size:1.3rem;min-width:28px;text-align:center}
+.weightlabel{font-weight:700;font-size:.9rem;min-width:90px}
+.turncard{background:#1d4ed8;color:#fff;border-radius:14px;padding:20px;margin-bottom:16px;text-align:center}
+.turnlabel{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.turnwhat{font-size:1.1rem}
+.alliancechips{display:flex;flex-wrap:wrap;gap:10px}
+.allgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.allside{background:#fff;border:2px solid #000;border-radius:14px;padding:10px 12px;max-height:80vh;overflow:auto;position:sticky;top:10px}
+.allside h4{margin:4px 0 8px}
+.allside .alliancechips{flex-direction:column;flex-wrap:nowrap;gap:6px}
+.allside .alliancechip{width:100%}
+.allside .chipteam{flex:1;text-align:left}
+.rankbox{max-height:340px;overflow:auto;border:2px solid #000;border-radius:12px;background:#fff;margin-top:18px}
+.rankbox table{width:100%}
+.rankbox tr.rk-picked{opacity:.45}
+.rankbox tr.rk-no{color:#7f1d1d}
+@media(max-width:900px){.allgrid{grid-template-columns:1fr}.allside{position:static;max-height:none}}
+.alliancechip{display:flex;border-radius:10px;overflow:hidden;border:2px solid #000}
+.chipteam{padding:16px 18px;font-size:1.15rem;font-weight:700;background:#f5f9fb;border:none;cursor:pointer}
+.chipdecline{padding:16px 14px;font-size:1.1rem;font-weight:700;background:#7f1d1d;color:#fff;border:none;border-left:2px solid #000;cursor:pointer}
+.pickpool button{margin:4px;padding:10px 14px;border-radius:8px;border:2px solid #000;background:#f5f9fb;font-weight:700;cursor:pointer}
+.pickpool button.declineBtn{background:#7f1d1d;color:#fff;border-color:#7f1d1d}
+#menuToggle{position:fixed;top:14px;left:14px;z-index:50;font:700 18px Barlow,sans-serif;padding:12px 20px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+main{padding-top:70px}
+.menuBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}
+.menuBackdrop.open{display:block}
+.menuDrawer{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:#fff;z-index:45;transform:translateX(-100%);transition:transform .2s ease;padding:70px 10px 20px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;box-shadow:4px 0 20px rgba(0,0,0,.3)}
+.menuDrawer.open{transform:translateX(0)}
+.menuDrawer a{display:block;color:#000;text-decoration:none;padding:18px 16px;border-radius:12px;font-weight:700;font-size:1.15rem}
+.menuDrawer a:active,.menuDrawer a.active{background:var(--line)}
+.menuClose{position:absolute;top:16px;right:16px;font:700 16px Barlow,sans-serif;padding:10px 16px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;cursor:pointer}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:0 0 6px}
+.stat{background:#f5f9fb;border:1px solid #000;border-radius:8px;padding:8px 10px}
+.stat-l{font-size:.75rem;color:#000;margin-bottom:2px;font-weight:600}
+.stat-v{font-weight:700;color:#000}
+.modebar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:0;z-index:30;border-top:1px solid var(--line)}
+.modebar button{flex:1;padding:16px;font:700 16px Barlow,sans-serif;border:none;cursor:pointer;background:var(--panel);color:var(--ink)}
+.modebar button.active{background:var(--acc);color:#fff}
+.stratTabs{display:flex;gap:8px;margin-bottom:14px}
+.stratTabs button{flex:1;padding:10px;border:2px solid var(--ink);border-radius:10px;background:var(--panel);color:var(--ink);font:700 15px Barlow,sans-serif;cursor:pointer}
+.stratTabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.apTeams{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.apTeams button{padding:10px 14px;border-radius:10px;border:2px solid #000;font:700 16px Barlow,sans-serif;cursor:pointer;color:#fff}
+.apTeams button.red{background:#b3282d}.apTeams button.blue{background:#2250c4}
+.apTeams button.sel{box-shadow:0 0 0 3px #000}
+.apCv{width:100%;border:2px solid #000;border-radius:10px;display:block;background:#444}
+.apRow{display:flex;gap:8px;align-items:flex-start;padding:8px;border-radius:8px;border:2px solid transparent;cursor:pointer;color:var(--ink);margin-top:6px}
+.apRow.sel{border-color:#000;background:rgba(0,0,0,.06)}
+.apChip{flex:0 0 auto;min-width:30px;height:24px;border-radius:12px;border:2px solid #000;color:#000;font-weight:700;text-align:center;line-height:20px;padding:0 6px}
+.strategyBtn{position:fixed;right:0;top:45%;transform:translateY(-50%);z-index:25;background:var(--acc);color:#fff;border:none;padding:18px 10px;border-radius:10px 0 0 10px;font:700 15px Barlow,sans-serif;cursor:pointer;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.03em}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--panel);border-radius:12px;padding:22px;max-width:700px;width:100%;max-height:85vh;overflow-y:auto;position:relative;color:var(--ink)}
+.modal-box .closeBtn{position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Evilleempire</h1>
+  <p class="sub">Live scouting data from Firebase.</p>
+  <p id="status" role="status">Connecting…</p>
+  <div id="progressCard" class="panel" style="display:none;padding:14px 18px;margin-bottom:16px">
+    <div id="progressText" style="font-weight:700;margin-bottom:6px"></div>
+    <div style="background:var(--line);border-radius:8px;height:14px;overflow:hidden">
+      <div id="progressBar" style="background:var(--acc);height:100%;width:0%"></div>
+    </div>
+  </div>
+
+  <div class="navrow">
+    <label for="eventSel" style="color:#fff;font-weight:700">Event</label>
+    <select id="eventSel"><option value="">All events</option></select>
+    <button id="menuToggle" type="button">☰ Menu</button>
+  </div>
+  <select id="view" style="display:none">
+    <option value="analysis">Analysis</option>
+    <option value="rankings">Rankings</option>
+    <option value="breakdown">Team breakdown</option>
+    <option value="pit">Pit scouting</option>
+    <option value="profile">Team profile</option>
+    <option value="prescout">Prescout</option>
+    <option value="validate">Data Validation</option>
+    <option value="picklist">Pick List</option>
+    <option value="alliance">Alliance Selection</option>
+    <option value="all">All matches</option>
+    <option value="tba">Official (TBA)</option>
+  </select>
+  <div id="menuBackdrop" class="menuBackdrop"></div>
+  <nav id="menuDrawer" class="menuDrawer">
+    <button type="button" class="menuClose" id="menuClose">✕ Close</button>
+    <a href="#" data-view="analysis">📊 Analysis</a>
+    <a href="#" data-view="rankings">🏆 Rankings</a>
+    <a href="#" data-view="breakdown">📈 Team breakdown</a>
+    <a href="#" data-view="pit">🔧 Pit scouting</a>
+    <a href="#" data-view="profile">👤 Team profile</a>
+    <a href="#" data-view="prescout">🔍 Prescout</a>
+    <a href="#" data-view="validate">✅ Data Validation</a>
+    <a href="#" data-view="picklist">📋 Pick List</a>
+    <a href="#" data-view="alliance">🤝 Alliance Selection</a>
+    <a href="#" data-view="all">📄 All matches</a>
+    <a href="#" data-view="tba">🌐 Official (TBA)</a>
+  </nav>
+
+  <section id="sec-analysis" class="panel on">
+    <div class="bar-top">
+      <input id="q" type="search" placeholder="Search teams" aria-label="Search teams">
+      <span id="count" class="count"></span>
+      <button id="pointValuesBtn" style="background:#fff;color:#0f7b6c">Point values</button>
+      <button id="exportAnalysisBtn" style="background:#fff;color:#0f7b6c">Export CSV</button>
+    </div>
+    <div id="pointValuesEditor" style="display:none;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)"></div>
+    <div class="wrap"><table id="tbl"></table></div>
+    <p class="hint" style="margin-top:8px">Each row averages that team's matches for this event. Non-numeric answers (like a dropdown pick) show the most common one.</p>
+  </section>
+
+  <section id="sec-rankings" class="panel">
+    <div class="navrow" style="margin-bottom:12px">
+      <label for="metric">Metric</label>
+      <select id="metric"></select>
+    </div>
+    <div id="rankchart"></div>
+  </section>
+
+  <section id="sec-breakdown" class="panel">
+    <p class="hint" style="margin:0 0 10px">Every team, ranked by total. Each color is one stat — hover a segment to see its value.</p>
+    <div id="breakdownLegend" class="legend"></div>
+    <div id="breakdown"></div>
+  </section>
+
+  <section id="sec-pit" class="panel">
+    <button class="save" id="editPitQBtn" style="background:#fff;color:#0f7b6c;margin-bottom:14px">Edit questions</button>
+    <div id="pitQEditor" style="display:none;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)"></div>
+    <div id="pitgrid" class="pitgrid"></div>
+    <div id="pitform"></div>
+    <p class="hint">Answers and photos save in this browser only, per event. Questions are saved separately for FRC and FTC.</p>
+  </section>
+
+  <section id="sec-profile" class="panel">
+    <div id="profilegrid" class="pitgrid"></div>
+    <div id="profilecontent"></div>
+  </section>
+
+  <section id="sec-prescout" class="panel">
+    <p class="hint" style="margin:0 0 14px">See how the teams at the current event performed at an earlier event — useful for studying opponents before the competition starts.</p>
+    <div class="bar-top">
+      <label for="prescoutEventSel" style="color:#fff;font-weight:700">Compare against</label>
+      <select id="prescoutEventSel"><option value="">Pick an earlier event…</option></select>
+    </div>
+    <div id="prescoutBody"></div>
+  </section>
+
+  <section id="sec-validate" class="panel">
+    <p class="hint" style="margin:0 0 14px">Flags matches that look like scouting mistakes — numbers way outside the normal range, the same match/slot submitted more than once, or a missing team number. This is informational only; nothing here is changed automatically.</p>
+    <div id="validateBody"></div>
+  </section>
+
+  <section id="sec-picklist" class="panel">
+    <p class="hint" style="margin:0 0 14px">Make as many lists as you like (Scorers, Defense, Dream picks…). Each list has its own weights and order. Teams picked on the Alliance Selection page disappear from every list.</p>
+    <div id="pickListBar"></div>
+    <div class="card" style="padding:14px 18px;margin-bottom:16px">
+      <h4 style="margin-top:0">Weights for this list</h4>
+      <div id="weightInputs"></div>
+    </div>
+    <div id="pickListBody"></div>
+  </section>
+
+  <section id="sec-alliance" class="panel">
+    <p class="hint" style="margin:0 0 14px">A live draft board for alliance selection day. Choose which of your pick lists to pick from. Picked teams disappear from all lists. The captains are filled in from the ranking when you press Start. Round 1 goes 1 to 8, round 2 comes back 8 to 1, and when a captain is picked the captains below move up.</p>
+    <div class="card" style="padding:14px 18px;margin-bottom:16px">
+      <div class="bar-top">
+        <label style="color:#000;font-weight:700"># Alliances</label>
+        <input id="allianceCount" type="number" min="2" max="16" value="8" style="width:70px">
+        <label style="color:#000;font-weight:700">Picks per alliance</label>
+        <input id="picksPerAlliance" type="number" min="1" max="4" value="2" style="width:70px">
+        <button id="startAllianceBtn">Start / Restart Selection</button>
+      </div>
+      <div class="bar-top" id="alliancePoolPick" style="margin-top:10px"></div>
+    </div>
+    <div id="allianceBody"></div>
+  </section>
+
+  <section id="sec-all" class="panel">
+    <div class="bar-top"><span id="allCount" class="count"></span><button id="exportAllBtn" style="background:#fff;color:#0f7b6c">Export CSV</button></div>
+    <div id="allMatches"></div>
+  </section>
+
+  <section id="sec-tba" class="panel">
+    <div id="tbaBody"></div>
+  </section>
+</main>
+<div id="tip" class="tip"></div>
+
+<button id="strategyBtn" class="strategyBtn">Stressed</button>
+<div id="strategyModal" class="modal-overlay">
+  <div class="modal-box">
+    <button class="closeBtn" id="closeStrategyModal">✕</button>
+    <div id="strategyContent"></div>
+  </div>
+</div>
+
+<div class="modebar">
+  <button id="modeFrc" class="active">Switch to FRC</button>
+  <button id="modeFtc">Switch to FTC</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyD89JSCdkO3TOYiTxilAzZdEltlVYsKjKY",
+  authDomain: "evilleempire-scouting.firebaseapp.com",
+  projectId: "evilleempire-scouting",
+  storageBucket: "evilleempire-scouting.firebasestorage.app",
+  messagingSenderId: "69285497577",
+  appId: "1:69285497577:web:d448ac8175fdf55626be78"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const META = ["match","slot","team","profileId","profileName","gameType"];
+
+let liveDocs = [];
+let livePitDocs = [];
+let liveSuperDocs = [];
+let profileMeta = {};
+let lastAnalysisRows = [], lastAnalysisCols = [];
+let lastAllRows = [], lastAllCols = [];
+
+function csvEscape(v){
+  const s = v===null || v===undefined ? "" : String(v);
+  return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function downloadCsv(filename, cols, rows){
+  const header = cols.map(csvEscape).join(",");
+  const lines = rows.map(r=>cols.map(c=>csvEscape(r[c])).join(","));
+  const csv = [header, ...lines].join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function eventFilenamePart(){
+  const sel = $("eventSel");
+  const name = currentEvent && sel.selectedOptions[0] ? sel.selectedOptions[0].textContent : "all-events";
+  return name.replace(/[^a-z0-9]+/gi,"-").toLowerCase();
+}
+$("exportAnalysisBtn").addEventListener("click", ()=>{
+  downloadCsv(`analysis-${mode}-${eventFilenamePart()}.csv`, lastAnalysisCols, lastAnalysisRows);
+});
+$("exportAllBtn").addEventListener("click", ()=>{
+  downloadCsv(`matches-${mode}-${eventFilenamePart()}.csv`, lastAllCols, lastAllRows);
+});
+
+let mode = localStorage.getItem("scoutMode") || "frc";
+let currentEvent = "";
+let sortCol = -1, sortDir = -1;
+let selectedTeam = null;
+
+function isNum(v){ return v!=="" && v!=null && !isNaN(parseFloat(v)); }
+
+function setMode(m){
+  mode = m;
+  try{ localStorage.setItem("scoutMode", m); }catch(e){}
+  $("modeFrc").classList.toggle("active", m==="frc");
+  $("modeFtc").classList.toggle("active", m==="ftc");
+  currentEvent = "";
+  $("eventSel").dataset.picked = "";
+  tbaError = null;
+  refreshAll();
+}
+$("modeFrc").addEventListener("click", ()=>setMode("frc"));
+$("modeFtc").addEventListener("click", ()=>setMode("ftc"));
+
+function modeDocs(){ return liveDocs.filter(d=>d.gameType===mode); }
+function filteredDocs(){
+  const md = modeDocs();
+  return currentEvent ? md.filter(d=>d.profileId===currentEvent) : md;
+}
+function filteredPitDocsFromApp(){
+  const md = livePitDocs.filter(d=>d.gameType===mode);
+  return currentEvent ? md.filter(d=>d.profileId===currentEvent) : md;
+}
+function filteredSuperDocs(){
+  const md = liveSuperDocs.filter(d=>d.gameType===mode);
+  return currentEvent ? md.filter(d=>d.profileId===currentEvent) : md;
+}
+function fieldKeys(docs){
+  const keys = [];
+  docs.forEach(d=>Object.keys(d).forEach(k=>{ if(!META.includes(k) && !keys.includes(k)) keys.push(k); }));
+  return keys;
+}
+function teamsIn(docs){
+  let teams = [...new Set(docs.map(d=>d.team))].filter(t=>t);
+  if(mode==="frc"){
+    teams = [...new Set([...teams, ...currentTbaTeams()])];
+  }
+  return teams.sort((a,b)=>{
+    const na = parseInt(a), nb = parseInt(b);
+    if(!isNaN(na) && !isNaN(nb)) return na-nb;
+    return String(a).localeCompare(String(b));
+  });
+}
+
+function aggregateTeam(docs, team, fields){
+  const matches = docs.filter(d=>d.team===team);
+  const row = {};
+  fields.forEach(f=>{
+    const vals = matches.map(m=>m[f]).filter(v=>v!==undefined && v!=="" && v!=null);
+    if(!vals.length){ row[f] = null; return; }
+    if(vals.every(isNum)){
+      const nums = vals.map(parseFloat);
+      row[f] = Math.round((nums.reduce((a,b)=>a+b,0)/nums.length)*100)/100;
+    } else {
+      const counts = {};
+      vals.forEach(v=>counts[v]=(counts[v]||0)+1);
+      row[f] = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+    }
+  });
+  row._matches = matches.length;
+  return row;
+}
+
+// ---------- Point values ----------
+function pointValuesKey(){ return "pointValues_"+mode; }
+function getPointValues(){ try{ return JSON.parse(localStorage.getItem(pointValuesKey())||"{}"); }catch(e){ return {}; } }
+function savePointValues(pv){ try{ localStorage.setItem(pointValuesKey(), JSON.stringify(pv)); }catch(e){} }
+function pointValuesConfigured(){ return Object.keys(getPointValues()).length > 0; }
+
+function fieldIsChoiceStyle(field, docs){
+  return docs.some(d => d[field]!==undefined && d[field]!=="" && !isNum(d[field]));
+}
+function distinctValuesFor(field, docs){
+  const vals = new Set();
+  docs.forEach(d=>{ if(d[field]!==undefined && d[field]!=="") vals.add(String(d[field])); });
+  return [...vals].sort();
+}
+
+// Points are computed per match, then averaged — not from an already-averaged
+// row — so a team that climbed L1 twice and L3 once gets credit for all three
+// climbs, not just whichever level happened to come up most often.
+function pointsForMatch(matchDoc, fields, pv){
+  let total = 0, any = false;
+  fields.forEach(f=>{
+    const conf = pv[f];
+    if(conf===undefined) return;
+    const v = matchDoc[f];
+    if(v===undefined || v==="" || v===null) return;
+    if(typeof conf==="object"){
+      if(conf[v]!==undefined){ total += conf[v]; any = true; }
+    } else if(isNum(v)){
+      total += parseFloat(v) * conf; any = true;
+    }
+  });
+  return any ? total : null;
+}
+function computeTeamPoints(docs, team, fields){
+  const pv = getPointValues();
+  if(!Object.keys(pv).length) return null;
+  const matches = docs.filter(d=>d.team===team);
+  const perMatch = matches.map(m=>pointsForMatch(m, fields, pv)).filter(v=>v!==null);
+  if(!perMatch.length) return null;
+  return Math.round((perMatch.reduce((a,b)=>a+b,0)/perMatch.length)*100)/100;
+}
+
+function renderPointValuesEditor(){
+  const box = $("pointValuesEditor");
+  const docs = modeDocs();
+  const fields = fieldKeys(docs);
+  const pv = getPointValues();
+  if(!fields.length){
+    box.innerHTML = '<p class="hint">No stats found yet for this game — submit a few matches first, then set point values here.</p>';
+    return;
+  }
+  box.innerHTML = '<p class="hint" style="margin:0 0 10px">How many real game points is each stat worth? For a pick-one stat like Climb, set a value per option. Leave blank for stats that don\'t score points directly.</p>' +
+    fields.map(f=>{
+      if(fieldIsChoiceStyle(f, docs)){
+        const opts = distinctValuesFor(f, docs);
+        const current = (pv[f] && typeof pv[f]==="object") ? pv[f] : {};
+        return `<div class="qrow"><label>${esc(f)}</label>` +
+          opts.map(o=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <span style="flex:1">${esc(o)}</span>
+            <input type="number" step="any" class="pv-choice-input" data-field="${esc(f)}" data-option="${esc(o)}" value="${current[o]!==undefined?current[o]:""}" placeholder="points" style="width:110px;margin-bottom:0">
+          </div>`).join("") + `</div>`;
+      }
+      const currentVal = (pv[f]!==undefined && typeof pv[f]!=="object") ? pv[f] : "";
+      return `<div class="qrow"><label>${esc(f)}</label><input type="number" step="any" class="pv-input" data-field="${esc(f)}" value="${currentVal}" placeholder="points per unit"></div>`;
+    }).join("") +
+    '<button class="save" id="savePointValuesBtn">Save point values</button>';
+  box.querySelector("#savePointValuesBtn").addEventListener("click", ()=>{
+    const newPv = {};
+    box.querySelectorAll(".pv-input").forEach(inp=>{
+      const v = parseFloat(inp.value);
+      if(!isNaN(v)) newPv[inp.dataset.field] = v;
+    });
+    box.querySelectorAll(".pv-choice-input").forEach(inp=>{
+      const v = parseFloat(inp.value);
+      if(!isNaN(v)){
+        if(!newPv[inp.dataset.field] || typeof newPv[inp.dataset.field]!=="object") newPv[inp.dataset.field] = {};
+        newPv[inp.dataset.field][inp.dataset.option] = v;
+      }
+    });
+    savePointValues(newPv);
+    box.style.display = "none";
+    refreshAll();
+  });
+}
+$("pointValuesBtn").addEventListener("click", ()=>{
+  const box = $("pointValuesEditor");
+  if(box.style.display==="none"){ renderPointValuesEditor(); box.style.display="block"; }
+  else box.style.display = "none";
+});
+
+function updateEventOptions(){
+  const md = modeDocs();
+  const eventMap = new Map(md.map(d=>[d.profileId, d.profileName]));
+  // Events the scouting app has announced count too, even before a single match
+  // has been scouted -- otherwise a brand-new event can't be selected, and
+  // anything loaded for it (like a TBA event) has nothing to attach to.
+  Object.entries(profileMeta).forEach(([id, meta])=>{
+    if(meta && meta.gameType===mode && !eventMap.has(id)) eventMap.set(id, meta.profileName);
+  });
+  const events = [...eventMap.entries()];
+  const sel = $("eventSel");
+  sel.innerHTML = '<option value="">All events</option>' + events.map(([id,name])=>`<option value="${id}">${esc(name||id)}</option>`).join("");
+  // Keep the event you picked. If the list is still loading (or the page was
+  // just reopened), fall back to the one remembered on this device instead of
+  // dropping to "All events".
+  const keep = [sel.dataset.picked, loadWantedEvent()].find(v=>v && events.some(([id])=>id===v));
+  if(keep) sel.value = keep;
+  currentEvent = sel.value;
+  sel.dataset.picked = currentEvent;
+}
+function evKey(){ return "scoutEvent_"+mode; }
+function loadWantedEvent(){ try{ return localStorage.getItem(evKey())||""; }catch(e){ return ""; } }
+function saveWantedEvent(v){ try{ localStorage.setItem(evKey(), v); }catch(e){} }
+$("eventSel").addEventListener("change", ()=>{ currentEvent = $("eventSel").value; $("eventSel").dataset.picked = currentEvent; saveWantedEvent(currentEvent); tbaError = null; refreshAll(); });
+
+function updatePrescoutEventOptions(){
+  const md = modeDocs();
+  const events = [...new Map(md.map(d=>[d.profileId, d.profileName])).entries()]
+    .filter(([id])=>id !== currentEvent); // never offer comparing an event against itself
+  const sel = $("prescoutEventSel");
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">Pick an earlier event…</option>' +
+    events.map(([id,name])=>`<option value="${id}">${esc(name||id)}</option>`).join("");
+  if(events.some(([id])=>id===prev)) sel.value = prev;
+}
+$("prescoutEventSel").addEventListener("change", renderPrescout);
+
+function renderPrescout(){
+  const body = $("prescoutBody");
+  const compareId = $("prescoutEventSel").value;
+  if(!compareId){
+    body.innerHTML = '<p class="hint">Pick an event above to see how these teams performed there.</p>';
+    return;
+  }
+  const compareDocs = liveDocs.filter(d=>d.gameType===mode && d.profileId===compareId);
+  if(!compareDocs.length){
+    body.innerHTML = '<p class="hint">No data found for that event.</p>';
+    return;
+  }
+  const currentTeams = new Set(teamsIn(filteredDocs()));
+  const compareFields = fieldKeys(compareDocs);
+  // Derive teams directly from compareDocs (not teamsIn), since teamsIn always
+  // injects the CURRENT event's TBA team list regardless of which docs are
+  // passed in -- using it here would list teams with no real data in compareDocs.
+  const compareTeams = [...new Set(compareDocs.map(d=>d.team))].filter(t=>t && currentTeams.has(t))
+    .sort((a,b)=>{
+      const na=parseInt(a), nb=parseInt(b);
+      if(!isNaN(na) && !isNaN(nb)) return na-nb;
+      return String(a).localeCompare(String(b));
+    });
+  if(!compareTeams.length){
+    body.innerHTML = '<p class="hint">None of the teams at the current event show up in that one.</p>';
+    return;
+  }
+  const rows = compareTeams.map(t=>aggregateTeam(compareDocs, t, compareFields));
+  let html = '<div class="wrap"><table><thead><tr><th><button style="cursor:default">Team</button></th>' +
+    compareFields.map(f=>`<th><button style="cursor:default">${esc(f)}</button></th>`).join("") + '</tr></thead><tbody>';
+  rows.forEach((r,i)=>{
+    html += `<tr><td class="n">${esc(compareTeams[i])}</td>` +
+      compareFields.map(f=>`<td class="n">${r[f]!==null && r[f]!==undefined ? esc(r[f]) : "–"}</td>`).join("") + '</tr>';
+  });
+  html += '</tbody></table></div>';
+  body.innerHTML = html;
+}
+
+function median(sorted){
+  const n = sorted.length;
+  return n%2 ? sorted[(n-1)/2] : (sorted[n/2-1]+sorted[n/2])/2;
+}
+
+// Median + MAD (median absolute deviation) instead of mean/stddev: a single
+// extreme value skews a mean/stddev enough to mask its own z-score, but
+// barely moves the median -- so this stays sensitive even to the exact
+// typo it's meant to catch (e.g. "80" typed for "8").
+function computeFieldStats(docs, field){
+  const vals = docs.map(d=>d[field]).filter(v=>v!==undefined && v!=="" && v!=null && isNum(v)).map(parseFloat).sort((a,b)=>a-b);
+  if(vals.length < 5) return null; // too few points for this to mean anything
+  const med = median(vals);
+  const deviations = vals.map(v=>Math.abs(v-med)).sort((a,b)=>a-b);
+  const mad = median(deviations);
+  return { median: med, mad };
+}
+
+function findOutliers(docs, fields){
+  const outliers = [];
+  fields.forEach(f=>{
+    const stats = computeFieldStats(docs, f);
+    if(!stats || stats.mad===0) return;
+    docs.forEach(d=>{
+      const v = d[f];
+      if(v===undefined || v==="" || v===null || !isNum(v)) return;
+      // modified z-score (Iglewicz & Hoaglin); >3.5 is the standard threshold
+      const z = Math.abs(0.6745 * (parseFloat(v)-stats.median) / stats.mad);
+      if(z > 3.5){
+        outliers.push({match:d.match, slot:d.slot, team:d.team, field:f, value:v, mean:Math.round(stats.median*10)/10, z:Math.round(z*10)/10});
+      }
+    });
+  });
+  return outliers.sort((a,b)=>b.z-a.z);
+}
+
+function findDuplicateSlots(docs){
+  const groups = {};
+  docs.forEach(d=>{
+    if(!d.match || !d.slot) return;
+    const key = d.match+"::"+d.slot;
+    (groups[key] = groups[key] || []).push(d);
+  });
+  return Object.entries(groups).filter(([,g])=>g.length>1)
+    .map(([key,g])=>{
+      const [match,slot] = key.split("::");
+      return { match, slot, count: g.length, teams: [...new Set(g.map(d=>d.team))] };
+    });
+}
+
+function findMissingTeam(docs){
+  return docs.filter(d=>!d.team || String(d.team).trim()==="");
+}
+
+// ===== Pick lists: as many lists as you want, one set per event, synced =====
+// Which event the lists belong to: the one selected at the top, or the only event there is
+// (the tablet app only ever has one event, and "All events" then means that event).
+function plEventId(){
+  if(currentEvent) return currentEvent;
+  const ids = [...new Set(modeDocs().map(d=>d.profileId).filter(Boolean))];
+  return ids.length===1 ? ids[0] : "";
+}
+function plId(){ return plEventId() || ("local_"+mode); }
+function plSyncs(){ return !!plEventId(); }
+let plRemote = {};          // event id -> fields from Firebase
+function plLoadLocal(){ try{ return JSON.parse(localStorage.getItem("plLocal_"+plId())||"{}"); }catch(e){ return {}; } }
+function plSaveLocal(f){ try{ localStorage.setItem("plLocal_"+plId(), JSON.stringify(f)); }catch(e){} }
+function plTs(s){ try{ return +JSON.parse(s).ts||0; }catch(e){ return 0; } }
+function plFields(){
+  const out = Object.assign({}, plRemote[plId()]||{});
+  const loc = plLoadLocal();
+  for(const k in loc){ if(!(k in out) || plTs(loc[k])>plTs(out[k])) out[k]=loc[k]; }
+  return out;
+}
+function plPut(key, obj){
+  obj.ts = Date.now();
+  const s = JSON.stringify(obj);
+  const loc = plLoadLocal(); loc[key] = s; plSaveLocal(loc);
+  if(plSyncs()){ try{ db.collection("picklists").doc(plId()).set({[key]: s}, {merge:true}).catch(()=>{}); }catch(e){} }
+}
+// After Firebase sends its copy: push anything we have that is newer.
+function plReconcile(){
+  if(!plSyncs()) return;
+  const rem = plRemote[plId()]||{}, loc = plLoadLocal(), up = {};
+  for(const k in loc){ if(!(k in rem) || plTs(loc[k])>plTs(rem[k])) up[k]=loc[k]; }
+  if(Object.keys(up).length){ try{ db.collection("picklists").doc(plId()).set(up, {merge:true}).catch(()=>{}); }catch(e){} }
+}
+function plLegacy(){
+  let w={}, o=null;
+  try{ w = JSON.parse(localStorage.getItem("pickListWeights_"+(currentEvent||mode))||"{}"); }catch(e){}
+  try{ o = JSON.parse(localStorage.getItem("pickListOrder_"+(currentEvent||mode))||"null"); }catch(e){}
+  return {id:"main", name:"Main list", weights:w, teams:o||null, created:1, ts:0};
+}
+function plLists(){
+  const f = plFields(), arr = [];
+  for(const k in f){
+    if(k.indexOf("list_")===0){ try{ const o = JSON.parse(f[k]); if(o && !o.del) arr.push(o); }catch(e){} }
+  }
+  if(!("list_main" in f)) arr.push(plLegacy());   // the original list, until it is edited or deleted
+  arr.sort((a,b)=>(a.created||0)-(b.created||0));
+  return arr;
+}
+function plActiveKey(){ return "plActive_"+plId(); }
+function plActive(){
+  const lists = plLists();
+  let id = ""; try{ id = localStorage.getItem(plActiveKey())||""; }catch(e){}
+  return lists.find(l=>l.id===id) || lists[0] || plLegacy();
+}
+function plSetActive(id){ try{ localStorage.setItem(plActiveKey(), id); }catch(e){} }
+function plSaveList(l){ plPut("list_"+l.id, l); }
+function plNewId(){ return "l"+Date.now().toString(36)+Math.floor(Math.random()*1296).toString(36); }
+function plShowPicked(){ try{ return localStorage.getItem("plShowPicked")==="1"; }catch(e){ return false; } }
+
+// ----- alliance state (shared the same way) -----
+function allianceGet(){
+  const f = plFields();
+  if(f.alliance){ try{ return JSON.parse(f.alliance); }catch(e){} }
+  try{ return JSON.parse(localStorage.getItem("allianceState_"+(currentEvent||mode))||"null"); }catch(e){ return null; }
+}
+function allianceSet(s){ plPut("alliance", s); }
+function pickedMap(){          // teams off the list: joined an alliance as a pick, or a captain whose alliance has made its first pick
+  const st = allianceGet(), m = {};
+  if(st && st.alliances) st.alliances.forEach((a,i)=>a.forEach((t,j)=>{ if(t && (j>0 || a[1]!==null)) m[t]=i+1; }));
+  return m;
+}
+function captainMap(){         // captains still on the list (their alliance hasn't picked yet): team -> alliance number
+  const st = allianceGet(), m = {};
+  if(st && st.alliances) st.alliances.forEach((a,i)=>{ if(a[0] && a[1]===null) m[a[0]]=i+1; });
+  return m;
+}
+function declinedList(){ const st = allianceGet(); return (st && st.declined) || []; }
+
+function computeWeightedScore(aggRow, weights){
+  let score = 0;
+  Object.entries(weights).forEach(([field,w])=>{
+    const v = parseFloat(aggRow[field]);
+    if(!isNaN(v) && w) score += v*w;
+  });
+  return score;
+}
+// Order for one list: its saved order first, then any team it hasn't seen
+// (ranked by this list's weights).
+function plOrder(list, teams, docs){
+  const weights = list.weights||{};
+  const anyW = Object.values(weights).some(w=>w);
+  let ranked = teams;
+  if(anyW){
+    ranked = teams.map(t=>({team:t, score: computeWeightedScore(aggregateTeam(docs, t, Object.keys(weights)), weights)}))
+      .sort((a,b)=>b.score-a.score).map(r=>r.team);
+  }
+  if(list.teams && list.teams.length){
+    const known = list.teams.filter(t=>teams.includes(t));
+    return known.concat(ranked.filter(t=>!known.includes(t)));
+  }
+  return ranked;
+}
+
+// Small in-page question boxes (browser pop-ups don't always work inside the tablet app).
+function plDialog(msg, withInput, def, cb){
+  const wrap = document.createElement("div");
+  wrap.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px";
+  wrap.innerHTML = '<div style="background:#fff;color:#000;border:2px solid #000;border-radius:14px;padding:18px;max-width:420px;width:100%"><p style="margin:0 0 12px;font-weight:700;font-size:1.1rem"></p>'+(withInput?'<input type="text" style="width:100%;margin-bottom:12px;font-size:1.1rem">':'')+'<div style="display:flex;gap:10px;justify-content:flex-end"><button type="button" class="pickmove" data-x="no">Cancel</button><button type="button" class="pickmove" data-x="ok" style="background:#0f7b6c;color:#fff">OK</button></div></div>';
+  wrap.querySelector("p").textContent = msg;
+  const inp = wrap.querySelector("input");
+  if(inp){ inp.value = def||""; }
+  document.body.appendChild(wrap);
+  if(inp){ inp.focus(); inp.select(); }
+  function done(ok){ const v = inp ? inp.value.trim() : true; wrap.remove(); if(ok && v) cb(v); }
+  wrap.querySelector('[data-x="ok"]').addEventListener("click", ()=>done(true));
+  wrap.querySelector('[data-x="no"]').addEventListener("click", ()=>done(false));
+  if(inp) inp.addEventListener("keydown", e=>{ if(e.key==="Enter") done(true); });
+}
+function plAsk(msg, def, cb){ plDialog(msg, true, def, cb); }
+function plConfirm(msg, cb){ plDialog(msg, false, "", cb); }
+
+function plBar(){
+  const lists = plLists(), act = plActive();
+  const picked = pickedMap();
+  let h = '<div class="card" style="padding:12px 14px;margin-bottom:14px"><div class="plbar">';
+  lists.forEach(l=>{ h += `<button type="button" class="pltab${l.id===act.id?" on":""}" data-id="${esc(l.id)}">${esc(l.name)}</button>`; });
+  h += '<button type="button" class="pltab plnew" id="plNew">＋ New list</button></div>';
+  h += '<div class="plbar" style="margin-top:10px"><button type="button" class="pickmove" id="plRename">✏ Rename</button><button type="button" class="pickmove" id="plDup">⧉ Copy this list</button><button type="button" class="pickmove" id="plDel">🗑 Delete</button><button type="button" class="pickmove" id="plRerank">↻ Re-rank by weights</button>';
+  h += `<label class="plchk"><input type="checkbox" id="plShow" ${plShowPicked()?"checked":""}> Show crossed-off teams (${new Set([...Object.keys(picked), ...declinedList()]).size})</label></div>`;
+  h += `<p class="hint" style="margin:8px 0 0">${plSyncs() ? "Saved for this event and shared with every device that has internet. Offline tablets get it with the send/receive buttons." : "Pick an event at the top to share these lists. Right now they are saved on this device only."}</p></div>`;
+  return h;
+}
+
+function renderPickList(){
+  const docs = filteredDocs();
+  const teams = teamsIn(docs);
+  const list = plActive();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const weights = list.weights||{};
+  $("pickListBar").innerHTML = plBar();
+  $("pickListBar").querySelectorAll(".pltab[data-id]").forEach(b=>b.addEventListener("click", ()=>{ plSetActive(b.dataset.id); renderPickList(); }));
+  $("plNew").addEventListener("click", ()=>{
+    plAsk("Name for the new list (for example: Defense, Scorers, Dream picks):", "", name=>{
+      const l = {id:plNewId(), name, weights:{}, teams:null, created:Date.now()};
+      plSaveList(l); plSetActive(l.id); renderPickList();
+    });
+  });
+  $("plRename").addEventListener("click", ()=>{
+    plAsk("New name:", list.name, name=>{ list.name = name; plSaveList(list); renderPickList(); });
+  });
+  $("plDup").addEventListener("click", ()=>{
+    plAsk("Name for the copy:", list.name+" copy", name=>{
+      const l = {id:plNewId(), name, weights:Object.assign({},list.weights||{}), teams:plOrder(list,teams,docs), created:Date.now()};
+      plSaveList(l); plSetActive(l.id); renderPickList();
+    });
+  });
+  $("plDel").addEventListener("click", ()=>{
+    plConfirm('Delete the list "'+list.name+'"? This removes it on every device.', ()=>{
+      plPut("list_"+list.id, {id:list.id, del:true, created:list.created||0});
+      plSetActive(""); renderPickList();
+    });
+  });
+  $("plRerank").addEventListener("click", ()=>{ list.teams = null; plSaveList(list); renderPickList(); });
+  $("plShow").addEventListener("change", e=>{ try{ localStorage.setItem("plShowPicked", e.target.checked?"1":"0"); }catch(x){} renderPickList(); });
+
+  const wbox = $("weightInputs");
+  if(!fields.length){
+    wbox.innerHTML = '<p class="hint">No numeric stats found yet for this event.</p>';
+  } else {
+    wbox.innerHTML = fields.map(f=>{
+      const w = weights[f]||0;
+      const label = w>0 ? "Important" : (w<0 ? "Avoid" : "Not used");
+      const labelColor = w>0 ? "#0f7b6c" : (w<0 ? "#7f1d1d" : "var(--mute)");
+      return `
+      <div class="weightrow" data-field="${esc(f)}">
+        <span class="weightname">${esc(f)}</span>
+        <button type="button" class="weightbtn weightminus">−</button>
+        <span class="weightval">${w}</span>
+        <button type="button" class="weightbtn weightplus">+</button>
+        <span class="weightlabel" style="color:${labelColor}">${label}</span>
+      </div>`;
+    }).join("");
+    wbox.querySelectorAll(".weightrow").forEach(row=>{
+      const field = row.dataset.field;
+      function bump(delta){
+        const l = plActive();
+        l.weights = l.weights||{};
+        l.weights[field] = Math.max(-3, Math.min(3, (l.weights[field]||0)+delta));
+        plSaveList(l);
+        renderPickList();
+      }
+      row.querySelector(".weightminus").addEventListener("click", ()=>bump(-1));
+      row.querySelector(".weightplus").addEventListener("click", ()=>bump(1));
+    });
+  }
+  renderPickListTable();
+}
+
+function renderPickListTable(){
+  const docs = filteredDocs();
+  const teams = teamsIn(docs);
+  const list = plActive();
+  const weights = list.weights||{};
+  if(!teams.length){ $("pickListBody").innerHTML = '<p class="hint">No teams found for this event.</p>'; return; }
+  const picked = pickedMap(), declined = declinedList(), show = plShowPicked();
+  const ordered = plOrder(list, teams, docs);
+  const scoreMap = {};
+  teams.forEach(t=>{ scoreMap[t] = computeWeightedScore(aggregateTeam(docs, t, Object.keys(weights)), weights); });
+  const visible = ordered.filter(t=>show || (!picked[t] && !declined.includes(t)));   // picked and declined teams are crossed off your list
+  // Two extra numbers next to each team: where this list's weights rank it, and its official event rank (if loaded from The Blue Alliance).
+  const anyW = Object.values(weights).some(w=>w);
+  const statRank = {};
+  if(anyW) [...teams].sort((x,y)=>scoreMap[y]-scoreMap[x]).forEach((t,i)=>{ statRank[t]=i+1; });
+  const eventRank = eventRankMap();
+
+  $("pickListBody").innerHTML = '<div class="card" style="padding:10px"><div id="pickListItems"></div></div>';
+  const itemsBox = $("pickListItems");
+  if(!visible.length) itemsBox.innerHTML = '<p class="hint" style="padding:10px">Every team is picked. Tick "Show picked teams" to see them.</p>';
+  let rank = 0;
+  visible.forEach((t,i)=>{
+    const isPicked = !!picked[t] || declined.includes(t);
+    if(!isPicked) rank++;
+    const div = document.createElement("div");
+    div.className = "pickitem"+(isPicked?" picked":"");
+    const capsM = captainMap();
+    const tag = picked[t] ? `<span class="pltag">Alliance ${picked[t]}</span>` : (declined.includes(t) ? '<span class="pltag no">said no</span>' : (capsM[t] ? `<span class="pltag">A${capsM[t]} captain</span>` : ""));
+    div.innerHTML = `<span class="pickrank">${isPicked?"✓":"#"+rank}</span><span class="pickteam">${esc(t)} ${tag}</span><span class="pickscore">${statRank[t]?`Stats rank #${statRank[t]} · `:""}${eventRank[t]?`Event rank #${eventRank[t]} · `:""}score: ${Math.round(scoreMap[t]*100)/100}</span>` +
+      (isPicked ? "" : `<button type="button" class="pickmove pickup" ${i===0?"disabled":""}>⬆ Up</button><button type="button" class="pickmove pickdown" ${i===visible.length-1?"disabled":""}>⬇ Down</button>`);
+    itemsBox.appendChild(div);
+    if(!isPicked){
+      div.querySelector(".pickup").addEventListener("click", ()=>movePickListTeam(ordered, visible, t, -1));
+      div.querySelector(".pickdown").addEventListener("click", ()=>movePickListTeam(ordered, visible, t, 1));
+    }
+  });
+}
+
+function movePickListTeam(ordered, visible, team, direction){
+  const vi = visible.indexOf(team), other = visible[vi+direction];
+  if(other===undefined) return;
+  const newOrder = [...ordered];
+  const a = newOrder.indexOf(team), b = newOrder.indexOf(other);
+  [newOrder[a], newOrder[b]] = [newOrder[b], newOrder[a]];
+  const l = plActive(); l.teams = newOrder; plSaveList(l);
+  renderPickListTable();
+}
+
+// ----- alliance selection -----
+function draftOrder(count){ return Array.from({length:count}, (_,i)=>i); }
+
+// Captains are set when you press Start (Alliance 1 = rank 1 ... Alliance N = rank N).
+// Pick round 1 goes 1 to N, round 2 comes back N to 1, round 3 (if any) goes 1 to N again.
+function draftSequence(state){
+  const seq = [];
+  for(let slotIdx=1; slotIdx<=state.picks; slotIdx++){
+    const order = draftOrder(state.count);
+    if(slotIdx%2===0) order.reverse();
+    order.forEach(allianceIdx=>seq.push({allianceIdx, slotIdx}));
+  }
+  return seq;
+}
+
+// Whose turn it is. A skipped alliance is passed over until the next pick, then asked again in order.
+function currentDraftSlot(state){
+  const empty = draftSequence(state).filter(s=>state.alliances[s.allianceIdx][s.slotIdx]===null);
+  if(!empty.length) return null;
+  const skipped = state.skipped||[];
+  return empty.find(s=>!skipped.includes(s.allianceIdx+":"+s.slotIdx)) || empty[0];
+}
+
+function eventRankMap(){
+  const m = {};
+  try{
+    const bundle = currentTbaBundle();
+    if(bundle && bundle.rankings && bundle.rankings.rankings) bundle.rankings.rankings.forEach(r=>{ m[String(r.team_key).replace("frc","")] = r.rank; });
+  }catch(e){}
+  return m;
+}
+// Teams in rank order: the official event ranking if it is loaded, otherwise the order of your chosen list.
+function rankOrder(){
+  const docs = filteredDocs(), teams = teamsIn(docs), er = eventRankMap();
+  if(Object.keys(er).length) return {official:true, order:[...teams].sort((a,b)=>(er[a]||9999)-(er[b]||9999))};
+  return {official:false, order:plOrder(plActive(), teams, docs)};
+}
+
+function startAllianceSelection(){
+  const count = parseInt($("allianceCount").value,10) || 8;
+  const picks = parseInt($("picksPerAlliance").value,10) || 2;
+  const ro = rankOrder();
+  const alliances = Array.from({length:count}, (_,i)=>{ const a = new Array(picks+1).fill(null); a[0] = ro.order[i]||null; return a; });
+  allianceSet({ count, picks, alliances, declined: [], official: ro.official });
+  renderAllianceBoard();
+}
+$("startAllianceBtn").addEventListener("click", ()=>{
+  if(Object.keys(pickedMap()).length) plConfirm("Start over? This clears every pick on every device.", startAllianceSelection);
+  else startAllianceSelection();
+});
+
+// Every change keeps a copy of the board before it, so Undo can put things back exactly (even a captain shift).
+function allianceChange(fn){
+  const state = allianceGet();
+  if(!state) return;
+  const before = JSON.parse(JSON.stringify(state)); delete before.history;
+  const hist = (state.history||[]).slice(-29); hist.push(JSON.stringify(before));
+  fn(state);
+  state.history = hist;
+  allianceSet(state);
+  renderAllianceBoard();
+}
+
+function assignTeamToCurrentSlot(team){
+  allianceChange(state=>{
+    const slot = currentDraftSlot(state);
+    if(slot){ state.alliances[slot.allianceIdx][slot.slotIdx] = team; state.skipped = []; }
+  });
+}
+
+// Picking another alliance's captain.
+// Yes: the captain joins the picking alliance, the captains below move up one alliance, and the
+//      highest-ranked team that is not in any alliance becomes the new last captain.
+// No:  they stay a captain and nobody can pick them again.
+function pickCaptain(fromIdx, accepted){
+  const ro = rankOrder().order;
+  allianceChange(state=>{
+    const slot = currentDraftSlot(state);
+    if(!slot || fromIdx===slot.allianceIdx) return;
+    const team = state.alliances[fromIdx][0];
+    if(team===null) return;
+    if(!accepted){
+      state.declined = state.declined||[];
+      if(!state.declined.includes(team)) state.declined.push(team);
+      return;
+    }
+    state.alliances[slot.allianceIdx][slot.slotIdx] = team;
+    // the picking alliance keeps its own captain; the others close the gap
+    const idxs = draftOrder(state.count).filter(i=>i!==slot.allianceIdx);
+    const caps = idxs.map(i=>state.alliances[i][0]);
+    const pos = idxs.indexOf(fromIdx);
+    caps.splice(pos, 1);
+    const used = new Set(); state.alliances.forEach(a=>a.forEach(t=>{ if(t) used.add(t); }));
+    caps.forEach(t=>{ if(t) used.add(t); });
+    const dec = state.declined||[];
+    const next = ro.find(t=>!used.has(t) && !dec.includes(t));
+    caps.push(next===undefined ? null : next);
+    idxs.forEach((i,k)=>{ state.alliances[i][0] = caps[k]; });
+    state.skipped = [];
+  });
+}
+
+function changeCaptain(allianceIdx){
+  plAsk("Team number for Alliance "+(allianceIdx+1)+"'s captain:", "", v=>{
+    const team = String(v).trim();
+    const teams = teamsIn(filteredDocs());
+    if(!teams.includes(team)){ plDialog("Team "+team+" isn't in this event.", false, "", ()=>{}); return; }
+    allianceChange(state=>{
+      if(state.alliances.some(a=>a.slice(1).includes(team))) return;   // already picked as a team
+      const other = state.alliances.findIndex(a=>a[0]===team);
+      if(other>=0) state.alliances[other][0] = state.alliances[allianceIdx][0];   // swap
+      state.alliances[allianceIdx][0] = team;
+    });
+  });
+}
+
+function skipTurn(){
+  allianceChange(state=>{
+    const slot = currentDraftSlot(state);
+    if(!slot) return;
+    state.skipped = state.skipped||[];
+    const k = slot.allianceIdx+":"+slot.slotIdx;
+    if(!state.skipped.includes(k)) state.skipped.push(k);
+  });
+}
+
+function declineTeam(team){
+  allianceChange(state=>{
+    state.declined = state.declined||[];
+    if(!state.declined.includes(team)) state.declined.push(team);
+  });
+}
+
+function undoLastPick(){
+  const state = allianceGet();
+  if(!state || !(state.history||[]).length) return;
+  const hist = state.history.slice();
+  const prev = JSON.parse(hist.pop());
+  prev.history = hist;
+  allianceSet(prev);
+  renderAllianceBoard();
+}
+
+// Two-button question box (used when a captain is picked: did they say yes or no?)
+function plChoice(msg, yes, no, cb){
+  const wrap = document.createElement("div");
+  wrap.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px";
+  wrap.innerHTML = '<div style="background:#fff;color:#000;border:2px solid #000;border-radius:14px;padding:18px;max-width:420px;width:100%"><p style="margin:0 0 14px;font-weight:700;font-size:1.15rem"></p><div style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="pickmove" data-x="yes" style="background:#0f7b6c;color:#fff;flex:1"></button><button type="button" class="pickmove" data-x="no" style="background:#7f1d1d;color:#fff;flex:1"></button><button type="button" class="pickmove" data-x="x" style="flex-basis:100%">Cancel</button></div></div>';
+  wrap.querySelector("p").textContent = msg;
+  wrap.querySelector('[data-x="yes"]').textContent = yes; wrap.querySelector('[data-x="no"]').textContent = no;
+  document.body.appendChild(wrap);
+  wrap.querySelector('[data-x="yes"]').addEventListener("click", ()=>{ wrap.remove(); cb(true); });
+  wrap.querySelector('[data-x="no"]').addEventListener("click", ()=>{ wrap.remove(); cb(false); });
+  wrap.querySelector('[data-x="x"]').addEventListener("click", ()=>wrap.remove());
+}
+
+function renderAllianceBoard(){
+  const state = allianceGet();
+  const body = $("allianceBody");
+  const docs = filteredDocs(), teams = teamsIn(docs);
+  const lists = plLists(), act = (function(){ let id=""; try{ id=localStorage.getItem("plBoard_"+plId())||""; }catch(e){} return lists.find(l=>l.id===id)||plActive(); })();
+  $("alliancePoolPick").innerHTML = '<label style="color:#000;font-weight:700">Pick from list</label> <select id="plBoardSel">'+lists.map(l=>`<option value="${esc(l.id)}"${l.id===act.id?" selected":""}>${esc(l.name)}</option>`).join("")+'</select>';
+  $("plBoardSel").addEventListener("change", e=>{ try{ localStorage.setItem("plBoard_"+plId(), e.target.value); }catch(x){} renderAllianceBoard(); });
+  if(!state){ body.innerHTML = '<p class="hint">Click “Start / Restart Selection” to begin. The captains are filled in from the ranking.</p>'; return; }
+
+  const slot = currentDraftSlot(state);
+  let html = '', side = '';
+  if(slot){
+    html += `<div class="turncard"><div class="turnlabel">It's Alliance ${slot.allianceIdx+1}'s turn</div><div class="turnwhat">Tap a team on the right to pick ${slot.slotIdx===1 ? "their first pick" : "pick "+slot.slotIdx}</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px"><button type="button" class="pickmove" id="skipTurn">⏭ Skip (not ready)</button></div></div>`;
+  } else {
+    html += '<div class="turncard" style="background:#0f7b6c"><div class="turnlabel">🎉 Selection complete!</div></div>';
+  }
+  if(state.official===false) html += '<p class="hint">Captains were set from your pick list because the official ranking is not loaded. Tap a captain’s team number in the table to fix it, or load The Blue Alliance and press Start again.</p>';
+
+  html += '<div class="wrap"><table><thead><tr><th><button style="cursor:default">Alliance</button></th><th><button style="cursor:default">Captain</button></th>';
+  for(let p=1;p<=state.picks;p++) html += `<th><button style="cursor:default">Pick ${p}</button></th>`;
+  html += '</tr></thead><tbody>';
+  state.alliances.forEach((a,i)=>{
+    html += `<tr${slot && slot.allianceIdx===i ? ' style="background:#fffbe6"' : ''}><td class="n">${i+1}</td>`;
+    a.forEach((t,j)=>{ html += j===0 ? `<td class="n capcell" data-ai="${i}" style="cursor:pointer" title="Tap to change the captain">${t?esc(t):"–"}</td>` : `<td class="n">${t?esc(t):"–"}</td>`; });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += '<p><button type="button" class="pickmove" id="undoPick">↶ Undo last pick</button></p>';
+  if((state.skipped||[]).length && slot) html += `<p class="hint">Skipped for now: ${state.skipped.map(k=>"Alliance "+(parseInt(k)+1)).join(", ")} — they are asked again after the next pick.</p>`;
+
+  const picked = pickedMap(), caps = captainMap(), declined = state.declined||[];
+  const pool = plOrder(act, teams, docs).filter(t=>!picked[t] && !declined.includes(t) && !(slot && caps[t]===slot.allianceIdx+1));
+  if(slot){
+    side += `<h4>${esc(act.name)} <span class="hint">(${pool.length} left)</span></h4><p class="hint" style="margin:0 0 8px">Tap a team to pick it. Tap ✕ if it says no. A team tagged “captain” is asked, then the captains below move up.</p><div id="alliancePool" class="alliancechips"></div>`;
+  }
+  if(declined.length) html += `<h4>Said no / skipped</h4><p class="hint">${declined.map(esc).join(", ")}</p>`;
+
+  // Ranking along the bottom: the official event ranking if loaded, otherwise your list's order
+  const ro = rankOrder(), er = eventRankMap();
+  let rankHtml = '';
+  if(teams.length){
+    const where = {};
+    state.alliances.forEach((a,i)=>a.forEach((t,j)=>{ if(t) where[t] = "Alliance "+(i+1)+(j===0?" captain":" pick "+j); }));
+    rankHtml = `<h4 style="margin-top:18px">${ro.official?"Event ranking":"Ranking (your list’s order)"} <span class="hint">${ro.official?"":"(load The Blue Alliance to see the official ranking)"}</span></h4><div class="rankbox"><table><thead><tr><th><button style="cursor:default">Rank</button></th><th><button style="cursor:default">Team</button></th><th><button style="cursor:default">Status</button></th></tr></thead><tbody>` +
+      ro.order.map((t,i)=>{
+        const isPick = picked[t];
+        const st = where[t] ? where[t] : (declined.includes(t) ? "Said no" : "Available");
+        const cls = isPick ? "rk-picked" : (declined.includes(t) ? "rk-no" : "");
+        return `<tr class="${cls}"><td class="n">${ro.official ? (er[t]||"–") : i+1}</td><td class="n">${esc(t)}</td><td class="n">${esc(st)}</td></tr>`;
+      }).join("") + '</tbody></table></div>';
+  }
+  body.innerHTML = '<div class="allgrid"><div>'+html+'</div>'+(side?'<div class="allside">'+side+'</div>':'')+'</div>'+rankHtml;
+  $("undoPick").addEventListener("click", undoLastPick);
+  if(slot) $("skipTurn").addEventListener("click", skipTurn);
+  body.querySelectorAll(".capcell").forEach(c=>c.addEventListener("click", ()=>changeCaptain(parseInt(c.dataset.ai,10))));
+
+  if(slot){
+    const poolBox = $("alliancePool");
+    pool.forEach((t,i)=>{
+      const chip = document.createElement("div");
+      chip.className = "alliancechip";
+      const capIdx = caps[t];
+      chip.innerHTML = `<button type="button" class="chipteam"><small style="opacity:.6">${i+1}.</small> ${esc(t)}${capIdx?` <span class="pltag">A${capIdx} captain</span>`:""}</button>` + (capIdx ? "" : `<button type="button" class="chipdecline" title="This team says no">✕</button>`);
+      if(capIdx){
+        chip.querySelector(".chipteam").addEventListener("click", ()=>plChoice("Alliance "+(slot.allianceIdx+1)+" asked team "+t+" (captain of Alliance "+capIdx+"). What did they say?", "They said yes", "They said no", ok=>pickCaptain(capIdx-1, ok)));
+      } else {
+        chip.querySelector(".chipteam").addEventListener("click", ()=>assignTeamToCurrentSlot(t));
+        chip.querySelector(".chipdecline").addEventListener("click", ()=>declineTeam(t));
+      }
+      poolBox.appendChild(chip);
+    });
+  }
+}
+
+function renderValidation(){
+  const docs = filteredDocs();
+  const body = $("validateBody");
+  if(!docs.length){ body.innerHTML = '<p class="hint">No matches collected yet for this event.</p>'; return; }
+
+  const fields = fieldKeys(docs);
+  const outliers = findOutliers(docs, fields);
+  const dups = findDuplicateSlots(docs);
+  const missing = findMissingTeam(docs);
+
+  if(!outliers.length && !dups.length && !missing.length){
+    body.innerHTML = '<p class="hint" style="color:#0f7b6c;font-weight:700">Nothing flagged — this event\u2019s data looks clean so far.</p>';
+    return;
+  }
+
+  let html = '';
+  if(missing.length){
+    html += `<h4>Missing team number (${missing.length})</h4><div class="wrap"><table><thead><tr><th><button style="cursor:default">Match</button></th><th><button style="cursor:default">Slot</button></th></tr></thead><tbody>`;
+    missing.forEach(d=>{ html += `<tr><td class="n">${esc(d.match)}</td><td class="n">${esc(d.slot)}</td></tr>`; });
+    html += '</tbody></table></div>';
+  }
+  if(dups.length){
+    html += `<h4>Same match/slot submitted more than once (${dups.length})</h4><div class="wrap"><table><thead><tr><th><button style="cursor:default">Match</button></th><th><button style="cursor:default">Slot</button></th><th><button style="cursor:default">Times submitted</button></th><th><button style="cursor:default">Team(s)</button></th></tr></thead><tbody>`;
+    dups.forEach(d=>{ html += `<tr><td class="n">${esc(d.match)}</td><td class="n">${esc(d.slot)}</td><td class="n">${d.count}</td><td class="n">${esc(d.teams.join(", "))}</td></tr>`; });
+    html += '</tbody></table></div>';
+  }
+  if(outliers.length){
+    html += `<h4>Possible typos or misclicks (${outliers.length})</h4><div class="wrap"><table><thead><tr><th><button style="cursor:default">Match</button></th><th><button style="cursor:default">Slot</button></th><th><button style="cursor:default">Team</button></th><th><button style="cursor:default">Field</button></th><th><button style="cursor:default">Value</button></th><th><button style="cursor:default">Typical</button></th></tr></thead><tbody>`;
+    outliers.forEach(o=>{ html += `<tr><td class="n">${esc(o.match)}</td><td class="n">${esc(o.slot)}</td><td class="n">${esc(o.team)}</td><td class="n">${esc(o.field)}</td><td class="n">${esc(o.value)}</td><td class="n">~${o.mean}</td></tr>`; });
+    html += '</tbody></table></div>';
+  }
+  body.innerHTML = html;
+}
+
+// ---------- Analysis ----------
+function renderAnalysis(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const teams = teamsIn(docs);
+  const term = $("q").value.trim().toLowerCase();
+  const showPoints = pointValuesConfigured();
+  let rows = teams.filter(t=>!term || String(t).toLowerCase().includes(term))
+    .map(t=>{
+      const agg = aggregateTeam(docs, t, fields);
+      if(showPoints) agg.points = computeTeamPoints(docs, t, fields);
+      return {team:t, ...agg};
+    });
+  const cols = showPoints ? ["team", ...fields, "points"] : ["team", ...fields];
+  if(sortCol>=0 && sortCol<cols.length){
+    const key = cols[sortCol];
+    rows = rows.sort((a,b)=>{
+      const x=a[key], y=b[key];
+      if(x===null) return 1; if(y===null) return -1;
+      if(typeof x==="string" && isNaN(parseFloat(x))) return sortDir*String(x).localeCompare(String(y));
+      return sortDir*(parseFloat(x)-parseFloat(y));
+    });
+  }
+  let h = "<thead><tr>" + cols.map((c,i)=>
+    `<th><button data-c="${i}"${i===sortCol?` data-dir="${sortDir}"`:""}>${esc(c==="team"?"Team":c==="points"?"Points":c)}</button></th>`).join("") + "</tr></thead><tbody>";
+  h += rows.map(r=>"<tr>" + cols.map(c=>{
+    if(c==="team") return `<td class="l">${esc(r.team)}</td>`;
+    const v=r[c];
+    return `<td class="n">${v===null?"–":esc(v)}</td>`;
+  }).join("") + "</tr>").join("");
+  $("tbl").innerHTML = rows.length ? h+"</tbody>" : `<tr><td class="empty">${teams.length?"No teams match your search.":"No data yet for this event."}</td></tr>`;
+  $("count").textContent = rows.length+" of "+teams.length+" teams";
+  lastAnalysisRows = rows; lastAnalysisCols = cols;
+}
+$("tbl").addEventListener("click", e=>{
+  const b=e.target.closest("button[data-c]"); if(!b) return;
+  const c=+b.dataset.c;
+  if(sortCol===c) sortDir=-sortDir; else { sortCol=c; sortDir = c===0?1:-1; }
+  renderAnalysis();
+});
+$("q").addEventListener("input", renderAnalysis);
+
+// ---------- Rankings ----------
+function buildMetricSelect(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const sel = $("metric");
+  const prev = sel.value;
+  const showPoints = pointValuesConfigured();
+  let opts = fields.map(f=>`<option value="${f}">${esc(f)}</option>`).join("");
+  if(showPoints) opts = `<option value="__points__">Points (calculated)</option>` + opts;
+  sel.innerHTML = opts;
+  if(fields.includes(prev) || prev==="__points__" && showPoints) sel.value = prev;
+  else if(showPoints) sel.value = "__points__";
+  renderRankings();
+}
+$("metric").addEventListener("change", renderRankings);
+function renderRankings(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const metric = $("metric").value;
+  const box = $("rankchart");
+  if(!metric || !docs.length){ box.innerHTML = '<p class="hint">No numeric stats to chart yet.</p>'; return; }
+  const teams = teamsIn(docs);
+  const rows = teams.map(t=>{
+    const agg = aggregateTeam(docs,t,fields);
+    const v = metric==="__points__" ? computeTeamPoints(docs, t, fields) : agg[metric];
+    return {team:t, v};
+  }).filter(r=>r.v!==null && isNum(r.v));
+  rows.sort((a,b)=>b.v-a.v);
+  const max = Math.max(...rows.map(r=>parseFloat(r.v)), 1);
+  box.innerHTML = rows.map(r=>{
+    const w = Math.max(2, parseFloat(r.v)/max*100);
+    return `<div class="rankrow"><div class="team">${esc(r.team)}</div><div class="rankbar-wrap"><div class="rankbar" style="width:${w}%"></div></div><div>${r.v}</div></div>`;
+  }).join("") || '<p class="hint">No teams with this stat yet.</p>';
+}
+
+// ---------- Team breakdown ----------
+const PALETTE = ["#2f6fed","#e0393e","#f2b705","#2e9e4f","#8e44ad","#16a2b8","#e67e22","#795548","#d81b60","#607d8b"];
+function renderBreakdown(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+  const box = $("breakdown"), legend = $("breakdownLegend");
+  if(!docs.length || !fields.length){ box.innerHTML = '<p class="hint">No numeric stats to chart yet.</p>'; legend.innerHTML=""; return; }
+  legend.innerHTML = fields.map((f,k)=>`<span><span class="sw" style="background:${PALETTE[k%PALETTE.length]}"></span>${esc(f)}</span>`).join("");
+  const teams = teamsIn(docs);
+  const rows = teams.map(t=>{
+    const agg = aggregateTeam(docs, t, fields);
+    const total = fields.reduce((s,f)=>s+(isNum(agg[f])?parseFloat(agg[f]):0),0);
+    return {team:t, agg, total};
+  }).sort((a,b)=>b.total-a.total);
+  const max = Math.max(...rows.map(r=>r.total), 1);
+  box.innerHTML = rows.map(r=>{
+    const segs = fields.map((f,k)=>{
+      const v = r.agg[f];
+      if(!isNum(v) || parseFloat(v)===0) return "";
+      const w = parseFloat(v)/max*100;
+      return `<div class="breakseg" data-tip="${esc(f)}: ${v}" style="width:${w}%;background:${PALETTE[k%PALETTE.length]}"></div>`;
+    }).join("");
+    return `<div class="breakrow"><div class="team">${esc(r.team)}</div><div class="breakbar">${segs}</div></div>`;
+  }).join("");
+  const tipEl = $("tip");
+  box.querySelectorAll(".breakseg").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave", ()=>{ tipEl.style.display="none"; });
+  });
+}
+
+// ---------- Pit scouting ----------
+const DEFAULT_PIT_QS = [
+  {key:"drivetrain", label:"What drivetrain?", type:"text"},
+  {key:"intake", label:"Internal or external intake?", type:"choice", options:["Internal","External"]},
+  {key:"both_pieces", label:"Can both game pieces be intaked?", type:"choice", options:["Yes","No"]},
+  {key:"has_auto", label:"Do they have auto?", type:"choice", options:["Yes","No"]}
+];
+function pitQuestionsKey(){ return "pitQuestions_"+mode; }
+function slugify(label){ return label.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"") || "field"; }
+function getPitQuestions(){
+  try{
+    const raw = localStorage.getItem(pitQuestionsKey());
+    if(raw){ const parsed = JSON.parse(raw); if(Array.isArray(parsed) && parsed.length) return parsed; }
+  }catch(e){}
+  return DEFAULT_PIT_QS;
+}
+function savePitQuestions(qs){ try{ localStorage.setItem(pitQuestionsKey(), JSON.stringify(qs)); }catch(e){} }
+
+function renderPitQEditor(){
+  const box = $("pitQEditor");
+  const qs = getPitQuestions();
+  box.innerHTML = `<div id="pitQRows"></div>
+    <button type="button" id="addPitQRow" style="background:#fff;color:#0f7b6c;margin-bottom:14px">+ Add another question</button>
+    <div><button class="save" id="savePitQBtn">Save questions</button></div>`;
+  const rowsBox = box.querySelector("#pitQRows");
+  function addRow(q){
+    q = q || {};
+    const label = q.label||"", type = q.type||"text", optionsStr = (q.options||[]).join(", ");
+    const row = document.createElement("div");
+    row.className = "fieldrow";
+    row.dataset.qkey = q.key || "";
+    row.innerHTML = `<div class="fieldrow-main">
+        <input type="text" class="qlabel" placeholder="Question text" value="${esc(label)}">
+        <select class="qtype">
+          <option value="text"${type==="text"?" selected":""}>Text answer</option>
+          <option value="choice"${type==="choice"?" selected":""}>Multiple choice</option>
+        </select>
+        <button type="button" class="removeRow">✕</button>
+      </div>
+      <div class="fieldrow-extra">
+        <input type="text" class="qopts" placeholder="Options, comma separated (e.g. Yes, No)" value="${esc(optionsStr)}" style="display:${type==="choice"?"block":"none"}">
+      </div>`;
+    row.querySelector(".removeRow").addEventListener("click", ()=>row.remove());
+    row.querySelector(".qtype").addEventListener("change", e=>{
+      row.querySelector(".qopts").style.display = e.target.value==="choice" ? "block" : "none";
+    });
+    rowsBox.appendChild(row);
+  }
+  qs.forEach(addRow);
+  box.querySelector("#addPitQRow").addEventListener("click", ()=>addRow());
+  box.querySelector("#savePitQBtn").addEventListener("click", ()=>{
+    const seen = new Set();
+    const newQs = [...rowsBox.querySelectorAll(".fieldrow")].map(row=>{
+      const label = row.querySelector(".qlabel").value.trim();
+      const type = row.querySelector(".qtype").value;
+      const obj = {label, type};
+      if(type==="choice") obj.options = row.querySelector(".qopts").value.split(",").map(s=>s.trim()).filter(Boolean);
+      if(row.dataset.qkey) obj.key = row.dataset.qkey;
+      return obj;
+    }).filter(q=>q.label).map(q=>{
+      if(q.key && !seen.has(q.key)){ seen.add(q.key); return q; }
+      let base = slugify(q.label), key = base, n = 2;
+      while(seen.has(key)){ key = base+"_"+n; n++; }
+      seen.add(key);
+      return {...q, key};
+    });
+    savePitQuestions(newQs);
+    box.style.display = "none";
+    renderPitAndProfile();
+  });
+}
+$("editPitQBtn").addEventListener("click", ()=>{
+  const box = $("pitQEditor");
+  if(box.style.display==="none"){ renderPitQEditor(); box.style.display="block"; }
+  else box.style.display="none";
+});
+
+function pitKey(team){ return "pit_"+(currentEvent||mode)+"_"+team; }
+function loadPit(team){ try{ return JSON.parse(localStorage.getItem(pitKey(team))||"{}"); }catch(e){ return {}; } }
+function savePit(team,data){ try{ localStorage.setItem(pitKey(team), JSON.stringify(data)); }catch(e){} }
+
+function renderTeamGrid(gridId, docs){
+  const teams = teamsIn(docs);
+  const el = $(gridId);
+  el.innerHTML = teams.map(t=>`<button class="pitbtn${t===selectedTeam?" sel":""}" data-t="${esc(t)}">${esc(t)}</button>`).join("") || '<p class="hint">No teams yet for this event.</p>';
+  el.querySelectorAll("button").forEach(b=>b.addEventListener("click", ()=>{ selectedTeam=b.dataset.t; renderPitAndProfile(); }));
+  return teams;
+}
+function renderPitAndProfile(){
+  renderTeamGrid("pitgrid", filteredDocs());
+  renderTeamGrid("profilegrid", filteredDocs());
+  renderPitForm();
+  renderProfile();
+}
+function renderPitForm(){
+  const box = $("pitform");
+  if(!selectedTeam){ box.innerHTML=""; return; }
+  const PIT_QS = getPitQuestions();
+  const data = loadPit(selectedTeam);
+  if(!Array.isArray(data.photos)) data.photos=[];
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>` + PIT_QS.map(q=>{
+    if(q.type==="text") return `<div class="qrow"><label>${q.label}</label><input type="text" data-k="${q.key}" value="${esc(data[q.key]||"")}"></div>`;
+    return `<div class="qrow"><label>${q.label}</label><select data-k="${q.key}"><option value="">Select…</option>${(q.options||[]).map(o=>`<option ${data[q.key]===o?"selected":""}>${o}</option>`).join("")}</select></div>`;
+  }).join("") +
+  `<div class="qrow"><label>Photos</label><input type="file" id="pitphotos" accept="image/*" capture="environment" multiple><div class="photos" id="pitphotopreview"></div></div>
+  <button class="save" id="pitsave">Save answers</button>`;
+  const preview = $("pitphotopreview");
+  function draw(){
+    preview.innerHTML = "";
+    data.photos.forEach((src,idx)=>{
+      const img=document.createElement("img"); img.src=src; img.title="Click to remove"; img.style.cursor="pointer";
+      img.addEventListener("click", ()=>{ data.photos.splice(idx,1); savePit(selectedTeam,data); draw(); if($("view").value==="profile") renderProfile(); });
+      preview.appendChild(img);
+    });
+  }
+  draw();
+  box.querySelector("#pitphotos").addEventListener("change", e=>{
+    const files=Array.from(e.target.files); let remaining=files.length;
+    files.forEach(f=>{ const r=new FileReader(); r.onload=()=>{ data.photos.push(r.result); remaining--; if(remaining===0){ savePit(selectedTeam,data); draw(); } }; r.readAsDataURL(f); });
+  });
+  box.querySelector("#pitsave").addEventListener("click", ()=>{
+    const out={photos:data.photos};
+    box.querySelectorAll("[data-k]").forEach(el=>out[el.dataset.k]=el.value);
+    savePit(selectedTeam,out);
+    const btn=box.querySelector("#pitsave"); btn.textContent="Saved"; setTimeout(()=>btn.textContent="Save answers",1200);
+  });
+}
+
+// ---------- Team profile ----------
+function renderProfile(){
+  const box = $("profilecontent");
+  if(!selectedTeam){ box.innerHTML=""; return; }
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const agg = aggregateTeam(docs, selectedTeam, fields);
+  const showPoints = pointValuesConfigured();
+  const points = showPoints ? computeTeamPoints(docs, selectedTeam, fields) : null;
+  const avgHtml = fields.length ? '<div class="statgrid">' +
+    (showPoints ? `<div class="stat" style="background:#dff5f0"><div class="stat-l">Points (calculated)</div><div class="stat-v">${points===null?"–":esc(points)}</div></div>` : "") +
+    fields.map(f=>
+    `<div class="stat"><div class="stat-l">${esc(f)}</div><div class="stat-v">${agg[f]===null?"–":esc(agg[f])}</div></div>`).join("") + '</div>'
+    : '<p class="hint">No stats yet.</p>';
+  const matches = docs.filter(d=>d.team===selectedTeam);
+  const matchesHtml = matches.length ? '<div class="wrap"><table><thead><tr>' +
+    ["match","slot",...fields].map(c=>`<th><button style="cursor:default">${esc(c)}</button></th>`).join("") + '</tr></thead><tbody>' +
+    matches.map(m=>'<tr>'+["match","slot",...fields].map(c=>`<td class="n">${m[c]!==undefined&&m[c]!==""?esc(m[c]):"–"}</td>`).join("")+'</tr>').join("") +
+    '</tbody></table></div>' : '<p class="hint">No individual matches recorded yet.</p>';
+  const pit = loadPit(selectedTeam);
+  const photos = Array.isArray(pit.photos) ? pit.photos : [];
+  const pitHtml = getPitQuestions().map(q=>`<div class="stat"><div class="stat-l">${q.label}</div><div class="stat-v">${esc(pit[q.key]||"–")}</div></div>`).join("");
+  const photosHtml = photos.length ? `<div class="photos">${photos.map(src=>`<img src="${src}">`).join("")}</div>` : '<p class="hint">No photos saved.</p>';
+
+  const meta = currentEvent && profileMeta[currentEvent] ? profileMeta[currentEvent] : null;
+  let pitFieldDefs = [], superFieldDefs = [];
+  if(meta){
+    try{ pitFieldDefs = JSON.parse(meta.pitFields||"[]"); }catch(e){}
+    try{ superFieldDefs = JSON.parse(meta.superFields||"[]"); }catch(e){}
+  }
+  const pitFieldMap = {}; pitFieldDefs.forEach(f=>pitFieldMap[f.id]=f);
+  const superFieldMap = {}; superFieldDefs.forEach(f=>superFieldMap[f.id]=f);
+
+  function formatFieldValue(def, val){
+    if(val===undefined || val===null || val==="") return "–";
+    if(def && def.type==="rating"){
+      const n = parseInt(val,10)||0;
+      return "★".repeat(Math.max(0,n)) + "☆".repeat(Math.max(0,5-n));
+    }
+    if(def && def.type==="toggle") return val==="1" ? "Yes" : (val==="0" ? "No" : "–");
+    return esc(val);
+  }
+
+  const PIT_APP_META = ["team","profileId","profileName","gameType"];
+  const pitAppDoc = filteredPitDocsFromApp().find(d=>d.team===selectedTeam);
+  const pitAppHtml = pitAppDoc
+    ? '<div class="statgrid">' + Object.keys(pitAppDoc).filter(k=>!PIT_APP_META.includes(k))
+        .map(k=>{
+          const def = pitFieldMap[k];
+          const label = def ? def.label : k;
+          return `<div class="stat"><div class="stat-l">${esc(label)}</div><div class="stat-v">${formatFieldValue(def, pitAppDoc[k])}</div></div>`;
+        }).join("") + '</div>'
+    : '<p class="hint">No pit scouting from the app yet for this team.</p>';
+
+  const SUPER_META = ["match","team","profileId","profileName","gameType","auto_path"];
+  const superDocs = filteredSuperDocs().filter(d=>d.team===selectedTeam);
+  const superFieldIds = [];
+  superDocs.forEach(d=>Object.keys(d).forEach(k=>{ if(!SUPER_META.includes(k) && !superFieldIds.includes(k)) superFieldIds.push(k); }));
+  const superHtml = superDocs.length ? '<div class="wrap"><table><thead><tr>' +
+    ["match",...superFieldIds].map(fid=>{
+      const label = fid==="match" ? "match" : (superFieldMap[fid] ? superFieldMap[fid].label : fid);
+      return `<th><button style="cursor:default">${esc(label)}</button></th>`;
+    }).join("") + '</tr></thead><tbody>' +
+    superDocs.map(d=>'<tr>'+["match",...superFieldIds].map(fid=>{
+      const cellVal = fid==="match" ? (d.match!==undefined&&d.match!==""?esc(d.match):"–") : formatFieldValue(superFieldMap[fid], d[fid]);
+      return `<td class="n">${cellVal}</td>`;
+    }).join("")+'</tr>').join("") +
+    '</tbody></table></div>' : '<p class="hint">No super scout entries yet for this team.</p>';
+
+  box.innerHTML = `<h3>Team ${esc(selectedTeam)}</h3>
+    <h4>Averages (${matches.length} match${matches.length===1?"":"es"})</h4>${avgHtml}
+    <h4>Individual matches</h4>${matchesHtml}
+    <h4>Pit scouting (website)</h4><div class="statgrid">${pitHtml}</div>
+    <h4>Photos</h4>${photosHtml}
+    <h4>Pit scouting (from app)</h4>${pitAppHtml}
+    <h4>Super Scout</h4>${superHtml}`;
+}
+
+// ---------- All matches ----------
+function renderAll(){
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs);
+  const cols = ["team","match","slot",...fields];
+  $("allCount").textContent = docs.length+" match(es)";
+  lastAllRows = docs; lastAllCols = cols;
+  if(!docs.length){ $("allMatches").innerHTML = '<p class="hint">No matches yet for this event.</p>'; return; }
+  let h = '<div class="wrap"><table><thead><tr>'+cols.map(c=>`<th><button style="cursor:default">${esc(c)}</button></th>`).join("")+'</tr></thead><tbody>';
+  h += docs.map(d=>'<tr>'+cols.map(c=>`<td class="${c==='team'?'l':'n'}">${d[c]!==undefined&&d[c]!==""?esc(d[c]):"–"}</td>`).join("")+'</tr>').join("");
+  $("allMatches").innerHTML = h+"</tbody></table></div>";
+}
+
+// ---------- Official (TBA) ----------
+function tbaKeyStorageKey(){ return "tbaApiKey"; }
+function getTbaApiKey(){ try{ return localStorage.getItem(tbaKeyStorageKey())||""; }catch(e){ return ""; } }
+function tbaStorageKey(){ return currentEvent || "__all_events__"; }
+function loadTbaEvents(){ try{ return JSON.parse(localStorage.getItem("tbaEvents")||"{}"); }catch(e){ return {}; } }
+function saveTbaEvent(storageKey, bundle){
+  const all = loadTbaEvents();
+  all[storageKey] = bundle;
+  try{ localStorage.setItem("tbaEvents", JSON.stringify(all)); }catch(e){}
+}
+function currentTbaBundle(){
+  const all = loadTbaEvents();
+  return all[tbaStorageKey()] || null;
+}
+function currentTbaTeams(){
+  const b = currentTbaBundle();
+  return b && b.teams ? b.teams : [];
+}
+
+let tbaError = null;
+
+function renderTbaSettings(extra){
+  const apiKey = getTbaApiKey();
+  const bundle = currentTbaBundle();
+  const metaKey = currentEvent && profileMeta[currentEvent] && profileMeta[currentEvent].tbaEventKey ? profileMeta[currentEvent].tbaEventKey : "";
+  const lastEventKey = bundle && bundle.tbaEventKeyUsed ? bundle.tbaEventKeyUsed : metaKey;
+  return `
+    <p class="hint" style="margin:0 0 14px">Loading data here applies to whichever event is selected up top (${currentEvent ? esc($("eventSel").selectedOptions[0].textContent) : "All events"}). Switch the Event dropdown to load or view a different one.</p>
+    <div class="qrow"><label>TBA API key (saved in this browser only)</label>
+      <input type="text" id="tbaApiKeyInput" value="${esc(apiKey)}" placeholder="Get one free at thebluealliance.com/account"></div>
+    <div class="qrow"><label>Event key for this event</label>
+      <input type="text" id="tbaEventKeyInput" value="${esc(lastEventKey)}" placeholder="e.g. 2026mimid"></div>
+    <button class="save" id="tbaLoadBtn">Load from The Blue Alliance</button>
+    ${extra||""}
+  `;
+}
+
+function wireTbaSettings(onLoad){
+  document.getElementById("tbaLoadBtn").addEventListener("click", async ()=>{
+    const apiKey = document.getElementById("tbaApiKeyInput").value.trim();
+    const eventKey = document.getElementById("tbaEventKeyInput").value.trim();
+    try{ localStorage.setItem(tbaKeyStorageKey(), apiKey); }catch(e){}
+    if(!apiKey || !eventKey){ alert("Enter both the API key and an event key first."); return; }
+    await onLoad(apiKey, eventKey);
+  });
+}
+
+async function fetchTba(apiKey, eventKey){
+  const headers = {"X-TBA-Auth-Key": apiKey};
+  const base = "https://www.thebluealliance.com/api/v3/event/"+encodeURIComponent(eventKey);
+  const [infoRes, rankRes, matchRes, teamRes] = await Promise.all([
+    fetch(base, {headers}),
+    fetch(base+"/rankings", {headers}),
+    fetch(base+"/matches", {headers}),
+    fetch(base+"/teams/simple", {headers})
+  ]);
+  const statuses = [infoRes, rankRes, matchRes, teamRes].map(r=>r.status);
+  if(statuses.includes(401) || statuses.includes(403)) throw new Error("The Blue Alliance rejected that API key — double-check it.");
+  if(infoRes.status===404) throw new Error("The Blue Alliance doesn't have an event called \""+eventKey+"\" yet. Off-season events are often added only a few days before they start — check the key, or try again closer to the event.");
+  if(!infoRes.ok) throw new Error("The Blue Alliance returned an error ("+infoRes.status+") — try again in a moment.");
+  // An event that exists but hasn't published rankings, matches, or teams yet is
+  // normal early on -- treat "not found" on those pieces as empty, not as a failure.
+  async function pieceOrEmpty(res, empty){
+    if(res.status===404) return empty;
+    if(!res.ok) throw new Error("The Blue Alliance returned an error ("+res.status+") — try again in a moment.");
+    const body = await res.json();
+    return body===null ? empty : body;
+  }
+  const info = await infoRes.json();
+  const rankings = await pieceOrEmpty(rankRes, null);
+  const matches = await pieceOrEmpty(matchRes, []);
+  const teamsRaw = await pieceOrEmpty(teamRes, []);
+  const teams = teamsRaw.map(t=>String(t.team_number)).sort((a,b)=>parseInt(a)-parseInt(b));
+  return {info, rankings, matches, teams, savedAt: new Date().toISOString()};
+}
+
+function renderTbaResults(data){
+  const {info, rankings, matches, teams} = data;
+  let html = `<div class="panel" style="margin-bottom:16px">
+    <h3>${esc(info.name||"")}</h3>
+    <p class="hint">${esc(info.start_date||"")} – ${esc(info.end_date||"")} · ${esc(info.city||"")}${info.state_prov?", "+esc(info.state_prov):""}</p>
+  </div>`;
+
+  if(rankings && rankings.rankings && rankings.rankings.length){
+    const rpNames = (rankings.sort_order_info||[]).map(s=>s.name);
+    html += `<div class="wrap" style="margin-bottom:16px"><table><thead><tr>
+      <th><button style="cursor:default">Rank</button></th>
+      <th><button style="cursor:default">Team</button></th>
+      <th><button style="cursor:default">W-L-T</button></th>
+      ${rpNames.map(n=>`<th><button style="cursor:default">${esc(n)}</button></th>`).join("")}
+      </tr></thead><tbody>`;
+    html += rankings.rankings.map(r=>{
+      const rec = r.record ? `${r.record.wins}-${r.record.losses}-${r.record.ties}` : "–";
+      return `<tr><td class="n">${r.rank}</td><td class="l">${String(r.team_key).replace("frc","")}</td><td class="n">${rec}</td>
+        ${(r.sort_orders||[]).map(v=>`<td class="n">${v}</td>`).join("")}</tr>`;
+    }).join("");
+    html += "</tbody></table></div>";
+  } else {
+    html += '<p class="hint">No official rankings published yet for this event.</p>';
+  }
+
+  const qm = (matches||[]).filter(m=>m.comp_level==="qm").sort((a,b)=>a.match_number-b.match_number);
+  if(qm.length){
+    html += `<div class="wrap"><table><thead><tr>
+      <th><button style="cursor:default">Match</button></th>
+      <th><button style="cursor:default">Red</button></th>
+      <th><button style="cursor:default">Blue</button></th>
+      <th><button style="cursor:default">Red score</button></th>
+      <th><button style="cursor:default">Blue score</button></th>
+      </tr></thead><tbody>`;
+    html += qm.map(m=>{
+      const red = m.alliances.red.team_keys.map(t=>t.replace("frc","")).join(", ");
+      const blue = m.alliances.blue.team_keys.map(t=>t.replace("frc","")).join(", ");
+      const rs = m.alliances.red.score >= 0 ? m.alliances.red.score : "–";
+      const bs = m.alliances.blue.score >= 0 ? m.alliances.blue.score : "–";
+      return `<tr><td class="n">${m.match_number}</td><td class="n">${esc(red)}</td><td class="n">${esc(blue)}</td><td class="n">${rs}</td><td class="n">${bs}</td></tr>`;
+    }).join("");
+    html += "</tbody></table></div>";
+  } else {
+    html += '<p class="hint">No qualification matches published yet for this event.</p>';
+  }
+
+  if(teams && teams.length){
+    html += `<div class="panel" style="margin-top:16px"><h4 style="margin:0 0 8px">All ${teams.length} teams at this event</h4>
+      <p class="hint" style="margin:0">${teams.map(esc).join(", ")}</p></div>`;
+  }
+  return html;
+}
+
+function renderTba(){
+  const box = $("tbaBody");
+  if(mode==="ftc"){
+    box.innerHTML = '<p class="hint">The Blue Alliance only covers FRC — switch to FRC to use this.</p>' + renderTbaSettings();
+    wireTbaSettings(loadHandler);
+    return;
+  }
+  const bundle = currentTbaBundle();
+  const errorHtml = tbaError ? `<p class="hint" style="color:#b3261e;margin-top:10px">${esc(tbaError)}</p>` : "";
+  const emptyHtml = (!bundle && !tbaError) ? '<p class="hint" style="margin-top:10px">No event loaded yet. Enter a key above to load one.</p>' : "";
+  box.innerHTML = renderTbaSettings(errorHtml + emptyHtml) + (bundle ? renderTbaResults(bundle) : "");
+  wireTbaSettings(loadHandler);
+}
+
+async function loadHandler(apiKey, eventKey){
+  const loadBtn = document.getElementById("tbaLoadBtn");
+  loadBtn.textContent = "Loading…"; loadBtn.disabled = true;
+  try{
+    const bundle = await fetchTba(apiKey, eventKey);
+    bundle.tbaEventKeyUsed = eventKey;
+    saveTbaEvent(tbaStorageKey(), bundle);
+    tbaError = null;
+  }catch(e){
+    tbaError = e.message;
+  }
+  renderTba();
+}
+
+
+function switchView(viewName){
+  $("view").value = viewName;
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("on"));
+  $("sec-"+viewName).classList.add("on");
+  document.querySelectorAll("#menuDrawer a").forEach(a=>a.classList.toggle("active", a.dataset.view===viewName));
+  refreshAll();
+}
+$("view").addEventListener("change", ()=>switchView($("view").value));
+
+function openMenu(){ $("menuDrawer").classList.add("open"); $("menuBackdrop").classList.add("open"); }
+function closeMenu(){ $("menuDrawer").classList.remove("open"); $("menuBackdrop").classList.remove("open"); }
+$("menuToggle").addEventListener("click", openMenu);
+$("menuClose").addEventListener("click", closeMenu);
+$("menuBackdrop").addEventListener("click", closeMenu);
+document.querySelectorAll("#menuDrawer a").forEach(a=>{
+  a.addEventListener("click", e=>{
+    e.preventDefault();
+    switchView(a.dataset.view);
+    closeMenu();
+  });
+});
+document.querySelector('#menuDrawer a[data-view="analysis"]').classList.add("active");
+
+function renderProgressCard(){
+  const docs = filteredDocs();
+  const card = $("progressCard");
+  const bundle = currentTbaBundle();
+  const filledSet = new Set(docs.filter(d=>d.team).map(d=>d.match+"::"+d.slot));
+  const filled = filledSet.size;
+  if(mode==="frc" && bundle && bundle.matches){
+    const qm = bundle.matches.filter(m=>m.comp_level==="qm");
+    let total = 0;
+    qm.forEach(m=>{ total += m.alliances.red.team_keys.length + m.alliances.blue.team_keys.length; });
+    if(total>0){
+      const pct = Math.round(filled/total*100);
+      card.style.display = "block";
+      $("progressText").textContent = `Scouting progress: ${filled} / ${total} slots (${pct}%)`;
+      $("progressBar").style.width = pct+"%";
+      return;
+    }
+  }
+  if(filled>0){
+    card.style.display = "block";
+    $("progressText").textContent = `${filled} match slot(s) scouted so far`;
+    $("progressBar").style.width = "0%";
+  } else {
+    card.style.display = "none";
+  }
+}
+
+function refreshAll(){
+  updateEventOptions();
+  renderProgressCard();
+  const v = $("view").value;
+  if(v==="analysis") renderAnalysis();
+  else if(v==="rankings") buildMetricSelect();
+  else if(v==="breakdown") renderBreakdown();
+  else if(v==="pit" || v==="profile") renderPitAndProfile();
+  else if(v==="prescout"){ updatePrescoutEventOptions(); renderPrescout(); }
+  else if(v==="validate") renderValidation();
+  else if(v==="picklist") renderPickList();
+  else if(v==="alliance") renderAllianceBoard();
+  else if(v==="all") renderAll();
+  else if(v==="tba") renderTba();
+}
+
+// ---------- Strategy ----------
+function getMyTeam(){ try{ return localStorage.getItem("myTeamNumber")||""; }catch(e){ return ""; } }
+function setMyTeam(v){ try{ localStorage.setItem("myTeamNumber", v); }catch(e){} }
+
+function findNextMatch(myTeam){
+  const bundle = currentTbaBundle();
+  if(!bundle || !bundle.matches) return null;
+  const qm = bundle.matches.filter(m=>m.comp_level==="qm").sort((a,b)=>a.match_number-b.match_number);
+  const myMatches = qm.filter(m=>{
+    const teams = [...m.alliances.red.team_keys, ...m.alliances.blue.team_keys].map(t=>t.replace("frc",""));
+    return teams.includes(String(myTeam));
+  });
+  if(!myMatches.length) return null;
+  return myMatches.find(m=>m.alliances.red.score<0 && m.alliances.blue.score<0) || myMatches[0];
+}
+
+let stratTab = "plan", apTeam = "", apCombine = true, apPick = -1;
+const FIELD_DEFAULT_URI = "data:image/jpeg;base64,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";
+function fieldImageFor(eventId){
+  const ids = Object.keys(profileMeta);
+  const m = eventId && profileMeta[eventId] ? profileMeta[eventId] : (ids.length===1 ? profileMeta[ids[0]] : null);
+  return (m && m.fieldImage) ? m.fieldImage : FIELD_DEFAULT_URI;
+}
+function renderStrategy(){
+  const box = $("strategyContent");
+  box.innerHTML = '<div class="stratTabs"><button type="button" data-t="plan">Next match</button><button type="button" data-t="auto">Auto paths</button></div><div id="stratBody"></div>';
+  box.querySelectorAll(".stratTabs button").forEach(b=>{
+    b.classList.toggle("on", b.dataset.t===stratTab);
+    b.addEventListener("click", ()=>{ stratTab=b.dataset.t; renderStrategy(); });
+  });
+  if(stratTab==="auto") renderAutoPaths($("stratBody")); else renderStrategyPlan();
+}
+function renderStrategyPlan(){
+  const box = $("stratBody");
+  const myTeam = getMyTeam();
+  const teamInputHtml = `<div class="qrow"><label>Your team number</label><input type="text" id="myTeamInput" value="${esc(myTeam)}" placeholder="e.g. 5216"></div>`;
+
+  if(mode!=="frc"){
+    box.innerHTML = '<h3>Stressed</h3><p class="hint">This uses the official schedule from The Blue Alliance, which only covers FRC. Switch to FRC to use this.</p>';
+    return;
+  }
+  if(!myTeam){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + '<p class="hint">Enter your team number above to find your next match.</p>';
+    wireMyTeamInput(); return;
+  }
+  const bundle = currentTbaBundle();
+  if(!bundle){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + '<p class="hint">No event schedule loaded yet — load one on the Official (TBA) tab first.</p>';
+    wireMyTeamInput(); return;
+  }
+  const match = findNextMatch(myTeam);
+  if(!match){
+    box.innerHTML = '<h3>Stressed</h3>' + teamInputHtml + `<p class="hint">No matches found for team ${esc(myTeam)} in the loaded event.</p>`;
+    wireMyTeamInput(); return;
+  }
+
+  const red = match.alliances.red.team_keys.map(t=>t.replace("frc",""));
+  const blue = match.alliances.blue.team_keys.map(t=>t.replace("frc",""));
+  const onRed = red.includes(String(myTeam));
+  const allTeams = [...red, ...blue];
+
+  const docs = filteredDocs();
+  const fields = fieldKeys(docs).filter(f=>docs.some(d=>isNum(d[f])));
+
+  let html = `<h3>Stressed</h3>${teamInputHtml}
+    <h3 style="margin-top:0">Match ${match.match_number}</h3>
+    <p class="hint" style="margin:0 0 10px">You're on the <b>${onRed?"RED":"BLUE"}</b> alliance.</p>
+    <p style="margin:0 0 4px"><b style="color:#e0393e">Red:</b> ${red.map(esc).join(", ")}</p>
+    <p style="margin:0 0 16px"><b style="color:#2f6fed">Blue:</b> ${blue.map(esc).join(", ")}</p>`;
+
+  if(!fields.length){
+    html += '<p class="hint">No scouted stats yet to compare these teams on.</p>';
+  } else {
+    html += `<div class="legend">${fields.map((f,k)=>`<span><span class="sw" style="background:${PALETTE[k%PALETTE.length]}"></span>${esc(f)}</span>`).join("")}</div>`;
+    const rows = allTeams.map(t=>{
+      const agg = aggregateTeam(docs, t, fields);
+      const total = fields.reduce((s,f)=>s+(isNum(agg[f])?parseFloat(agg[f]):0),0);
+      return {team:t, agg, total, isMe: String(t)===String(myTeam)};
+    });
+    const max = Math.max(...rows.map(r=>r.total), 1);
+    html += rows.map(r=>{
+      const segs = fields.map((f,k)=>{
+        const v = r.agg[f];
+        if(!isNum(v) || parseFloat(v)===0) return "";
+        const w = parseFloat(v)/max*100;
+        return `<div class="breakseg" data-tip="${esc(f)}: ${v}" style="width:${w}%;background:${PALETTE[k%PALETTE.length]}"></div>`;
+      }).join("");
+      return `<div class="breakrow"><div class="team"${r.isMe?' style="color:var(--acc)"':""}>${esc(r.team)}${r.isMe?" (us)":""}</div><div class="breakbar">${segs}</div></div>`;
+    }).join("");
+  }
+  box.innerHTML = html;
+  wireMyTeamInput();
+  const tipEl = $("tip");
+  box.querySelectorAll(".breakseg").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      tipEl.style.display="block"; tipEl.style.left=(e.clientX+14)+"px"; tipEl.style.top=(e.clientY+14)+"px";
+      tipEl.textContent = el.dataset.tip;
+    });
+    el.addEventListener("mouseleave", ()=>{ tipEl.style.display="none"; });
+  });
+}
+
+// ---------- Auto paths (Stressed tab) ----------
+const AP_RESULT = {worked:"worked", partly:"partly", failed:"failed", none:"didn't move"};
+const AP_COLORS = ["#e6194b","#3cb44b","#4363d8","#f58231","#911eb4","#008080","#9a6324","#800000","#808000","#000075"];
+function apParse(d){
+  try{ const v = JSON.parse(d.auto_path||"null"); if(v && (Array.isArray(v.pts) || v.result || v.note)) return {match:String(d.match), team:String(d.team), side:v.side||"", pts:Array.isArray(v.pts)?v.pts:[], result:v.result||"", note:v.note||""}; }catch(e){}
+  return null;
+}
+function apResample(pts, n){
+  if(pts.length<2) return null;
+  const L=[0]; for(let i=1;i<pts.length;i++) L.push(L[i-1]+Math.hypot(pts[i][0]-pts[i-1][0], (pts[i][1]-pts[i-1][1])*0.525));
+  const tot=L[L.length-1]; if(tot<0.03) return null;
+  const out=[]; let j=1;
+  for(let k=0;k<n;k++){
+    const t=tot*k/(n-1);
+    while(j<L.length-1 && L[j]<t) j++;
+    const seg=L[j]-L[j-1]||1, f=Math.max(0,Math.min(1,(t-L[j-1])/seg));
+    out.push([pts[j-1][0]+(pts[j][0]-pts[j-1][0])*f, pts[j-1][1]+(pts[j][1]-pts[j-1][1])*f]);
+  }
+  return out;
+}
+function apDist(a,b){ let s=0; for(let i=0;i<a.length;i++) s+=Math.hypot(a[i][0]-b[i][0], (a[i][1]-b[i][1])*0.525); return s/a.length; }
+function apCluster(paths){
+  const cl=[];
+  paths.forEach(p=>{
+    const r=apResample(p.drawPts, 24); if(!r){ return; }
+    let best=null, bd=1e9;
+    cl.forEach(c=>{ const d=apDist(c.rep, r); const sd=Math.hypot(c.rep[0][0]-r[0][0], (c.rep[0][1]-r[0][1])*0.525); if(d<0.07 && sd<0.10 && d<bd){ bd=d; best=c; } });
+    if(best){
+      best.items.push(p);
+      const n=best.items.length;
+      best.rep = best.rep.map((q,i)=>[(q[0]*(n-1)+r[i][0])/n, (q[1]*(n-1)+r[i][1])/n]);
+    } else cl.push({rep:r, items:[p]});
+  });
+  cl.sort((a,b)=>b.items.length-a.items.length);
+  return cl;
+}
+function renderAutoPaths(box){
+  const docs = filteredSuperDocs();
+  const all = [];
+  docs.forEach(d=>{ const p=apParse(d); if(p) all.push(p); });
+  const byTeam = {};
+  all.forEach(p=>{ (byTeam[p.team] = byTeam[p.team] || []).push(p); });
+  const teams = Object.keys(byTeam).sort((a,b)=>parseInt(a)-parseInt(b));
+  const sideOf = t => { const r=byTeam[t].filter(p=>p.side==="red").length, b=byTeam[t].filter(p=>p.side==="blue").length; return b>r ? "blue" : "red"; };
+  if(!apTeam || !byTeam[apTeam]) apTeam = "";
+  let html = '<h3>Auto paths</h3>';
+  if(!teams.length){
+    box.innerHTML = html + '<p class="hint">No auto paths yet. Super scouts draw them on the Super Scout page in the app.</p>';
+    return;
+  }
+  html += '<p class="hint" style="margin:0">Tap a team. Similar paths are joined into one line.</p>';
+  html += '<div class="apTeams">'+teams.map(t=>`<button type="button" class="${sideOf(t)}${t===apTeam?" sel":""}" data-t="${esc(t)}">${esc(t)}</button>`).join("")+'</div>';
+  html += `<label style="display:flex;gap:8px;align-items:center;color:var(--ink);margin-bottom:10px"><input type="checkbox" id="apComb" ${apCombine?"checked":""}> Treat red and blue as the same side (flip blue paths)</label>`;
+  if(!apTeam){
+    box.innerHTML = html + '<p class="hint">Pick a team above.</p>'; wireAp(box); return;
+  }
+  const mine = byTeam[apTeam].slice().sort((a,b)=>parseInt(a.match)-parseInt(b.match));
+  mine.forEach(p=>{
+    p.drawPts = p.pts.map(q=> (apCombine && p.side==="blue") ? [1-q[0], 1-q[1]] : q);
+  });
+  const drawn = mine.filter(p=>p.pts.length>=2);
+  const cl = apCluster(drawn);
+  const clustered = new Set(); cl.forEach(c=>c.items.forEach(i=>clustered.add(i)));
+  const rest = mine.filter(p=>!clustered.has(p));
+  const label = p => `Match ${esc(p.match)}${p.result||p.note ? " ("+[p.result?AP_RESULT[p.result]||p.result:"", p.note?esc(p.note):""].filter(Boolean).join(": ")+")" : ""}`;
+  html += '<canvas id="apCv" class="apCv"></canvas>';
+  if(apPick>=cl.length) apPick=-1;
+  cl.forEach((c,i)=>{
+    html += `<div class="apRow${apPick===i?" sel":""}" data-i="${i}"><span class="apChip" style="background:${AP_COLORS[i%AP_COLORS.length]}">×${c.items.length}</span><span>${c.items.map(label).join(", ")}</span></div>`;
+  });
+  if(rest.length) html += `<div class="apRow" style="cursor:default"><span class="apChip" style="background:#ddd">–</span><span>No line drawn: ${rest.map(label).join(", ")}</span></div>`;
+  box.innerHTML = html;
+  const cv = $("apCv"), img = new Image();
+  function paint(){
+    const w = Math.min(box.clientWidth||600, 660); cv.width = w; cv.height = Math.round(w*(img.naturalHeight||315)/(img.naturalWidth||600));
+    const ctx = cv.getContext("2d");
+    if(img.naturalWidth) ctx.drawImage(img,0,0,cv.width,cv.height);
+    ctx.lineJoin="round"; ctx.lineCap="round";
+    cl.forEach((c,i)=>{
+      const dim = apPick>=0 && apPick!==i, col = AP_COLORS[i%AP_COLORS.length];
+      const P = c.rep.map(q=>[q[0]*cv.width, q[1]*cv.height]);
+      ctx.globalAlpha = dim ? 0.25 : 1;
+      const lw = Math.min(10, 3+c.items.length*1.2);
+      ctx.strokeStyle="#000"; ctx.lineWidth=lw+3; ctx.beginPath(); P.forEach((p,k)=>k?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();
+      ctx.strokeStyle=col; ctx.lineWidth=lw; ctx.beginPath(); P.forEach((p,k)=>k?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();
+      ctx.fillStyle="#22c55e"; ctx.strokeStyle="#000"; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(P[0][0],P[0][1],7,0,7); ctx.fill(); ctx.stroke();
+      const e=P[P.length-1], p0=P[P.length-3]||P[0], ang=Math.atan2(e[1]-p0[1], e[0]-p0[0]);
+      ctx.fillStyle="#fff"; ctx.beginPath(); ctx.moveTo(e[0]+11*Math.cos(ang), e[1]+11*Math.sin(ang)); ctx.lineTo(e[0]+7*Math.cos(ang+2.3), e[1]+7*Math.sin(ang+2.3)); ctx.lineTo(e[0]+7*Math.cos(ang-2.3), e[1]+7*Math.sin(ang-2.3)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+  }
+  img.onload = paint; img.src = fieldImageFor(currentEvent);
+  box.querySelectorAll(".apRow[data-i]").forEach(r=>r.addEventListener("click", ()=>{ const i=parseInt(r.dataset.i); apPick = apPick===i ? -1 : i; renderStrategy(); }));
+  wireAp(box);
+}
+function wireAp(box){
+  box.querySelectorAll(".apTeams button").forEach(b=>b.addEventListener("click", ()=>{ apTeam=b.dataset.t; apPick=-1; renderStrategy(); }));
+  const c = $("apComb"); if(c) c.addEventListener("change", ()=>{ apCombine=c.checked; apPick=-1; renderStrategy(); });
+}
+function wireMyTeamInput(){
+  const input = document.getElementById("myTeamInput");
+  if(input) input.addEventListener("change", ()=>{ setMyTeam(input.value.trim()); renderStrategyPlan(); });
+}
+$("strategyBtn").addEventListener("click", ()=>{ $("strategyModal").classList.add("open"); renderStrategy(); });
+$("closeStrategyModal").addEventListener("click", ()=>{ $("strategyModal").classList.remove("open"); });
+$("strategyModal").addEventListener("click", e=>{ if(e.target.id==="strategyModal") $("strategyModal").classList.remove("open"); });
+
+db.collection("submissions").onSnapshot(snapshot=>{
+  liveDocs = snapshot.docs.map(doc=>doc.data());
+  $("status").textContent = "Connected — "+liveDocs.length+" total match(es) received.";
+  refreshAll();
+}, err=>{
+  $("status").textContent = "Could not connect to Firebase: "+err.message;
+});
+
+db.collection("pit_scouting").onSnapshot(snapshot=>{
+  livePitDocs = snapshot.docs.map(doc=>doc.data());
+  if(selectedTeam) renderProfile();
+}, err=>{ console.error("pit_scouting listener error:", err.message); });
+
+db.collection("super_scout").onSnapshot(snapshot=>{
+  liveSuperDocs = snapshot.docs.map(doc=>doc.data());
+  if(selectedTeam) renderProfile();
+}, err=>{ console.error("super_scout listener error:", err.message); });
+
+db.collection("picklists").onSnapshot(snapshot=>{
+  plRemote = {};
+  snapshot.docs.forEach(doc=>{ plRemote[doc.id] = doc.data(); });
+  plReconcile();
+  const v = $("view").value, a = document.activeElement;
+  if(a && (a.tagName==="INPUT" || a.tagName==="SELECT")) return;
+  if(v==="picklist") renderPickList();
+  else if(v==="alliance") renderAllianceBoard();
+}, err=>{ console.error("picklists listener error:", err.message); });
+
+db.collection("profile_meta").onSnapshot(snapshot=>{
+  profileMeta = {};
+  snapshot.docs.forEach(doc=>{ profileMeta[doc.id] = doc.data(); });
+  // don't rebuild the page out from under someone who is typing a TBA key
+  const a = document.activeElement;
+  if(a && a.id && a.id.indexOf("tba")===0) updateEventOptions(); else refreshAll();
+}, err=>{ console.error("profile_meta listener error:", err.message); });
+</script>
+</body>
+</html>
