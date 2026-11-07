@@ -176,6 +176,7 @@ main{padding-top:70px}
     <option value="prescout">Prescout</option>
     <option value="validate">Data Validation</option>
     <option value="picklist">Pick List</option>
+    <option value="teams">Teams</option>
     <option value="predict">Predict</option>
     <option value="alliance">Alliance Selection</option>
     <option value="autopaths">Auto paths</option>
@@ -193,6 +194,7 @@ main{padding-top:70px}
     <a href="#" data-view="prescout">🔍 Prescout</a>
     <a href="#" data-view="validate">✅ Data Validation</a>
     <a href="#" data-view="picklist">📋 Pick List</a>
+    <a href="#" data-view="teams">👥 Teams</a>
     <a href="#" data-view="predict">🔮 Predict</a>
     <a href="#" data-view="alliance">🤝 Alliance Selection</a>
     <a href="#" data-view="autopaths">🛣️ Auto paths</a>
@@ -271,6 +273,11 @@ main{padding-top:70px}
 
   <section id="sec-autopaths" class="panel">
     <div class="card" style="padding:14px 18px"><div id="autopagecontent"></div></div>
+  </section>
+
+  <section id="sec-teams" class="panel">
+    <p class="hint" style="margin:0 0 10px">Every team at the event. Teams from the app (Setup) show up here on their own. You can also type or paste teams below, one per line as <b>number, name</b> (the name is optional). Typed teams are saved on this computer only.</p>
+    <div id="teamsBox"></div>
   </section>
 
   <section id="sec-predict" class="panel">
@@ -406,8 +413,41 @@ function fieldKeys(docs){
   docs.forEach(d=>Object.keys(d).forEach(k=>{ if(!META.includes(k) && !keys.includes(k)) keys.push(k); }));
   return keys;
 }
+function manualTeamsKey(){ return "manualTeams_" + (currentEvent || "all"); }
+function manualTeamText(){ try{ return localStorage.getItem(manualTeamsKey()) || ""; }catch(e){ return ""; } }
+function parseTeamLines(text){
+  const out = [];
+  String(text||"").split(/\r?\n/).forEach(line=>{
+    const m = line.trim().match(/^(?:frc|ftc)?\s*(\d{1,6})\b[\s,;:\-\t]*(.*)$/i);
+    if(m) out.push([m[1], (m[2]||"").trim()]);
+  });
+  return out;
+}
+function allEventTeams(){
+  // [[number, name]]: from the app's team list, then typed ones (typed names win)
+  const map = new Map();
+  try{ const mt = metaNow(); const arr = mt && mt.teams ? JSON.parse(mt.teams) : []; arr.forEach(x=>map.set(String(x[0]), x[1]||"")); }catch(e){}
+  parseTeamLines(manualTeamText()).forEach(x=>{ if(x[1] || !map.has(x[0])) map.set(x[0], x[1] || map.get(x[0]) || ""); });
+  return [...map.entries()];
+}
+function teamNameOf(t){ const f = allEventTeams().find(x=>x[0]===String(t)); return f ? f[1] : ""; }
+function renderTeamsPage(){
+  const box = $("teamsBox"); if(!box) return;
+  const list = allEventTeams().sort((a,b)=>parseInt(a[0])-parseInt(b[0]));
+  const have = new Set(filteredDocs().map(d=>String(d.team)));
+  box.innerHTML = '<textarea id="teamsText" rows="8" style="width:100%;box-sizing:border-box" placeholder="12603, Jefferson Wired Wolves\n14623, Bounty Hunters">' + esc(manualTeamText()) + '</textarea>'+
+    '<div style="margin:8px 0 14px"><button type="button" id="teamsSave" class="pickmove">Save teams</button> <span id="teamsMsg" class="hint"></span></div>'+
+    '<h4 style="margin:0 0 6px">' + list.length + ' teams</h4>' +
+    (list.length ? '<div class="wrap"><table><thead><tr><th>Team</th><th>Name</th><th>Scouted matches</th></tr></thead><tbody>' + list.map(x=>'<tr><td class="l">'+esc(x[0])+'</td><td class="l">'+esc(x[1])+'</td><td class="n">'+filteredDocs().filter(d=>String(d.team)===x[0]).length+'</td></tr>').join("") + '</tbody></table></div>' : '<p class="hint">No teams yet. Paste some above, or add them in the app under Setup.</p>');
+  $("teamsSave").addEventListener("click", ()=>{
+    try{ localStorage.setItem(manualTeamsKey(), $("teamsText").value); }catch(e){ $("teamsMsg").textContent = "Couldn't save on this browser."; return; }
+    renderTeamsPage(); const mm=$("teamsMsg"); if(mm) mm.textContent = "Saved.";
+    try{ refreshAll(); }catch(e){}
+  });
+}
 function teamsIn(docs){
   let teams = [...new Set(docs.map(d=>d.team))].filter(t=>t);
+  teams = [...new Set([...teams, ...allEventTeams().map(x=>x[0])])];
   if(mode==="frc"){
     teams = [...new Set([...teams, ...currentTbaTeams()])];
   }
@@ -1675,9 +1715,11 @@ function renderProfile(boxOverride, teamOverride){
     matches.map(m=>'<tr><td style="white-space:nowrap"><button type="button" class="pickmove mEdit" data-id="'+esc(m.__id)+'">✏ Edit</button> <button type="button" class="pickmove mDel" data-id="'+esc(m.__id)+'">🗑 Delete</button></td>'+["match","slot",...fields].map(c=>`<td class="n">${m[c]!==undefined&&m[c]!==""?esc(m[c]):"–"}</td>`).join("")+'</tr>').join("") +
     '</tbody></table></div>' : '<p class="hint">No individual matches recorded yet.</p>';
   const pit = loadPit(team);
-  const photos = Array.isArray(pit.photos) ? pit.photos : [];
+  const photos = Array.isArray(pit.photos) ? pit.photos.slice() : [];
+  const rpDoc = filteredPitDocsFromApp().find(d=>String(d.team)===String(team));
+  if(rpDoc && typeof rpDoc.robot_photo==="string" && rpDoc.robot_photo.indexOf("data:image/")===0) photos.unshift(rpDoc.robot_photo);
   const pitHtml = getPitQuestions().map(q=>`<div class="stat"><div class="stat-l">${q.label}</div><div class="stat-v">${esc(pit[q.key]||"–")}</div></div>`).join("");
-  const photosHtml = photos.length ? `<div class="photos">${photos.map(src=>`<img src="${src}">`).join("")}</div>` : '<p class="hint">No photos saved.</p>';
+  const photosHtml = photos.length ? `<div class="photos">${photos.map(src=>`<img src="${src}" title="Click to make bigger" style="cursor:zoom-in" onclick="var s=this.style;if(s.width==='100%'){s.width='100px';s.height='100px'}else{s.width='100%';s.height='auto'}">`).join("")}</div>` : '<p class="hint">No photos saved.</p>';
 
   const meta = currentEvent && profileMeta[currentEvent] ? profileMeta[currentEvent] : null;
   let pitFieldDefs = [], superFieldDefs = [];
@@ -1698,7 +1740,7 @@ function renderProfile(boxOverride, teamOverride){
     return esc(val);
   }
 
-  const PIT_APP_META = ["team","profileId","profileName","gameType"];
+  const PIT_APP_META = ["team","profileId","profileName","gameType","robot_photo"];
   const pitAppDoc = filteredPitDocsFromApp().find(d=>d.team===team);
   const pitAppHtml = pitAppDoc
     ? '<div class="statgrid">' + Object.keys(pitAppDoc).filter(k=>!PIT_APP_META.includes(k))
@@ -2032,6 +2074,7 @@ function refreshAll(){
   else if(v==="prescout"){ updatePrescoutEventOptions(); renderPrescout(); }
   else if(v==="validate") renderValidation();
   else if(v==="picklist") renderPickList();
+  else if(v==="teams") renderTeamsPage();
   else if(v==="predict") renderPredict();
   else if(v==="alliance") renderAllianceBoard();
   else if(v==="autopaths") renderAutoPage();
